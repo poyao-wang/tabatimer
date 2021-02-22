@@ -9,27 +9,27 @@ const timeData = [
     setNo: 1,
     workoutNo: 1,
     type: "rest",
-    duration: 1,
+    duration: 5,
     start: 0,
-    end: 1,
+    end: 5,
   },
   {
     id: 1,
     setNo: 2,
     workoutNo: 2,
     type: "workout",
-    duration: 1,
-    start: 1,
-    end: 2,
+    duration: 5,
+    start: 5,
+    end: 10,
   },
   {
     id: 2,
     setNo: 3,
     workoutNo: 1,
     type: "rest",
-    duration: 1,
-    start: 2,
-    end: 3,
+    duration: 5,
+    start: 10,
+    end: 15,
   },
   {
     id: 3,
@@ -65,6 +65,7 @@ const defaultState = {
   isActive: false,
   seconds: 0,
   sectionId: 0,
+  sectoinCountDownSeconds: timeData[0].duration,
   setNo: timeData[0].setNo,
   start: timeData[0].start,
   timeMax: timeData[timeData.length - 1].end,
@@ -111,6 +112,8 @@ export default function App() {
         setPartOfState({
           seconds: state.seconds + 1,
           sectionId: newSectionId,
+          sectoinCountDownSeconds:
+            timeData[newSectionId].end - state.seconds - 1,
           setNo: timeData[newSectionId].setNo,
           type: timeData[newSectionId].type,
           workoutNo: timeData[newSectionId].workoutNo,
@@ -128,6 +131,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Timer seconds={state.seconds} />
+      <Timer seconds={state.sectoinCountDownSeconds} />
       <Text>{`Set : ${state.setNo}`}</Text>
       <Text>{`Workout : ${state.workoutNo}`}</Text>
       <Text>{`Type : ${state.type}`}</Text>
