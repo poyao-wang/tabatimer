@@ -7,6 +7,7 @@ import {
   View,
   Dimensions,
   FlatList,
+  TextInput,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 
@@ -99,6 +100,9 @@ const returnSectionId = (seconds) => {
 export default function App() {
   const [state, setState] = useState(defaultState);
   const flatlist = useRef();
+  const setInputRef = useRef();
+  const workoutInputRef = useRef();
+
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   function setPartOfState(object) {
@@ -118,6 +122,22 @@ export default function App() {
       animated: true,
     });
   }
+
+  useEffect(() => {
+    const listener = scrollX.addListener(({ value }) => {
+      const newSectionId = Math.round(value / ITEM_SIZE);
+      setInputRef?.current?.setNativeProps({
+        text: "Set : " + timeData[newSectionId].setNo.toString(),
+      });
+      workoutInputRef?.current?.setNativeProps({
+        text: "Workout : " + timeData[newSectionId].workoutNo.toString(),
+      });
+    });
+    return () => {
+      scrollX.removeListener(listener);
+      scrollX.removeAllListeners();
+    };
+  });
 
   useEffect(() => {
     let interval = null;
@@ -230,6 +250,16 @@ export default function App() {
         onPress={toggle}
       ></Button>
       <Button onPress={reset} title="Reset"></Button>
+      <TextInput
+        ref={setInputRef}
+        defaultValue={"Set : " + timeData[state.sectionId].setNo.toString()}
+      />
+      <TextInput
+        ref={workoutInputRef}
+        defaultValue={
+          "Workout : " + timeData[state.sectionId].workoutNo.toString()
+        }
+      />
     </View>
   );
 }
