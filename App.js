@@ -7,7 +7,7 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import Timer from "./app/Timer";
 
@@ -97,6 +97,7 @@ const returnSectionId = (seconds) => {
 
 export default function App() {
   const [state, setState] = useState(defaultState);
+  const flatlist = useRef();
 
   function setPartOfState(object) {
     const newObject = { ...state, ...object };
@@ -110,6 +111,10 @@ export default function App() {
 
   function reset() {
     setPartOfState(defaultState);
+    flatlist?.current?.scrollToOffset({
+      offset: 0,
+      animated: true,
+    });
   }
 
   useEffect(() => {
@@ -117,7 +122,7 @@ export default function App() {
     if (state.isActive && state.seconds < state.timeMax) {
       interval = setInterval(() => {
         const newSectionId = returnSectionId(state.seconds + 1);
-
+        const scrollOrNot = !(newSectionId == state.sectionId);
         const newIsActive =
           state.seconds + 1 == state.timeMax ? { isActive: false } : {};
 
@@ -133,6 +138,12 @@ export default function App() {
           end: timeData[newSectionId].end,
           ...newIsActive,
         });
+        if (scrollOrNot) {
+          flatlist?.current?.scrollToOffset({
+            offset: ITEM_SIZE * newSectionId,
+            animated: true,
+          });
+        }
       }, 1000);
     } else if (!state.isActive && state.seconds !== 0) {
       clearInterval(interval);
@@ -143,6 +154,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatlist}
         data={timeData}
         keyExtractor={(item) => item.id.toString()}
         horizontal
@@ -151,6 +163,24 @@ export default function App() {
         decelerationRate="fast"
         style={{ flexGrow: 0 }}
         contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
+        onMomentumScrollBegin={() => {
+          setPartOfState({ isActive: false });
+        }}
+        onMomentumScrollEnd={(event) => {
+          const newSectionId = Math.round(
+            event.nativeEvent.contentOffset.x / ITEM_SIZE
+          );
+          setPartOfState({
+            seconds: timeData[newSectionId].start,
+            sectionId: newSectionId,
+            sectoinCountDownSeconds: timeData[newSectionId].duration,
+            setNo: timeData[newSectionId].setNo,
+            type: timeData[newSectionId].type,
+            workoutNo: timeData[newSectionId].workoutNo,
+            start: timeData[newSectionId].start,
+            end: timeData[newSectionId].end,
+          });
+        }}
         renderItem={({ item }) => {
           return (
             <View
