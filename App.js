@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   TextInput,
+  Easing,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 
@@ -99,11 +100,16 @@ const returnSectionId = (seconds) => {
 
 export default function App() {
   const [state, setState] = useState(defaultState);
+  const [timerOn, setTimerOn] = useState(false);
+
   const flatlist = useRef();
+  const secondsInputRef = useRef();
   const setInputRef = useRef();
   const workoutInputRef = useRef();
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const totalSeconds = React.useRef(new Animated.Value(0)).current;
+  let totalSecondsTemp = 0;
 
   function setPartOfState(object) {
     const newObject = { ...state, ...object };
@@ -113,6 +119,7 @@ export default function App() {
   function toggle() {
     if (state.seconds >= state.timeMax) return Alert.alert("End");
     setPartOfState({ isActive: !state.isActive });
+    setTimerOn(!timerOn);
   }
 
   function reset() {
@@ -121,10 +128,25 @@ export default function App() {
       offset: 0,
       animated: true,
     });
+    totalSeconds.setValue(0);
+    setTimerOn(false);
   }
 
   useEffect(() => {
-    const listener = scrollX.addListener(({ value }) => {
+    if (timerOn) {
+      Animated.timing(totalSeconds, {
+        toValue: state.timeMax,
+        duration: (state.timeMax - totalSecondsTemp) * 1000,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }).start();
+    } else {
+      Animated.timing(totalSeconds).stop();
+    }
+  }, [timerOn]);
+
+  useEffect(() => {
+    const scrollXListener = scrollX.addListener(({ value }) => {
       const newSectionId = Math.round(value / ITEM_SIZE);
       setInputRef?.current?.setNativeProps({
         text: "Set : " + timeData[newSectionId].setNo.toString(),
@@ -133,9 +155,17 @@ export default function App() {
         text: "Workout : " + timeData[newSectionId].workoutNo.toString(),
       });
     });
+    const totalSecondsListener = totalSeconds.addListener(({ value }) => {
+      secondsInputRef?.current?.setNativeProps({
+        text: (Math.ceil(value * 10) / 10).toString(),
+      });
+      totalSecondsTemp = value;
+    });
     return () => {
-      scrollX.removeListener(listener);
+      scrollX.removeListener(scrollXListener);
       scrollX.removeAllListeners();
+      totalSeconds.removeListener(totalSecondsListener);
+      totalSeconds.removeAllListeners();
     };
   });
 
@@ -250,6 +280,11 @@ export default function App() {
         onPress={toggle}
       ></Button>
       <Button onPress={reset} title="Reset"></Button>
+      <TextInput
+        ref={secondsInputRef}
+        defaultValue={"0"}
+        style={{ fontSize: 40 }}
+      />
       <TextInput
         ref={setInputRef}
         defaultValue={"Set : " + timeData[state.sectionId].setNo.toString()}
