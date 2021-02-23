@@ -1,4 +1,5 @@
 import {
+  Animated,
   Alert,
   Button,
   StyleSheet,
@@ -98,6 +99,7 @@ const returnSectionId = (seconds) => {
 export default function App() {
   const [state, setState] = useState(defaultState);
   const flatlist = useRef();
+  const scrollX = React.useRef(new Animated.Value(0)).current;
 
   function setPartOfState(object) {
     const newObject = { ...state, ...object };
@@ -153,7 +155,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <Animated.FlatList
         ref={flatlist}
         data={timeData}
         keyExtractor={(item) => item.id.toString()}
@@ -163,6 +165,10 @@ export default function App() {
         decelerationRate="fast"
         style={{ flexGrow: 0 }}
         contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: true }
+        )}
         onMomentumScrollBegin={() => {
           setPartOfState({ isActive: false });
         }}
@@ -181,7 +187,22 @@ export default function App() {
             end: timeData[newSectionId].end,
           });
         }}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
+          const inputRange = [
+            (index - 1) * ITEM_SIZE,
+            index * ITEM_SIZE,
+            (index + 1) * ITEM_SIZE,
+          ];
+          const opacity = scrollX.interpolate({
+            inputRange,
+            outputRange: [0.4, 1, 0.4],
+          });
+
+          const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0.7, 1, 0.7],
+          });
+
           return (
             <View
               style={{
@@ -190,7 +211,11 @@ export default function App() {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.text}>{item.id}</Text>
+              <Animated.Text
+                style={[styles.text, { opacity, transform: [{ scale }] }]}
+              >
+                {item.id}
+              </Animated.Text>
             </View>
           );
         }}
