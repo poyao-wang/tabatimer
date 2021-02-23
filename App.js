@@ -1,4 +1,12 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  FlatList,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 
 import Timer from "./app/Timer";
@@ -73,6 +81,10 @@ const defaultState = {
   workoutNo: timeData[0].workoutNo,
 };
 
+const { width, height } = Dimensions.get("window");
+const ITEM_SIZE = width * 0.38;
+const ITEM_SPACING = (width - ITEM_SIZE) / 2;
+
 const returnSectionId = (seconds) => {
   let findResult = timeData.find(
     (section) => seconds >= section.start && seconds < section.end
@@ -130,6 +142,29 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <FlatList
+        data={timeData}
+        keyExtractor={(item) => item.id.toString()}
+        horizontal
+        bounces={false}
+        snapToInterval={ITEM_SIZE}
+        decelerationRate="fast"
+        style={{ flexGrow: 0 }}
+        contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
+        renderItem={({ item }) => {
+          return (
+            <View
+              style={{
+                width: ITEM_SIZE,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.text}>{item.id}</Text>
+            </View>
+          );
+        }}
+      />
       <Timer seconds={state.seconds} />
       <Timer seconds={state.sectoinCountDownSeconds} />
       <Text>{`Set : ${state.setNo}`}</Text>
@@ -150,5 +185,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  text: {
+    fontSize: ITEM_SIZE * 0.8,
+    color: "black",
+    fontWeight: "900",
   },
 });
