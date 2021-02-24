@@ -105,6 +105,7 @@ export default function App() {
 
   const flatlist = useRef();
   const secondsInputRef = useRef();
+  const sectionSecondsInputRef = useRef();
   const setInputRef = useRef();
   const workoutInputRef = useRef();
 
@@ -121,7 +122,7 @@ export default function App() {
   function reset() {
     flatlist?.current?.scrollToOffset({
       offset: 0,
-      animated: false,
+      animated: true,
     });
     totalSeconds.setValue(0);
     setTimerOn(false);
@@ -162,14 +163,19 @@ export default function App() {
       }
     });
     const totalSecondsListener = totalSeconds.addListener(({ value }) => {
+      const newSectionId = returnSectionId(value);
       secondsInputRef?.current?.setNativeProps({
         text: (Math.ceil(value * 10) / 10).toString(),
+      });
+      sectionSecondsInputRef?.current?.setNativeProps({
+        text: (
+          Math.ceil((timeData[newSectionId].end - value) * 10) / 10
+        ).toString(),
       });
       totalSeconds._value = value;
 
       if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
         totalSeconds._ceiledValue = Math.ceil(value);
-        const newSectionId = returnSectionId(value);
         if (sectionId !== newSectionId) {
           sectionId = newSectionId;
           if (flatListScrolling == false) {
@@ -259,6 +265,12 @@ export default function App() {
       />
       <TextInput
         ref={secondsInputRef}
+        defaultValue={"0"}
+        style={{ fontSize: 40 }}
+        editable={false}
+      />
+      <TextInput
+        ref={sectionSecondsInputRef}
         defaultValue={"0"}
         style={{ fontSize: 40 }}
         editable={false}
