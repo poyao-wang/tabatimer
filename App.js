@@ -1,6 +1,6 @@
 import React from "react";
-import TimerScreen from "./app/screen/TimerScreen";
+import EditorScreen from "./app/screen/EditorScreen";
 
 export default function App() {
-  return <TimerScreen />;
+  return <EditorScreen />;
 }
