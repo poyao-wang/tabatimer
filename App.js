@@ -111,6 +111,8 @@ export default function App() {
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
+  const backgroundAnimation = React.useRef(new Animated.Value(0)).current;
+
   let sectionId = 0;
   let flatListScrolling = false;
 
@@ -120,11 +122,11 @@ export default function App() {
   }
 
   function reset() {
+    if (scrollX._value == 0) totalSeconds.setValue(0);
     flatlist?.current?.scrollToOffset({
       offset: 0,
       animated: true,
     });
-    totalSeconds.setValue(0);
     setTimerOn(false);
   }
 
@@ -165,14 +167,14 @@ export default function App() {
     const totalSecondsListener = totalSeconds.addListener(({ value }) => {
       const newSectionId = returnSectionId(value);
       secondsInputRef?.current?.setNativeProps({
-        text: (Math.ceil(value * 10) / 10).toString(),
+        text: Math.ceil(value).toString(),
       });
       sectionSecondsInputRef?.current?.setNativeProps({
-        text: (
-          Math.ceil((timeData[newSectionId].end - value) * 10) / 10
-        ).toString(),
+        text: Math.ceil(timeData[newSectionId].end - value).toString(),
       });
       totalSeconds._value = value;
+
+      backgroundAnimation.setValue(height * (value / defaultState.timeMax));
 
       if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
         totalSeconds._ceiledValue = Math.ceil(value);
@@ -197,11 +199,23 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            height,
+            width,
+            backgroundColor: "gray",
+            transform: [{ translateY: backgroundAnimation }],
+          },
+        ]}
+      />
       <Animated.FlatList
         ref={flatlist}
         data={timeData}
         keyExtractor={(item) => item.id.toString()}
         horizontal
+        showsHorizontalScrollIndicator={false}
         bounces={false}
         snapToInterval={ITEM_SIZE}
         decelerationRate="fast"
