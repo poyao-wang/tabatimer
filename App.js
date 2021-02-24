@@ -101,6 +101,7 @@ const returnSectionId = (seconds) => {
 export default function App() {
   const [timerOn, setTimerOn] = useState(false);
   const [timeMax, setTimeMax] = useState(defaultState.timeMax);
+  const [btnPressable, setBtnPressable] = useState(true);
 
   const flatlist = useRef();
   const secondsInputRef = useRef();
@@ -120,7 +121,7 @@ export default function App() {
   function reset() {
     flatlist?.current?.scrollToOffset({
       offset: 0,
-      animated: true,
+      animated: false,
     });
     totalSeconds.setValue(0);
     setTimerOn(false);
@@ -135,37 +136,48 @@ export default function App() {
         easing: Easing.linear,
       }).start(() => setTimerOn(false));
     } else {
-      Animated.timing(totalSeconds).stop();
+      totalSeconds.stopAnimation();
     }
   }, [timerOn]);
 
   useEffect(() => {
     const scrollXListener = scrollX.addListener(({ value }) => {
-      const newSectionId = Math.round(value / ITEM_SIZE);
+      scrollX._value = value;
+      let newSectionId = Math.round(value / ITEM_SIZE);
+      if (newSectionId <= 0) newSectionId = 0;
+      if (newSectionId >= timeData.length - 1)
+        newSectionId = timeData.length - 1;
+
       setInputRef?.current?.setNativeProps({
         text: "Set : " + timeData[newSectionId].setNo.toString(),
       });
       workoutInputRef?.current?.setNativeProps({
         text: "Workout : " + timeData[newSectionId].workoutNo.toString(),
       });
+      if (!timerOn) {
+        secondsInputRef?.current?.setNativeProps({
+          text: timeData[newSectionId].start.toString(),
+        });
+        totalSeconds.setValue(timeData[newSectionId].start);
+      }
     });
     const totalSecondsListener = totalSeconds.addListener(({ value }) => {
       secondsInputRef?.current?.setNativeProps({
         text: (Math.ceil(value * 10) / 10).toString(),
       });
       totalSeconds._value = value;
-      const newSectionId = returnSectionId(value);
 
-      if (sectionId !== newSectionId) {
-        sectionId = newSectionId;
-        if (flatListScrolling == false) {
-          flatlist?.current?.scrollToOffset({
-            offset: ITEM_SIZE * sectionId,
-            animated: true,
-          });
-          console.log(
-            `id:${sectionId} newId:${newSectionId} scrolling:${flatListScrolling}  scrolled to ${newSectionId}`
-          );
+      if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
+        totalSeconds._ceiledValue = Math.ceil(value);
+        const newSectionId = returnSectionId(value);
+        if (sectionId !== newSectionId) {
+          sectionId = newSectionId;
+          if (flatListScrolling == false) {
+            flatlist?.current?.scrollToOffset({
+              offset: ITEM_SIZE * sectionId,
+              animated: true,
+            });
+          }
         }
       }
     });
@@ -198,6 +210,9 @@ export default function App() {
         }}
         onMomentumScrollEnd={() => {
           flatListScrolling = false;
+        }}
+        onScrollBeginDrag={() => {
+          setTimerOn(false);
         }}
         renderItem={({ item, index }) => {
           const inputRange = [
@@ -232,20 +247,31 @@ export default function App() {
           );
         }}
       />
-      <Button title={timerOn ? "pause" : "play"} onPress={toggle}></Button>
-      <Button onPress={reset} title="Reset"></Button>
+      <Button
+        disabled={!btnPressable}
+        title={timerOn ? "pause" : "play"}
+        onPress={toggle}
+      />
+      <Button
+        disabled={!btnPressable || timerOn}
+        onPress={reset}
+        title="Reset"
+      />
       <TextInput
         ref={secondsInputRef}
         defaultValue={"0"}
         style={{ fontSize: 40 }}
+        editable={false}
       />
       <TextInput
         ref={setInputRef}
         defaultValue={"Set : " + timeData[0].setNo.toString()}
+        editable={false}
       />
       <TextInput
         ref={workoutInputRef}
         defaultValue={"Workout : " + timeData[0].workoutNo.toString()}
+        editable={false}
       />
     </View>
   );
