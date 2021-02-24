@@ -99,8 +99,8 @@ const returnSectionId = (seconds) => {
 };
 
 export default function App() {
-  const [state, setState] = useState(defaultState);
   const [timerOn, setTimerOn] = useState(false);
+  const [timeMax, setTimeMax] = useState(defaultState.timeMax);
 
   const flatlist = useRef();
   const secondsInputRef = useRef();
@@ -109,21 +109,15 @@ export default function App() {
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
-  let totalSecondsTemp = 0;
-
-  function setPartOfState(object) {
-    const newObject = { ...state, ...object };
-    setState(newObject);
-  }
+  let sectionId = 0;
+  let flatListScrolling = false;
 
   function toggle() {
-    if (state.seconds >= state.timeMax) return Alert.alert("End");
-    setPartOfState({ isActive: !state.isActive });
+    if (totalSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
   }
 
   function reset() {
-    setPartOfState(defaultState);
     flatlist?.current?.scrollToOffset({
       offset: 0,
       animated: true,
@@ -135,11 +129,11 @@ export default function App() {
   useEffect(() => {
     if (timerOn) {
       Animated.timing(totalSeconds, {
-        toValue: state.timeMax,
-        duration: (state.timeMax - totalSecondsTemp) * 1000,
+        toValue: timeMax,
+        duration: (timeMax - totalSeconds._value) * 1000,
         useNativeDriver: true,
         easing: Easing.linear,
-      }).start();
+      }).start(() => setTimerOn(false));
     } else {
       Animated.timing(totalSeconds).stop();
     }
@@ -159,7 +153,21 @@ export default function App() {
       secondsInputRef?.current?.setNativeProps({
         text: (Math.ceil(value * 10) / 10).toString(),
       });
-      totalSecondsTemp = value;
+      totalSeconds._value = value;
+      const newSectionId = returnSectionId(value);
+
+      if (sectionId !== newSectionId) {
+        sectionId = newSectionId;
+        if (flatListScrolling == false) {
+          flatlist?.current?.scrollToOffset({
+            offset: ITEM_SIZE * sectionId,
+            animated: true,
+          });
+          console.log(
+            `id:${sectionId} newId:${newSectionId} scrolling:${flatListScrolling}  scrolled to ${newSectionId}`
+          );
+        }
+      }
     });
     return () => {
       scrollX.removeListener(scrollXListener);
@@ -168,40 +176,6 @@ export default function App() {
       totalSeconds.removeAllListeners();
     };
   });
-
-  useEffect(() => {
-    let interval = null;
-    if (state.isActive && state.seconds < state.timeMax) {
-      interval = setInterval(() => {
-        const newSectionId = returnSectionId(state.seconds + 1);
-        const scrollOrNot = !(newSectionId == state.sectionId);
-        const newIsActive =
-          state.seconds + 1 == state.timeMax ? { isActive: false } : {};
-
-        setPartOfState({
-          seconds: state.seconds + 1,
-          sectionId: newSectionId,
-          sectoinCountDownSeconds:
-            timeData[newSectionId].end - state.seconds - 1,
-          setNo: timeData[newSectionId].setNo,
-          type: timeData[newSectionId].type,
-          workoutNo: timeData[newSectionId].workoutNo,
-          start: timeData[newSectionId].start,
-          end: timeData[newSectionId].end,
-          ...newIsActive,
-        });
-        if (scrollOrNot) {
-          flatlist?.current?.scrollToOffset({
-            offset: ITEM_SIZE * newSectionId,
-            animated: true,
-          });
-        }
-      }, 1000);
-    } else if (!state.isActive && state.seconds !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [state]);
 
   return (
     <View style={styles.container}>
@@ -220,22 +194,10 @@ export default function App() {
           { useNativeDriver: true }
         )}
         onMomentumScrollBegin={() => {
-          setPartOfState({ isActive: false });
+          flatListScrolling = true;
         }}
-        onMomentumScrollEnd={(event) => {
-          const newSectionId = Math.round(
-            event.nativeEvent.contentOffset.x / ITEM_SIZE
-          );
-          setPartOfState({
-            seconds: timeData[newSectionId].start,
-            sectionId: newSectionId,
-            sectoinCountDownSeconds: timeData[newSectionId].duration,
-            setNo: timeData[newSectionId].setNo,
-            type: timeData[newSectionId].type,
-            workoutNo: timeData[newSectionId].workoutNo,
-            start: timeData[newSectionId].start,
-            end: timeData[newSectionId].end,
-          });
+        onMomentumScrollEnd={() => {
+          flatListScrolling = false;
         }}
         renderItem={({ item, index }) => {
           const inputRange = [
@@ -270,15 +232,7 @@ export default function App() {
           );
         }}
       />
-      <Timer seconds={state.seconds} />
-      <Timer seconds={state.sectoinCountDownSeconds} />
-      <Text>{`Set : ${state.setNo}`}</Text>
-      <Text>{`Workout : ${state.workoutNo}`}</Text>
-      <Text>{`Type : ${state.type}`}</Text>
-      <Button
-        title={state.isActive ? "pause" : "play"}
-        onPress={toggle}
-      ></Button>
+      <Button title={timerOn ? "pause" : "play"} onPress={toggle}></Button>
       <Button onPress={reset} title="Reset"></Button>
       <TextInput
         ref={secondsInputRef}
@@ -287,13 +241,11 @@ export default function App() {
       />
       <TextInput
         ref={setInputRef}
-        defaultValue={"Set : " + timeData[state.sectionId].setNo.toString()}
+        defaultValue={"Set : " + timeData[0].setNo.toString()}
       />
       <TextInput
         ref={workoutInputRef}
-        defaultValue={
-          "Workout : " + timeData[state.sectionId].workoutNo.toString()
-        }
+        defaultValue={"Workout : " + timeData[0].workoutNo.toString()}
       />
     </View>
   );
