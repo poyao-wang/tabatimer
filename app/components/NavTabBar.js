@@ -45,24 +45,18 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
 
   return (
     <Animated.View
-      style={{
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "30%",
-        position: "absolute",
-        bottom: "5%",
-        flexDirection: "row",
-        height: "7%",
-        width: "90%",
-        backgroundColor: "#e6ebf2",
-        opacity,
-        transform: [
-          {
-            translateY,
-          },
-        ],
-      }}
+      style={[
+        styles.container,
+        {
+          borderRadius: "50%",
+          opacity,
+          transform: [
+            {
+              translateY,
+            },
+          ],
+        },
+      ]}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -115,6 +109,16 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: "5%",
+    flexDirection: "row",
+    height: "7%",
+    width: "90%",
+    backgroundColor: "#e6ebf2",
+  },
 });
 export default NavTabBar;
