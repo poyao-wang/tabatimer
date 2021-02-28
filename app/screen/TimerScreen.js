@@ -96,7 +96,7 @@ const returnSectionId = (seconds) => {
   return findResult?.id;
 };
 
-export default function TimerScreen() {
+export default function TimerScreen({ setTabBarShow }) {
   const [timerOn, setTimerOn] = useState(false);
   const [timeMax, setTimeMax] = useState(defaultState.timeMax);
   const [btnPressable, setBtnPressable] = useState(true);
@@ -117,6 +117,7 @@ export default function TimerScreen() {
   function toggle() {
     if (totalSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
+    setTabBarShow(timerOn);
   }
 
   function reset() {
@@ -126,6 +127,7 @@ export default function TimerScreen() {
       animated: true,
     });
     setTimerOn(false);
+    setTabBarShow(true);
   }
 
   useEffect(() => {
@@ -135,7 +137,10 @@ export default function TimerScreen() {
         duration: (timeMax - totalSeconds._value) * 1000,
         useNativeDriver: true,
         easing: Easing.linear,
-      }).start(() => setTimerOn(false));
+      }).start(() => {
+        setTimerOn(false);
+        setTabBarShow(true);
+      });
     } else {
       totalSeconds.stopAnimation();
     }
@@ -231,6 +236,7 @@ export default function TimerScreen() {
         }}
         onScrollBeginDrag={() => {
           setTimerOn(false);
+          setTabBarShow(true);
         }}
         renderItem={({ item, index }) => {
           const inputRange = [
