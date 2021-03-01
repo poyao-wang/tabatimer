@@ -82,10 +82,6 @@ const defaultState = {
   workoutNo: timeData[0].workoutNo,
 };
 
-const { width, height } = Dimensions.get("window");
-const ITEM_SIZE = width * 0.38;
-const ITEM_SPACING = (width - ITEM_SIZE) / 2;
-
 const returnSectionId = (seconds) => {
   let findResult = timeData.find(
     (section) => seconds >= section.start && seconds < section.end
@@ -97,9 +93,14 @@ const returnSectionId = (seconds) => {
 };
 
 export default function TimerScreen({ setTabBarShow }) {
+  const { width, height } = Dimensions.get("window");
+
   const [timerOn, setTimerOn] = useState(false);
   const [timeMax, setTimeMax] = useState(defaultState.timeMax);
   const [btnPressable, setBtnPressable] = useState(true);
+
+  const ITEM_SIZE = width * 0.38;
+  const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
   const flatlist = useRef();
   const secondsInputRef = useRef();
@@ -251,23 +252,36 @@ export default function TimerScreen({ setTabBarShow }) {
 
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.7, 1, 0.7],
+            outputRange: [0.5, 1, 0.5],
           });
 
           return (
-            <View
+            <Animated.View
               style={{
                 width: ITEM_SIZE,
+                height: height * 0.3,
                 justifyContent: "center",
                 alignItems: "center",
+                borderWidth: 2,
+                opacity,
+                transform: [
+                  {
+                    scale,
+                  },
+                ],
               }}
             >
               <Animated.Text
-                style={[styles.text, { opacity, transform: [{ scale }] }]}
+                style={[
+                  styles.text,
+                  {
+                    fontSize: height * 0.15,
+                  },
+                ]}
               >
                 {item.id}
               </Animated.Text>
-            </View>
+            </Animated.View>
           );
         }}
       />
@@ -315,7 +329,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: ITEM_SIZE * 0.8,
+    textAlign: "center",
     color: "black",
     fontWeight: "900",
   },

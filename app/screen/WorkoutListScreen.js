@@ -12,9 +12,7 @@ import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 
-const { width, height } = Dimensions.get("window");
-
-const NUM_ITEMS = 10;
+const NUM_ITEMS = 15;
 
 function getColor(i) {
   const multiplier = 255 / (NUM_ITEMS - 1);
@@ -32,25 +30,25 @@ const exampleData = [...Array(NUM_ITEMS)].map((d, index) => {
 });
 
 function WorkoutListScreen(props) {
+  const { width, height } = Dimensions.get("window");
   const [data, setData] = useState(exampleData);
 
   const renderItem = useCallback(({ item, index, drag, isActive }) => {
     return (
       <TouchableOpacity
         style={{
-          height: height * 0.08,
+          height: width > height ? height * 0.15 : height * 0.08,
           backgroundColor: item.backgroundColor,
           alignItems: "center",
           justifyContent: "center",
         }}
         onLongPress={drag}
-        // onPressIn={drag}
       >
         <Text
           style={{
             fontWeight: "bold",
             color: "white",
-            fontSize: height * 0.03,
+            fontSize: width > height ? height * 0.07 : height * 0.03,
           }}
         >
           {isActive && "↕"}
@@ -63,6 +61,10 @@ function WorkoutListScreen(props) {
   return (
     <View style={{ flex: 1 }}>
       <DraggableFlatList
+        contentContainerStyle={{
+          paddingTop: height * 0.05,
+          paddingBottom: width > height ? height * 0.2 : height * 0.15,
+        }}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => `draggable-item-${item.key}`}

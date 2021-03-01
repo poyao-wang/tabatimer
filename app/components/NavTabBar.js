@@ -5,9 +5,12 @@ import {
   Text,
   TouchableOpacity,
   Animated,
+  Dimensions,
 } from "react-native";
 
 function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
+  const { width, height } = Dimensions.get("window");
+
   const tabBarAnimation = useRef(new Animated.Value(0)).current;
 
   const tabBarShowAnime = () => {
@@ -42,6 +45,23 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
       tabBarHideAnime();
     }
   }, [tabBarShowState]);
+
+  const styles = StyleSheet.create({
+    container: {
+      position: width > height ? "absolute" : "relative",
+      left: width > height ? width * 0.05 : null,
+      alignSelf: "center",
+      alignItems: "center",
+      justifyContent: "center",
+      position: "absolute",
+      bottom: "5%",
+      flexDirection: "row",
+      height: width > height ? "13%" : "10%",
+      aspectRatio: 4,
+      backgroundColor: "#e6ebf2",
+      // flexDirection: "column",
+    },
+  });
 
   return (
     <Animated.View
@@ -108,17 +128,4 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    bottom: "5%",
-    flexDirection: "row",
-    height: "7%",
-    width: "90%",
-    backgroundColor: "#e6ebf2",
-  },
-});
 export default NavTabBar;

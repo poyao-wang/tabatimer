@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, TouchableOpacity, Animated } from "react-native";
+import { Text, TouchableOpacity, Animated, Dimensions } from "react-native";
 
 import EditorScreen from "./app/screen/EditorScreen";
 import TimerScreen from "./app/screen/TimerScreen";
@@ -12,6 +12,16 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
+
+  const [screenDimentions, setScreenDimentions] = useState(
+    Dimensions.get("window")
+  );
+
+  useEffect(() => {
+    Dimensions.addEventListener("change", ({ window }) => {
+      setScreenDimentions(window);
+    });
+  }, []);
 
   return (
     <NavigationContainer>
