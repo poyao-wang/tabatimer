@@ -7,6 +7,7 @@ import {
   Switch,
   View,
   Text,
+  TouchableOpacity,
 } from "react-native";
 
 const mainData = [
@@ -40,7 +41,7 @@ const mainData = [
 
 const BORDER_WIDTH = 0;
 
-function EditorScreen() {
+function EditorScreen({ navigation }) {
   const { width, height } = Dimensions.get("window");
   const [listDimentions, setListDimentions] = useState({ width, height });
   const ITEM_WIDTH = listDimentions.width * 0.9;
@@ -114,7 +115,12 @@ function EditorScreen() {
           />
         )}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("EditorDetailScreen", item);
+            }}
+            style={styles.itemContainer}
+          >
             <View style={styles.titlesContainer}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -125,7 +131,7 @@ function EditorScreen() {
                 {" >"}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

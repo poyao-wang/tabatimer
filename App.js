@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NavTabBar from "./app/components/NavTabBar";
 import WorkoutListScreen from "./app/screen/WorkoutListScreen";
+import EditorNavigator from "./app/navigation/EditorNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ export default function App() {
         <Tab.Screen name="Timer">
           {() => <TimerScreen setTabBarShow={setTabBarShow} />}
         </Tab.Screen>
-        <Tab.Screen name="Editor">{() => <EditorScreen />}</Tab.Screen>
+        <Tab.Screen name="Editor" component={EditorNavigator} />
         <Tab.Screen name="WorkoutList">
           {() => <WorkoutListScreen />}
         </Tab.Screen>
