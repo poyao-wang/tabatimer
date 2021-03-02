@@ -11,6 +11,7 @@ import {
   Easing,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const timeData = [
   {
@@ -93,7 +94,7 @@ const returnSectionId = (seconds) => {
 };
 
 export default function TimerScreen({ setTabBarShow }) {
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = useWindowDimentions();
 
   const [timerOn, setTimerOn] = useState(false);
   const [timeMax, setTimeMax] = useState(defaultState.timeMax);

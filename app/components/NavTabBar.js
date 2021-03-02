@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import useWindowDimentions from "../hook/useWindowDimentions";
 import {
   View,
   StyleSheet,
@@ -9,7 +10,7 @@ import {
 } from "react-native";
 
 function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = useWindowDimentions();
 
   const tabBarAnimation = useRef(new Animated.Value(0)).current;
 

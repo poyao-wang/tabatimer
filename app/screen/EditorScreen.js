@@ -9,11 +9,12 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 
 function EditorScreen({ navigation, mainData }) {
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = useWindowDimentions();
 
   const listDimentions = {
     width: width > height ? height : width,

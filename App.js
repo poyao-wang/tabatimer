@@ -14,16 +14,6 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
 
-  const [screenDimentions, setScreenDimentions] = useState(
-    Dimensions.get("window")
-  );
-
-  useEffect(() => {
-    Dimensions.addEventListener("change", ({ window }) => {
-      setScreenDimentions(window);
-    });
-  }, []);
-
   return (
     <NavigationContainer>
       <Tab.Navigator
