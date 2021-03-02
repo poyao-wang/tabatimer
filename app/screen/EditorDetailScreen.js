@@ -66,7 +66,7 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
         fontSize={30}
         title="Ok"
         onPress={() => {
-          mainData[item.id].value =
+          item.value =
             item.type == "time"
               ? finalValue.minutes * 60 + finalValue.seconds
               : finalValue.numbers;

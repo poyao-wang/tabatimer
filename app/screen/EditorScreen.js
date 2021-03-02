@@ -66,42 +66,34 @@ function EditorScreen({ navigation, mainData }) {
     },
   });
 
+  const renderItem = (item) => (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("EditorDetailScreen", item);
+      }}
+      style={styles.itemContainer}
+    >
+      <View style={styles.titlesContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.subtitle}>{item.subtitle}</Text>
+      </View>
+      <View style={styles.valueTextContainer}>
+        <Text style={styles.valueText}>
+          {item.value}
+          {" >"}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={mainData}
-        keyExtractor={(item) => item.id.toString()}
-        style={{ flexGrow: 0 }}
-        bounces={false}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              width: ITEM_WIDTH,
-              padding: ITEM_HEIGHT * 0.1,
-              borderWidth: BORDER_WIDTH,
-            }}
-          />
-        )}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("EditorDetailScreen", item);
-            }}
-            style={styles.itemContainer}
-          >
-            <View style={styles.titlesContainer}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.subtitle}>{item.subtitle}</Text>
-            </View>
-            <View style={styles.valueTextContainer}>
-              <Text style={styles.valueText}>
-                {item.value}
-                {" >"}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+      {renderItem(mainData["prepareTime"])}
+      {renderItem(mainData["workoutTime"])}
+      {renderItem(mainData["restTime"])}
+      {renderItem(mainData["restTimeSets"])}
+      {renderItem(mainData["sets"])}
+      {renderItem(mainData["workouts"])}
     </View>
   );
 }
