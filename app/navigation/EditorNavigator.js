@@ -8,9 +8,9 @@ import timerSetupDefaultData from "../config/timerSetupDefaultData";
 
 const Stack = createStackNavigator();
 
-function EditorNavigator(props) {
-  const [mainData, setMainData] = useState(timerSetupDefaultData);
-
+function EditorNavigator({ useTimerSetupState }) {
+  const mainData = useTimerSetupState.timerSetup;
+  const setMainData = useTimerSetupState.setTimerSetup;
   return (
     <Stack.Navigator>
       <Stack.Screen name="EditorScreen" options={{ headerShown: false }}>

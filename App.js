@@ -8,11 +8,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NavTabBar from "./app/components/NavTabBar";
 import WorkoutListScreen from "./app/screen/WorkoutListScreen";
 import EditorNavigator from "./app/navigation/EditorNavigator";
+import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
+  const [timerSetup, setTimerSetup] = useState(timerSetupDefaultData);
 
   return (
     <NavigationContainer>
@@ -24,7 +26,13 @@ export default function App() {
         <Tab.Screen name="Timer">
           {() => <TimerScreen setTabBarShow={setTabBarShow} />}
         </Tab.Screen>
-        <Tab.Screen name="Editor" component={EditorNavigator} />
+        <Tab.Screen name="Editor">
+          {() => (
+            <EditorNavigator
+              useTimerSetupState={{ timerSetup, setTimerSetup }}
+            />
+          )}
+        </Tab.Screen>
         <Tab.Screen name="WorkoutList">
           {() => <WorkoutListScreen />}
         </Tab.Screen>
