@@ -10,50 +10,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const mainData = [
-  {
-    id: 0,
-    title: "Preparation Time",
-    subtitle: "Preparation before Start",
-    value: 5,
-  },
-  {
-    id: 1,
-    title: "Workout Time",
-    subtitle: "Duration for  Workout",
-    value: 5,
-  },
-  {
-    id: 2,
-    title: "Rest Time",
-    subtitle: "Rest between Workouts",
-    value: 5,
-  },
-  {
-    id: 3,
-    title: "Rest Time - Sets",
-    subtitle: "Rest between Sets",
-    value: 2,
-  },
-  { id: 4, title: "Sets", subtitle: "Set Amount", value: 2 },
-  { id: 5, title: "Workouts", subtitle: "Workouts per Set", value: 1 },
-];
-
 const BORDER_WIDTH = 0;
 
-function EditorScreen({ navigation }) {
+function EditorScreen({ navigation, mainData }) {
   const { width, height } = Dimensions.get("window");
-  const [listDimentions, setListDimentions] = useState({ width, height });
+
+  const listDimentions = {
+    width: width > height ? height : width,
+    height: height,
+  };
   const ITEM_WIDTH = listDimentions.width * 0.9;
   const ITEM_HEIGHT = listDimentions.height * 0.1;
-
-  useEffect(() => {
-    if (width > height) {
-      setListDimentions({ height, width: height });
-    } else {
-      setListDimentions({ height, width });
-    }
-  }, [width, height]);
 
   const styles = StyleSheet.create({
     container: {
