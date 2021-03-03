@@ -24,7 +24,12 @@ export default function App() {
         )}
       >
         <Tab.Screen name="Timer">
-          {() => <TimerScreen setTabBarShow={setTabBarShow} />}
+          {() => (
+            <TimerScreen
+              setTabBarShow={setTabBarShow}
+              useTimerSetupState={{ timerSetup, setTimerSetup }}
+            />
+          )}
         </Tab.Screen>
         <Tab.Screen name="Editor">
           {() => (

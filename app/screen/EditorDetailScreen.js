@@ -136,6 +136,8 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
             item.type == "time"
               ? finalValue.minutes * 60 + finalValue.seconds
               : finalValue.numbers;
+          mainData.workoutSetup.workoutArray = makeWorkoutsArray();
+          mainData.workoutSetup.updated = true;
           setMainData(mainData);
           navigation.navigate("EditorScreen");
         }}

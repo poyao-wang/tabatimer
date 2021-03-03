@@ -12,95 +12,33 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import { useFocusEffect } from "@react-navigation/native";
 
-const timeData = [
-  {
-    id: 0,
-    setNo: 1,
-    workoutNo: 1,
-    type: "rest",
-    duration: 5,
-    start: 0,
-    end: 5,
-  },
-  {
-    id: 1,
-    setNo: 2,
-    workoutNo: 2,
-    type: "workout",
-    duration: 5,
-    start: 5,
-    end: 10,
-  },
-  {
-    id: 2,
-    setNo: 3,
-    workoutNo: 1,
-    type: "rest",
-    duration: 5,
-    start: 10,
-    end: 15,
-  },
-  {
-    id: 3,
-    setNo: 3,
-    workoutNo: 2,
-    type: "rest",
-    duration: 5,
-    start: 15,
-    end: 20,
-  },
-  {
-    id: 4,
-    setNo: 3,
-    workoutNo: 3,
-    type: "rest",
-    duration: 5,
-    start: 20,
-    end: 25,
-  },
-  {
-    id: 5,
-    setNo: 4,
-    workoutNo: 1,
-    type: "rest",
-    duration: 2,
-    start: 25,
-    end: 27,
-  },
-];
-
-const defaultState = {
-  end: timeData[0].end,
-  isActive: false,
-  seconds: 0,
-  sectionId: 0,
-  sectoinCountDownSeconds: timeData[0].duration,
-  setNo: timeData[0].setNo,
-  start: timeData[0].start,
-  timeMax: timeData[timeData.length - 1].end,
-  type: timeData[0].type,
-  workoutNo: timeData[0].workoutNo,
-};
-
-const returnSectionId = (seconds) => {
-  let findResult = timeData.find(
-    (section) => seconds >= section.start && seconds < section.end
-  );
-  if (!findResult)
-    findResult = timeData.find((section) => seconds === section.end);
-
-  return findResult?.id;
-};
-
-export default function TimerScreen({ setTabBarShow }) {
+export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const { width, height } = useWindowDimentions();
 
+  const [timeData, setTimeData] = useState(
+    useTimerSetupState.timerSetup.workoutSetup.workoutArray
+  );
+
+  const returnSectionId = (seconds) => {
+    let findResult = timeData.find(
+      (section) => seconds >= section.start && seconds < section.end
+    );
+    if (!findResult)
+      findResult = timeData.find((section) => seconds === section.end);
+
+    return findResult?.id;
+  };
+
   const [timerOn, setTimerOn] = useState(false);
-  const [timeMax, setTimeMax] = useState(defaultState.timeMax);
+  const [timeMax, setTimeMax] = useState(
+    useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
+      .end
+  );
   const [btnPressable, setBtnPressable] = useState(true);
 
-  const ITEM_SIZE = width * 0.38;
+  const ITEM_SIZE = Math.round(width * 0.38);
   const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
   const flatlist = useRef();
@@ -126,11 +64,28 @@ export default function TimerScreen({ setTabBarShow }) {
     if (scrollX._value == 0) totalSeconds.setValue(0);
     flatlist?.current?.scrollToOffset({
       offset: 0,
-      animated: true,
+      animated: false,
     });
     setTimerOn(false);
     setTabBarShow(true);
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (useTimerSetupState.timerSetup.workoutSetup.updated) {
+        setTimeData(useTimerSetupState.timerSetup.workoutSetup.workoutArray);
+        reset();
+        useTimerSetupState.timerSetup.workoutSetup.updated = false;
+        useTimerSetupState.setTimerSetup(useTimerSetupState.timerSetup);
+      }
+      return;
+    }, [])
+  );
+
+  useEffect(() => {
+    setTimeMax(timeData[timeData.length - 1].end);
+    totalSeconds.setValue(0);
+  }, [timeData]);
 
   useEffect(() => {
     if (timerOn) {
@@ -179,7 +134,7 @@ export default function TimerScreen({ setTabBarShow }) {
       });
       totalSeconds._value = value;
 
-      backgroundAnimation.setValue(height * (value / defaultState.timeMax));
+      backgroundAnimation.setValue(height * (value / timeMax));
 
       if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
         totalSeconds._ceiledValue = Math.ceil(value);
