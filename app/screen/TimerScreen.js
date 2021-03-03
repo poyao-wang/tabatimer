@@ -89,6 +89,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   useEffect(() => {
     setTimeMax(timeData[timeData.length - 1].end);
     totalSeconds.setValue(0);
+    sectionSecondsInputRef?.current?.setNativeProps({
+      text: Math.ceil(timeData[0].end).toString(),
+    });
   }, [timeData]);
 
   useEffect(() => {
