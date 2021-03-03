@@ -50,6 +50,72 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
     </>
   );
 
+  const makeWorkoutsArray = () => {
+    let newArray = [];
+    const setAmt = mainData.sets.value;
+    const workoutAmt = mainData.workouts.value;
+
+    let id = 0;
+    let end = mainData.prepareTime.value;
+
+    newArray.push({
+      id: id,
+      setNo: 1,
+      workoutNo: 0,
+      type: "prepare",
+      duration: mainData.prepareTime.value,
+      start: 0,
+      end: end,
+    });
+    id++;
+
+    for (let i = 1; i <= setAmt; i++) {
+      for (let j = 1; j <= workoutAmt; j++) {
+        newArray.push({
+          id: id,
+          setNo: i,
+          workoutNo: j,
+          type: "workout",
+          duration: mainData.workoutTime.value,
+          start: end,
+          end: end + mainData.workoutTime.value,
+        });
+        end = end + mainData.workoutTime.value;
+        id++;
+
+        if (j !== workoutAmt) {
+          newArray.push({
+            id: id,
+            setNo: i,
+            workoutNo: j,
+            type: "rest",
+            duration: mainData.restTime.value,
+            start: end,
+            end: end + mainData.restTime.value,
+          });
+          end = end + mainData.restTime.value;
+          id++;
+        }
+      }
+
+      if (i !== setAmt) {
+        newArray.push({
+          id: id,
+          setNo: i + 1,
+          workoutNo: 0,
+          type: "prepare",
+          duration: mainData.restTimeSets.value,
+          start: end,
+          end: end + mainData.restTimeSets.value,
+        });
+        end = end + mainData.restTimeSets.value;
+        id++;
+      }
+    }
+
+    return newArray;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 40 }}>{item.title}</Text>
@@ -72,6 +138,13 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
               : finalValue.numbers;
           setMainData(mainData);
           navigation.navigate("EditorScreen");
+        }}
+      />
+      <Button
+        fontSize={30}
+        title="ValueCheck"
+        onPress={() => {
+          console.log(makeWorkoutsArray());
         }}
       />
     </View>
