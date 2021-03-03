@@ -52,7 +52,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
   const backgroundAnimation = React.useRef(new Animated.Value(0)).current;
 
-  let sectionId = 0;
+  const [sectionId, setSectionId] = useState(0);
 
   function toggle() {
     if (totalSeconds._value >= timeMax) return Alert.alert("End");
@@ -126,24 +126,25 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       });
     });
     const totalSecondsListener = totalSeconds.addListener(({ value }) => {
-      const newSectionId = returnSectionId(value);
+      totalSeconds._value = value;
+
       secondsInputRef?.current?.setNativeProps({
         text: Math.ceil(value).toString(),
       });
       sectionSecondsInputRef?.current?.setNativeProps({
-        text: Math.ceil(timeData[newSectionId].end - value).toString(),
+        text: Math.ceil(timeData[sectionId].end - value).toString(),
       });
-      totalSeconds._value = value;
-
       backgroundAnimation.setValue(height * (value / timeMax));
 
       if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
+        // const newSectionId = returnSectionId(value);
         totalSeconds._ceiledValue = Math.ceil(value);
-        if (sectionId !== newSectionId) {
-          sectionId = newSectionId;
+        // if (sectionId !== newSectionId) {
+        if (timeData[sectionId].end - value <= 0.5) {
+          setSectionId(sectionId + 1);
           if (flatListScrolling == false) {
             flatlist?.current?.scrollToOffset({
-              offset: ITEM_SIZE * sectionId,
+              offset: ITEM_SIZE * (sectionId + 1),
               animated: true,
             });
           }
@@ -172,6 +173,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         ]}
       />
       <Animated.FlatList
+        initialNumToRender={10}
         ref={flatlist}
         data={timeData}
         keyExtractor={(item) => item.id.toString()}
@@ -204,10 +206,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
             Animated.timing(totalSeconds, {
               toValue: timeData[newSectionId].start,
-              duration: 200,
+              duration: 100,
               useNativeDriver: true,
             }).start();
           }
+          setSectionId(newSectionId);
         }}
         onScrollBeginDrag={() => {
           setTimerOn(false);
@@ -245,7 +248,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ],
               }}
             >
-              <Animated.Text
+              <Text
                 style={[
                   styles.text,
                   {
@@ -254,7 +257,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ]}
               >
                 {item.id}
-              </Animated.Text>
+              </Text>
             </Animated.View>
           );
         }}
