@@ -37,6 +37,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       .end
   );
   const [btnPressable, setBtnPressable] = useState(true);
+  const [flatListScrolling, setFlatListScrolling] = useState(false);
 
   const ITEM_SIZE = Math.round(width * 0.38);
   const ITEM_SPACING = (width - ITEM_SIZE) / 2;
@@ -52,7 +53,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const backgroundAnimation = React.useRef(new Animated.Value(0)).current;
 
   let sectionId = 0;
-  let flatListScrolling = false;
 
   function toggle() {
     if (totalSeconds._value >= timeMax) return Alert.alert("End");
@@ -61,10 +61,14 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }
 
   function reset() {
-    if (scrollX._value == 0) totalSeconds.setValue(0);
+    Animated.timing(totalSeconds, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
     flatlist?.current?.scrollToOffset({
       offset: 0,
-      animated: false,
+      animated: true,
     });
     setTimerOn(false);
     setTabBarShow(true);
@@ -117,12 +121,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       workoutInputRef?.current?.setNativeProps({
         text: "Workout : " + timeData[newSectionId].workoutNo.toString(),
       });
-      if (!timerOn) {
-        secondsInputRef?.current?.setNativeProps({
-          text: timeData[newSectionId].start.toString(),
-        });
-        totalSeconds.setValue(timeData[newSectionId].start);
-      }
     });
     const totalSecondsListener = totalSeconds.addListener(({ value }) => {
       const newSectionId = returnSectionId(value);
@@ -186,10 +184,27 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           { useNativeDriver: true }
         )}
         onMomentumScrollBegin={() => {
-          flatListScrolling = true;
+          setFlatListScrolling(true);
         }}
         onMomentumScrollEnd={() => {
-          flatListScrolling = false;
+          setFlatListScrolling(false);
+
+          let newSectionId = Math.round(scrollX._value / ITEM_SIZE);
+          if (newSectionId <= 0) newSectionId = 0;
+          if (newSectionId >= timeData.length - 1)
+            newSectionId = timeData.length - 1;
+
+          if (!timerOn) {
+            secondsInputRef?.current?.setNativeProps({
+              text: timeData[newSectionId].start.toString(),
+            });
+
+            Animated.timing(totalSeconds, {
+              toValue: timeData[newSectionId].start,
+              duration: 200,
+              useNativeDriver: true,
+            }).start();
+          }
         }}
         onScrollBeginDrag={() => {
           setTimerOn(false);
@@ -242,7 +257,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         }}
       />
       <Button
-        disabled={!btnPressable}
+        disabled={!btnPressable || flatListScrolling}
         title={timerOn ? "pause" : "play"}
         onPress={toggle}
       />
