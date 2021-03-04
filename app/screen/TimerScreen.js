@@ -14,6 +14,15 @@ import React, { useEffect, useState, useRef } from "react";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import { useFocusEffect } from "@react-navigation/native";
 
+const outPutColorByType = (type) => {
+  if (type == "prepare") return { value: 0, text: "rgb(200,200,200)" };
+  if (type == "workout") return { value: 1, text: "rgb(255,114,50)" };
+  if (type == "rest") return { value: 2, text: "rgb(20,196,108)" };
+  if (type == "finished") return { value: 3, text: "rgb(255,255,255)" };
+
+  return "gray";
+};
+
 export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const { width, height } = useWindowDimentions();
 
@@ -41,9 +50,28 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const sectionSeconds = React.useRef(new Animated.Value(0)).current;
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
-  const backgroundAnimation = React.useRef(new Animated.Value(0)).current;
+  const backgroundAnimation = React.useRef(new Animated.Value(-height)).current;
+  const backgroundColorAnimation = React.useRef(new Animated.Value(0)).current;
 
   const [sectionId, setSectionId] = useState(0);
+
+  const backgroundColorForScreen = backgroundColorAnimation.interpolate({
+    inputRange: [0, 1, 2, 3],
+    outputRange: [
+      outPutColorByType("prepare").text,
+      outPutColorByType("workout").text,
+      outPutColorByType("rest").text,
+      outPutColorByType("finished").text,
+    ],
+  });
+
+  function changeBackgroundColor(toValue) {
+    Animated.timing(backgroundColorAnimation, {
+      toValue: toValue,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }
 
   function toggle() {
     if (sectionSeconds._value >= timeMax) return Alert.alert("End");
@@ -54,15 +82,21 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   function reset() {
     setTimerOn(false);
     setTabBarShow(true);
-    Animated.timing(sectionSeconds, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
+    totalSeconds.setValue(0);
+    sectionSeconds.setValue(0);
+    secondsInputRef?.current?.setNativeProps({
+      text: timeData[0].start.toString(),
+    });
     flatlist?.current?.scrollToOffset({
       offset: 0,
       animated: true,
     });
+
+    Animated.timing(backgroundAnimation, {
+      toValue: -height,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
     setSectionId(0);
   }
 
@@ -85,7 +119,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         animated: true,
       });
       sectionSeconds.setValue(0);
-      backgroundAnimation.setValue(0);
+      backgroundAnimation.setValue(-height);
       Animated.parallel([
         Animated.timing(sectionSeconds, {
           toValue: timeData[sectionId].duration,
@@ -94,7 +128,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           easing: Easing.linear,
         }),
         Animated.timing(backgroundAnimation, {
-          toValue: height,
+          toValue: 0,
           duration: timeData[sectionId].duration * 1000,
           useNativeDriver: true,
           easing: Easing.linear,
@@ -103,11 +137,14 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         if (sectionId + 1 > timeData.length - 1) {
           setTimerOn(false);
           setTabBarShow(true);
+          if (finished)
+            changeBackgroundColor(outPutColorByType("finished").value);
         } else {
           if (finished) setSectionId(sectionId + 1);
         }
       });
     }
+    changeBackgroundColor(outPutColorByType(timeData[sectionId].type).value);
   }, [sectionId]);
 
   useEffect(() => {
@@ -129,7 +166,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           easing: Easing.linear,
         }),
         Animated.timing(backgroundAnimation, {
-          toValue: height,
+          toValue: 0,
           duration:
             (timeData[sectionId].duration - sectionSeconds._value) * 1000,
           useNativeDriver: true,
@@ -139,6 +176,8 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         if (sectionId + 1 > timeData.length - 1) {
           setTimerOn(false);
           setTabBarShow(true);
+          if (finished)
+            changeBackgroundColor(outPutColorByType("finished").value);
         } else {
           if (finished) setSectionId(sectionId + 1);
         }
@@ -192,7 +231,19 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           {
             height,
             width,
-            backgroundColor: "gray",
+            // backgroundColor: "red",
+            backgroundColor: backgroundColorForScreen,
+          },
+        ]}
+      />
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            height,
+            width,
+            opacity: 1,
+            backgroundColor: "white",
             transform: [{ translateY: backgroundAnimation }],
           },
         ]}
@@ -233,7 +284,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
             Animated.timing(backgroundAnimation, {
               // toValue: height * (timeData[newSectionId].start / timeMax),
-              toValue: 0,
+              toValue: -height,
               duration: 100,
               useNativeDriver: true,
             }).start();
@@ -252,13 +303,16 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           ];
           const opacity = scrollX.interpolate({
             inputRange,
-            outputRange: [0.4, 1, 0.4],
+            outputRange: [0.8, 1, 0.8],
           });
 
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.5, 1, 0.5],
+            outputRange: [0.8, 1, 0.8],
           });
+
+          const indexOfFlaiListArray =
+            item.workoutNo - 1 < 0 ? 0 : item.workoutNo - 1;
 
           return (
             <Animated.View
@@ -268,6 +322,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 justifyContent: "center",
                 alignItems: "center",
                 borderWidth: 2,
+                backgroundColor: outPutColorByType(item.type).text,
                 opacity,
                 transform: [
                   {
@@ -276,6 +331,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ],
               }}
             >
+              <Text style={{ fontSize: 25 }}>{item.type}</Text>
               <Text
                 style={[
                   styles.text,
@@ -285,6 +341,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ]}
               >
                 {item.id}
+              </Text>
+              <Text style={{ fontSize: 25 }}>
+                {
+                  useTimerSetupState.timerSetup.workoutSetup.flatListArray[
+                    indexOfFlaiListArray
+                  ].name
+                }
               </Text>
             </Animated.View>
           );
