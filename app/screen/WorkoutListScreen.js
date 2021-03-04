@@ -12,47 +12,35 @@ import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 
-const NUM_ITEMS = 15;
+const BORDER_WIDTH = 2;
 
-function getColor(i) {
-  const multiplier = 255 / (NUM_ITEMS - 1);
-  const colorVal = i * multiplier;
-  return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
-}
-
-const exampleData = [...Array(NUM_ITEMS)].map((d, index) => {
-  const backgroundColor = getColor(index);
-  return {
-    key: `item-${backgroundColor}`,
-    label: String(index),
-    backgroundColor,
-  };
-});
-
-function WorkoutListScreen(props) {
+function WorkoutListScreen({ navigation, mainData, setMainData }) {
   const { width, height } = Dimensions.get("window");
-  const [data, setData] = useState(exampleData);
-
+  const [data, setData] = useState(mainData.workoutSetup.flatListArray);
+  // console.log(data, mainData.workoutSetup.flatListArray);
   const renderItem = useCallback(({ item, index, drag, isActive }) => {
     return (
       <TouchableOpacity
         style={{
           height: width > height ? height * 0.15 : height * 0.08,
-          backgroundColor: item.backgroundColor,
           alignItems: "center",
           justifyContent: "center",
+          borderWidth: BORDER_WIDTH,
+        }}
+        onPress={() => {
+          navigation.navigate("WorkoutListDetailScreen", item);
         }}
         onLongPress={drag}
       >
         <Text
           style={{
             fontWeight: "bold",
-            color: "white",
             fontSize: width > height ? height * 0.07 : height * 0.03,
           }}
         >
           {isActive && "↕"}
-          {item.label}
+          {index + " :"}
+          {item.name}
         </Text>
       </TouchableOpacity>
     );
@@ -67,8 +55,15 @@ function WorkoutListScreen(props) {
         }}
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item, index) => `draggable-item-${item.key}`}
-        onDragEnd={({ data }) => setData(data)}
+        keyExtractor={(item, index) => `draggable-item-${index}`}
+        onDragEnd={({ data }) => {
+          for (let i = 0; i < data.length; i++) {
+            data[i].id = i;
+          }
+          mainData.workoutSetup.flatListArray = data;
+          setMainData(mainData);
+          setData(data);
+        }}
       />
     </View>
   );

@@ -9,6 +9,7 @@ import NavTabBar from "./app/components/NavTabBar";
 import WorkoutListScreen from "./app/screen/WorkoutListScreen";
 import EditorNavigator from "./app/navigation/EditorNavigator";
 import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
+import WorkoutListNavigator from "./app/navigation/WorkoutListNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,11 @@ export default function App() {
           )}
         </Tab.Screen>
         <Tab.Screen name="WorkoutList">
-          {() => <WorkoutListScreen />}
+          {() => (
+            <WorkoutListNavigator
+              useTimerSetupState={{ timerSetup, setTimerSetup }}
+            />
+          )}
         </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
