@@ -116,6 +116,29 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
     return newArray;
   };
 
+  const makeFlatListArray = () => {
+    let newArray = [...mainData.workoutSetup.flatListArray];
+    const workoutAmt = finalValue.numbers;
+    let arrayLength = newArray.length;
+    if (arrayLength > workoutAmt) {
+      for (let i = 0; i < arrayLength - workoutAmt; i++) {
+        newArray.pop();
+      }
+    } else if (arrayLength < workoutAmt) {
+      for (let i = 0; i < workoutAmt - arrayLength; i++) {
+        newArray.push({});
+      }
+    }
+
+    for (let i = 0; i < newArray.length; i++) {
+      newArray[i].id = i;
+      if (!newArray[i].name) newArray[i].name = `workout${i}`;
+      if (!newArray[i].image) newArray[i].image = "";
+    }
+
+    return newArray;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 40 }}>{item.title}</Text>
@@ -138,6 +161,10 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
               : finalValue.numbers;
           mainData.workoutSetup.workoutArray = makeWorkoutsArray();
           mainData.workoutSetup.updated = true;
+          if (item.title == "Workouts") {
+            mainData.workoutSetup.flatListArray = makeFlatListArray();
+            // console.log(makeFlatListArray());
+          }
           setMainData(mainData);
           navigation.navigate("EditorScreen");
         }}
@@ -146,7 +173,8 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
         fontSize={30}
         title="ValueCheck"
         onPress={() => {
-          console.log(makeWorkoutsArray());
+          console.log(makeFlatListArray());
+          console.log(item.title);
         }}
       />
     </View>
