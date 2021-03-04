@@ -21,16 +21,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     useTimerSetupState.timerSetup.workoutSetup.workoutArray
   );
 
-  const returnSectionId = (seconds) => {
-    let findResult = timeData.find(
-      (section) => seconds >= section.start && seconds < section.end
-    );
-    if (!findResult)
-      findResult = timeData.find((section) => seconds === section.end);
-
-    return findResult?.id;
-  };
-
   const [timerOn, setTimerOn] = useState(false);
   const [timeMax, setTimeMax] = useState(
     useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
