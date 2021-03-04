@@ -49,29 +49,31 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const workoutInputRef = useRef();
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const sectionSeconds = React.useRef(new Animated.Value(0)).current;
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
   const backgroundAnimation = React.useRef(new Animated.Value(0)).current;
 
   const [sectionId, setSectionId] = useState(0);
 
   function toggle() {
-    if (totalSeconds._value >= timeMax) return Alert.alert("End");
+    if (sectionSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
     setTabBarShow(timerOn);
   }
 
   function reset() {
-    Animated.timing(totalSeconds, {
+    setTimerOn(false);
+    setTabBarShow(true);
+    Animated.timing(sectionSeconds, {
       toValue: 0,
-      duration: 500,
+      duration: 200,
       useNativeDriver: true,
     }).start();
     flatlist?.current?.scrollToOffset({
       offset: 0,
       animated: true,
     });
-    setTimerOn(false);
-    setTabBarShow(true);
+    setSectionId(0);
   }
 
   useFocusEffect(
@@ -87,8 +89,31 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   );
 
   useEffect(() => {
+    if ((flatListScrolling == false) & timerOn) {
+      flatlist?.current?.scrollToOffset({
+        offset: ITEM_SIZE * sectionId,
+        animated: true,
+      });
+      sectionSeconds.setValue(0);
+      Animated.timing(sectionSeconds, {
+        toValue: timeData[sectionId].duration,
+        duration: timeData[sectionId].duration * 1000,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }).start(({ finished }) => {
+        if (sectionId + 1 > timeData.length - 1) {
+          setTimerOn(false);
+          setTabBarShow(true);
+        } else {
+          if (finished) setSectionId(sectionId + 1);
+        }
+      });
+    }
+  }, [sectionId]);
+
+  useEffect(() => {
     setTimeMax(timeData[timeData.length - 1].end);
-    totalSeconds.setValue(0);
+    sectionSeconds.setValue(0);
     sectionSecondsInputRef?.current?.setNativeProps({
       text: Math.ceil(timeData[0].end).toString(),
     });
@@ -96,23 +121,28 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useEffect(() => {
     if (timerOn) {
-      Animated.timing(totalSeconds, {
-        toValue: timeMax,
-        duration: (timeMax - totalSeconds._value) * 1000,
+      // console.log(sectionSeconds._value, sectionId);
+      sectionSeconds.setValue(sectionSeconds._value);
+      Animated.timing(sectionSeconds, {
+        toValue: timeData[sectionId].duration,
+        duration: (timeData[sectionId].duration - sectionSeconds._value) * 1000,
         useNativeDriver: true,
         easing: Easing.linear,
-      }).start(() => {
-        setTimerOn(false);
-        setTabBarShow(true);
+      }).start(({ finished }) => {
+        if (sectionId + 1 > timeData.length - 1) {
+          setTimerOn(false);
+          setTabBarShow(true);
+        } else {
+          if (finished) setSectionId(sectionId + 1);
+        }
       });
     } else {
-      totalSeconds.stopAnimation();
+      sectionSeconds.stopAnimation();
     }
   }, [timerOn]);
 
   useEffect(() => {
     const scrollXListener = scrollX.addListener(({ value }) => {
-      scrollX._value = value;
       let newSectionId = Math.round(value / ITEM_SIZE);
       if (newSectionId <= 0) newSectionId = 0;
       if (newSectionId >= timeData.length - 1)
@@ -125,37 +155,25 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         text: "Workout : " + timeData[newSectionId].workoutNo.toString(),
       });
     });
-    const totalSecondsListener = totalSeconds.addListener(({ value }) => {
-      totalSeconds._value = value;
-
-      secondsInputRef?.current?.setNativeProps({
-        text: Math.ceil(value).toString(),
-      });
-      sectionSecondsInputRef?.current?.setNativeProps({
-        text: Math.ceil(timeData[sectionId].end - value).toString(),
-      });
-      backgroundAnimation.setValue(height * (value / timeMax));
-
-      if (Math.ceil(value) !== totalSeconds._ceiledValue && timerOn) {
-        // const newSectionId = returnSectionId(value);
-        totalSeconds._ceiledValue = Math.ceil(value);
-        // if (sectionId !== newSectionId) {
-        if (timeData[sectionId].end - value <= 0.5) {
-          setSectionId(sectionId + 1);
-          if (flatListScrolling == false) {
-            flatlist?.current?.scrollToOffset({
-              offset: ITEM_SIZE * (sectionId + 1),
-              animated: true,
-            });
-          }
-        }
+    const sectionSecondsListener = sectionSeconds.addListener(({ value }) => {
+      if (timerOn) {
+        totalSeconds.setValue(timeData[sectionId].start + value);
+        secondsInputRef?.current?.setNativeProps({
+          text: Math.ceil(totalSeconds._value).toString(),
+        });
+        sectionSecondsInputRef?.current?.setNativeProps({
+          text: Math.ceil(timeData[sectionId].duration - value).toString(),
+        });
+        backgroundAnimation.setValue(
+          height * (sectionSeconds._value / timeData[sectionId].duration)
+        );
       }
     });
     return () => {
       scrollX.removeListener(scrollXListener);
       scrollX.removeAllListeners();
-      totalSeconds.removeListener(totalSecondsListener);
-      totalSeconds.removeAllListeners();
+      sectionSeconds.removeListener(sectionSecondsListener);
+      sectionSeconds.removeAllListeners();
     };
   });
 
@@ -200,12 +218,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             newSectionId = timeData.length - 1;
 
           if (!timerOn) {
+            totalSeconds.setValue(timeData[newSectionId].start);
+            sectionSeconds.setValue(0);
             secondsInputRef?.current?.setNativeProps({
               text: timeData[newSectionId].start.toString(),
             });
 
-            Animated.timing(totalSeconds, {
-              toValue: timeData[newSectionId].start,
+            Animated.timing(backgroundAnimation, {
+              // toValue: height * (timeData[newSectionId].start / timeMax),
+              toValue: 0,
               duration: 100,
               useNativeDriver: true,
             }).start();
