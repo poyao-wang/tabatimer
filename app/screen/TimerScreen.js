@@ -95,12 +95,21 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         animated: true,
       });
       sectionSeconds.setValue(0);
-      Animated.timing(sectionSeconds, {
-        toValue: timeData[sectionId].duration,
-        duration: timeData[sectionId].duration * 1000,
-        useNativeDriver: true,
-        easing: Easing.linear,
-      }).start(({ finished }) => {
+      backgroundAnimation.setValue(0);
+      Animated.parallel([
+        Animated.timing(sectionSeconds, {
+          toValue: timeData[sectionId].duration,
+          duration: timeData[sectionId].duration * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+        Animated.timing(backgroundAnimation, {
+          toValue: height,
+          duration: timeData[sectionId].duration * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+      ]).start(({ finished }) => {
         if (sectionId + 1 > timeData.length - 1) {
           setTimerOn(false);
           setTabBarShow(true);
@@ -121,14 +130,22 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useEffect(() => {
     if (timerOn) {
-      // console.log(sectionSeconds._value, sectionId);
-      sectionSeconds.setValue(sectionSeconds._value);
-      Animated.timing(sectionSeconds, {
-        toValue: timeData[sectionId].duration,
-        duration: (timeData[sectionId].duration - sectionSeconds._value) * 1000,
-        useNativeDriver: true,
-        easing: Easing.linear,
-      }).start(({ finished }) => {
+      Animated.parallel([
+        Animated.timing(sectionSeconds, {
+          toValue: timeData[sectionId].duration,
+          duration:
+            (timeData[sectionId].duration - sectionSeconds._value) * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+        Animated.timing(backgroundAnimation, {
+          toValue: height,
+          duration:
+            (timeData[sectionId].duration - sectionSeconds._value) * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+      ]).start(({ finished }) => {
         if (sectionId + 1 > timeData.length - 1) {
           setTimerOn(false);
           setTabBarShow(true);
@@ -164,9 +181,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         sectionSecondsInputRef?.current?.setNativeProps({
           text: Math.ceil(timeData[sectionId].duration - value).toString(),
         });
-        backgroundAnimation.setValue(
-          height * (sectionSeconds._value / timeData[sectionId].duration)
-        );
+        // backgroundAnimation.setValue(
+        //   height * (sectionSeconds._value / timeData[sectionId].duration)
+        // );
       }
     });
     return () => {
@@ -210,14 +227,14 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           setFlatListScrolling(true);
         }}
         onMomentumScrollEnd={() => {
-          setFlatListScrolling(false);
-
-          let newSectionId = Math.round(scrollX._value / ITEM_SIZE);
-          if (newSectionId <= 0) newSectionId = 0;
-          if (newSectionId >= timeData.length - 1)
-            newSectionId = timeData.length - 1;
-
           if (!timerOn) {
+            setFlatListScrolling(false);
+            // console.log("onMomentumScrollEnd");
+
+            let newSectionId = Math.round(scrollX._value / ITEM_SIZE);
+            if (newSectionId <= 0) newSectionId = 0;
+            if (newSectionId >= timeData.length - 1)
+              newSectionId = timeData.length - 1;
             totalSeconds.setValue(timeData[newSectionId].start);
             sectionSeconds.setValue(0);
             secondsInputRef?.current?.setNativeProps({
@@ -230,8 +247,8 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               duration: 100,
               useNativeDriver: true,
             }).start();
+            setSectionId(newSectionId);
           }
-          setSectionId(newSectionId);
         }}
         onScrollBeginDrag={() => {
           setTimerOn(false);
