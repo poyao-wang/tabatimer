@@ -23,7 +23,8 @@ const outPutColorByType = (type) => {
 };
 
 export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
-  const { width, height } = useWindowDimentions();
+  const windowDimentions = useWindowDimentions();
+  const { width, height } = windowDimentions;
 
   const [timeData, setTimeData] = useState(
     useTimerSetupState.timerSetup.workoutSetup.workoutArray
@@ -139,6 +140,22 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       return;
     }, [])
   );
+
+  useEffect(() => {
+    setTimerOn(false);
+    setTabBarShow(true);
+    setTimeout(() => {
+      flatlist?.current?.scrollToOffset({
+        offset: ITEM_SIZE * sectionId,
+        animated: false,
+      });
+    }, 100);
+    backgroundAnimation.setValue(
+      -height *
+        ((timeData[sectionId].duration - sectionSeconds._value) /
+          timeData[sectionId].duration)
+    );
+  }, [windowDimentions]);
 
   useEffect(() => {
     setTimeMax(timeData[timeData.length - 1].end);
