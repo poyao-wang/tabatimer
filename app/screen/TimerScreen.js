@@ -3,6 +3,7 @@ import {
   Animated,
   Button,
   Easing,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -303,6 +304,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           const indexOfFlaiListArray =
             item.workoutNo - 1 < 0 ? 0 : item.workoutNo - 1;
 
+          const flatListArrayIndex =
+            item.workoutNo == 0 ? 0 : item.workoutNo - 1;
+          const imageUri =
+            useTimerSetupState.timerSetup.workoutSetup.flatListArray[
+              flatListArrayIndex
+            ].image;
+
           return (
             <Animated.View
               style={{
@@ -321,7 +329,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               }}
             >
               <Text style={{ fontSize: 25 }}>{item.type}</Text>
-              <Text
+              {/* <Text
                 style={[
                   styles.text,
                   {
@@ -330,7 +338,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ]}
               >
                 {item.id}
-              </Text>
+              </Text> */}
+              {!(imageUri == "") && (
+                <Image
+                  source={{ uri: imageUri }}
+                  style={{ width: ITEM_SIZE, height: ITEM_SIZE }}
+                />
+              )}
               <Text style={{ fontSize: 25 }}>
                 {
                   useTimerSetupState.timerSetup.workoutSetup.flatListArray[
