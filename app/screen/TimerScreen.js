@@ -30,10 +30,10 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [timeData, setTimeData] = useState(
     useTimerSetupState.timerSetup.workoutSetup.workoutArray
   );
-  const [timeMax, setTimeMax] = useState(
-    useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
-      .end
-  );
+  // const [timeMax, setTimeMax] = useState(
+  //   useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
+  //     .end
+  // );
   const [timerOn, setTimerOn] = useState(false);
   const [btnPressable, setBtnPressable] = useState(true);
   const [flatListScrolling, setFlatListScrolling] = useState(false);
@@ -104,7 +104,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }
 
   function toggle() {
-    if (sectionSeconds._value >= timeMax) return Alert.alert("End");
+    // if (sectionSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
     setTabBarShow(timerOn);
   }
@@ -159,7 +159,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }, [windowDimentions]);
 
   useEffect(() => {
-    setTimeMax(timeData[timeData.length - 1].end);
+    // setTimeMax(timeData[timeData.length - 1].end);
     sectionSeconds.setValue(0);
     sectionSecondsRemainsInputRef?.current?.setNativeProps({
       text: Math.ceil(timeData[0].end).toString(),

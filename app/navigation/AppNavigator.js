@@ -14,7 +14,16 @@ import TimerScreen from "../screen/TimerScreen";
 
 const Tab = createBottomTabNavigator();
 
-function AppNavigator({ useTimerSetupState, useTabBarShowState }) {
+function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
+  React.useEffect(
+    () =>
+      navigation.addListener("beforeRemove", (e) => {
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+      }),
+    [navigation]
+  );
+
   return (
     <Tab.Navigator
       tabBar={(props) => (
