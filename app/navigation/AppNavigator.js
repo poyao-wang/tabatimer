@@ -11,6 +11,7 @@ import WorkoutListScreen from "../screen/WorkoutListScreen";
 import EditorNavigator from "../navigation/EditorNavigator";
 import WorkoutListNavigator from "../navigation/WorkoutListNavigator";
 import TimerScreen from "../screen/TimerScreen";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
         <NavTabBar {...props} tabBarShowState={useTabBarShowState.tabBarShow} />
       )}
     >
-      <Tab.Screen name="Timer">
+      <Tab.Screen name="Timer" options={{ iconName: "timer" }}>
         {() => (
           <TimerScreen
             setTabBarShow={useTabBarShowState.setTabBarShow}
@@ -38,10 +39,13 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name="Editor">
+      <Tab.Screen name="Editor" options={{ iconName: "square-edit-outline" }}>
         {() => <EditorNavigator useTimerSetupState={useTimerSetupState} />}
       </Tab.Screen>
-      <Tab.Screen name="WorkoutList">
+      <Tab.Screen
+        name="WorkoutList"
+        options={{ iconName: "format-list-bulleted" }}
+      >
         {() => <WorkoutListNavigator useTimerSetupState={useTimerSetupState} />}
       </Tab.Screen>
     </Tab.Navigator>

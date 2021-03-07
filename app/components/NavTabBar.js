@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
@@ -8,11 +9,14 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
+import colors from "../config/colors";
 
 function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
   const { width, height } = useWindowDimentions();
 
   const tabBarAnimation = useRef(new Animated.Value(0)).current;
+
+  const BAR_SIZE = width > height ? width * 0.1 : height * 0.1;
 
   const tabBarShowAnime = () => {
     Animated.timing(tabBarAnimation, {
@@ -36,7 +40,7 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
   });
   const translateY = tabBarAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 200],
+    outputRange: [0, width > height ? -height : -height * 0.3],
   });
 
   useEffect(() => {
@@ -49,18 +53,19 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
 
   const styles = StyleSheet.create({
     container: {
-      position: width > height ? "absolute" : "relative",
-      left: width > height ? width * 0.05 : null,
+      // borderWidth: 2,
+      // position: width > height ? "absolute" : "relative",
+      right: width > height ? "5%" : null,
       alignSelf: "center",
       alignItems: "center",
       justifyContent: "center",
       position: "absolute",
-      bottom: "5%",
-      flexDirection: "row",
-      height: width > height ? "13%" : "10%",
-      aspectRatio: 4,
-      backgroundColor: "#e6ebf2",
-      // flexDirection: "column",
+      top: width > height ? (height - BAR_SIZE * 4) / 2 : "10%",
+      flexDirection: width > height ? "column" : "row",
+      height: width > height ? null : BAR_SIZE,
+      width: width > height ? BAR_SIZE : null,
+      aspectRatio: width > height ? 0.25 : 4,
+      // backgroundColor: "#e6ebf2",
     },
   });
 
@@ -69,7 +74,7 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
       style={[
         styles.container,
         {
-          borderRadius: 20,
+          // borderRadius: 20,
           opacity,
           transform: [
             {
@@ -87,8 +92,35 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
             : options.title !== undefined
             ? options.title
             : route.name;
-
+        const iconName = options.iconName;
         const isFocused = state.index === index;
+
+        const tabIconAnimation = useRef(new Animated.Value(0)).current;
+
+        useEffect(() => {
+          if (isFocused) {
+            Animated.timing(tabIconAnimation, {
+              toValue: 1,
+              duration: 300,
+              useNativeDriver: true,
+            }).start();
+          } else {
+            Animated.timing(tabIconAnimation, {
+              toValue: 0,
+              duration: 300,
+              useNativeDriver: true,
+            }).start();
+          }
+        }, [isFocused]);
+
+        const iconScale = tabIconAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 1.2],
+        });
+        const iconOpacity = tabIconAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.5, 1],
+        });
 
         const onPress = () => {
           const event = navigation.emit({
@@ -116,12 +148,34 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={{ flex: 1, alignItems: "center" }}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
             key={index}
           >
-            <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
-              {label}
-            </Text>
+            {iconName && (
+              <Animated.View
+                style={{
+                  opacity: iconOpacity,
+                  transform: [
+                    {
+                      scale: iconScale,
+                    },
+                  ],
+                }}
+              >
+                <MaterialCommunityIcons //
+                  name={iconName}
+                  size={BAR_SIZE * 0.7}
+                  color={colors.dark}
+                  style={
+                    {
+                      // borderWidth: 2,
+                      // padding: BAR_SIZE * 0.06,
+                      // borderRadius: BAR_SIZE * 0.2,
+                    }
+                  }
+                />
+              </Animated.View>
+            )}
           </TouchableOpacity>
         );
       })}
