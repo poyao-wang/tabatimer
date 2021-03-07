@@ -69,7 +69,7 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
       style={[
         styles.container,
         {
-          borderRadius: "50%",
+          borderRadius: 20,
           opacity,
           transform: [
             {
