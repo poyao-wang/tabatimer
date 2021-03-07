@@ -199,15 +199,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       });
     });
     const sectionSecondsListener = sectionSeconds.addListener(({ value }) => {
-      if (timerOn) {
-        totalSeconds.setValue(timeData[sectionId].start + value);
-        totalSecondsInputRef?.current?.setNativeProps({
-          text: Math.ceil(totalSeconds._value).toString(),
-        });
-        sectionSecondsRemainsInputRef?.current?.setNativeProps({
-          text: Math.ceil(timeData[sectionId].duration - value).toString(),
-        });
-      }
+      totalSeconds.setValue(timeData[sectionId].start + value);
+      totalSecondsInputRef?.current?.setNativeProps({
+        text: Math.ceil(totalSeconds._value).toString(),
+      });
+      sectionSecondsRemainsInputRef?.current?.setNativeProps({
+        text: Math.ceil(timeData[sectionId].duration - value).toString(),
+      });
     });
     return () => {
       scrollX.removeListener(scrollXListener);
