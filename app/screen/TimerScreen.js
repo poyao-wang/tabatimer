@@ -13,6 +13,9 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import CustomIcons from "../components/CustomIcons";
+
+const BORDER_WIDTH = 0;
 
 const outPutColorByType = (type) => {
   if (type == "prepare") return { value: 0, text: "rgba(200,200,200,1)" };
@@ -250,7 +253,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       />
       <View
         style={{
-          borderWidth: 2,
+          borderWidth: BORDER_WIDTH,
           height: CENTER_CONTAINER_SIZE,
           width: CENTER_CONTAINER_SIZE,
           justifyContent: "center",
@@ -261,7 +264,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           style={{
             height: "30%",
             width: "100%",
-            borderWidth: 2,
+            borderWidth: BORDER_WIDTH,
             flexDirection: "row",
           }}
         >
@@ -270,7 +273,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             <TextInput
               ref={sectionSecondsRemainsInputRef}
               defaultValue={"0"}
-              style={{ fontSize: 40 }}
+              style={{ fontSize: ITEM_SIZE * 0.5 }}
               editable={false}
             />
           </View>
@@ -286,7 +289,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           bounces={false}
           snapToInterval={ITEM_SIZE}
           decelerationRate="fast"
-          style={{ flexGrow: 0, overflow: "visible", borderWidth: 2 }}
+          style={{
+            flexGrow: 0,
+            overflow: "visible",
+            borderWidth: BORDER_WIDTH,
+          }}
           contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
@@ -354,7 +361,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                   height: ITEM_SIZE,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderWidth: 2,
+                  borderWidth: BORDER_WIDTH,
                   backgroundColor: outPutColorByType(item.type).text,
                   opacity,
                   transform: [
@@ -396,7 +403,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           style={{
             height: "30%",
             width: "100%",
-            borderWidth: 2,
+            borderWidth: BORDER_WIDTH,
             flexDirection: "row",
           }}
         >
@@ -408,10 +415,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             />
           </View>
           <View style={styles.flatListLowerSubContainer}>
-            <Button
+            <CustomIcons
+              icnoName={timerOn ? "pause-circle" : "play-circle"}
               disabled={!btnPressable || flatListScrolling}
-              title={timerOn ? "pause" : "play"}
               onPress={toggle}
+              size={ITEM_SIZE * 0.6}
             />
           </View>
           <View style={styles.flatListLowerSubContainer}>
