@@ -8,12 +8,25 @@ import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
 
 import AppNavigator from "./app/navigation/AppNavigator";
 import WelcomeScreen from "./app/screen/WelcomeScreen";
+import useCache from "./app/utility/cache";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
   const [timerSetup, setTimerSetup] = useState(timerSetupDefaultData);
+
+  const readFromCache = async () => {
+    const result = await useCache.get();
+    console.log("cache loaded");
+    if (result) {
+      setTimerSetup(result);
+    }
+  };
+
+  useEffect(() => {
+    readFromCache();
+  }, []);
 
   return (
     <NavigationContainer>

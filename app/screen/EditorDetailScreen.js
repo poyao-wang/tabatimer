@@ -1,5 +1,3 @@
-import React from "react";
-import NumberPicker from "../components/NumberPicker";
 import {
   Animated,
   View,
@@ -9,6 +7,10 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+import React from "react";
+
+import NumberPicker from "../components/NumberPicker";
+import useCache from "../utility/cache";
 
 function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
   const { width, height } = Dimensions.get("window");
@@ -166,6 +168,7 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
             // console.log(makeFlatListArray());
           }
           setMainData(mainData);
+          useCache.store(mainData);
           navigation.navigate("EditorScreen");
         }}
       />

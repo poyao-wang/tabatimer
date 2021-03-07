@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import useCache from "../utility/cache";
 
 function WorkoutListDetailScreen({ route, navigation, mainData, setMainData }) {
   const { width, height } = Dimensions.get("window");
@@ -39,12 +40,14 @@ function WorkoutListDetailScreen({ route, navigation, mainData, setMainData }) {
         const resizedPhoto = await ImageManipulator.manipulateAsync(
           result.uri,
           [{ resize: { width: 300 } }], // resize to width of 300 and preserve aspect ratio
-          { compress: 0.7, format: "jpeg" }
+          { compress: 0.7, format: "jpeg", base64: true }
         );
         setImageUri(resizedPhoto.uri);
-        mainData.workoutSetup.flatListArray[item.id].image = resizedPhoto.uri;
+        const imageUri = "data:image/jpeg;base64," + resizedPhoto.base64;
+        mainData.workoutSetup.flatListArray[item.id].image = imageUri;
         mainData.workoutSetup.updated = true;
         setMainData(mainData);
+        useCache.store(mainData);
       }
     } catch (error) {
       console.log("Error reading an image", error);
@@ -55,6 +58,7 @@ function WorkoutListDetailScreen({ route, navigation, mainData, setMainData }) {
     setImageUri(null);
     mainData.workoutSetup.flatListArray[item.id].image = "";
     setMainData(mainData);
+    useCache.store(mainData);
   };
 
   // console.log(item);
