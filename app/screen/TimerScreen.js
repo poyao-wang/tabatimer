@@ -39,8 +39,16 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [flatListScrolling, setFlatListScrolling] = useState(false);
   const [sectionId, setSectionId] = useState(0);
 
-  const ITEM_SIZE = Math.round(width * 0.38);
-  const ITEM_SPACING = (width - ITEM_SIZE) / 2;
+  const longSide = width > height ? width : height;
+  const shortside = width > height ? height : width;
+
+  const longSideCal = longSide * 0.6;
+  const shortSodeCal = shortside;
+
+  const CENTER_CONTAINER_SIZE =
+    shortSodeCal > longSideCal ? longSideCal : shortSodeCal;
+  const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.4);
+  const ITEM_SPACING = (CENTER_CONTAINER_SIZE - ITEM_SIZE) / 2;
 
   const flatlist = useRef();
   const totalSecondsInputRef = useRef();
@@ -240,94 +248,124 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           },
         ]}
       />
-      <Animated.FlatList
-        initialNumToRender={10}
-        ref={flatlist}
-        data={timeData}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        snapToInterval={ITEM_SIZE}
-        decelerationRate="fast"
-        style={{ flexGrow: 0 }}
-        contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true }
-        )}
-        onMomentumScrollBegin={() => {
-          setFlatListScrolling(true);
+      <View
+        style={{
+          borderWidth: 2,
+          height: CENTER_CONTAINER_SIZE,
+          width: CENTER_CONTAINER_SIZE,
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        onMomentumScrollEnd={() => {
-          if (!timerOn) {
-            setFlatListScrolling(false);
+      >
+        <View
+          style={{
+            height: "30%",
+            width: "100%",
+            borderWidth: 2,
+            flexDirection: "row",
+          }}
+        >
+          <View style={styles.flatListLowerSubContainer}></View>
+          <View style={styles.flatListLowerSubContainer}>
+            <TextInput
+              ref={sectionSecondsRemainsInputRef}
+              defaultValue={"0"}
+              style={{ fontSize: 40 }}
+              editable={false}
+            />
+          </View>
+          <View style={styles.flatListLowerSubContainer}></View>
+        </View>
+        <Animated.FlatList
+          initialNumToRender={10}
+          ref={flatlist}
+          data={timeData}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          snapToInterval={ITEM_SIZE}
+          decelerationRate="fast"
+          style={{ flexGrow: 0, overflow: "visible", borderWidth: 2 }}
+          contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: true }
+          )}
+          onMomentumScrollBegin={() => {
+            setFlatListScrolling(true);
+          }}
+          onMomentumScrollEnd={() => {
+            if (!timerOn) {
+              setFlatListScrolling(false);
 
-            const newSectionId = scrollValueToSectionId(scrollX._value);
+              const newSectionId = scrollValueToSectionId(scrollX._value);
 
-            totalSeconds.setValue(timeData[newSectionId].start);
-            sectionSeconds.setValue(0);
-            totalSecondsInputRef?.current?.setNativeProps({
-              text: timeData[newSectionId].start.toString(),
+              totalSeconds.setValue(timeData[newSectionId].start);
+              sectionSeconds.setValue(0);
+              totalSecondsInputRef?.current?.setNativeProps({
+                text: timeData[newSectionId].start.toString(),
+              });
+
+              Animated.timing(backgroundAnimation, {
+                toValue: -height,
+                duration: 100,
+                useNativeDriver: true,
+              }).start();
+              setSectionId(newSectionId);
+            }
+          }}
+          onScrollBeginDrag={() => {
+            setTimerOn(false);
+            setTabBarShow(true);
+          }}
+          renderItem={({ item, index }) => {
+            const inputRange = [
+              (index - 1.5) * ITEM_SIZE,
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+              (index + 1) * ITEM_SIZE,
+              (index + 1.5) * ITEM_SIZE,
+            ];
+            const opacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.0, 0.8, 1, 0.8, 0.0],
             });
 
-            Animated.timing(backgroundAnimation, {
-              toValue: -height,
-              duration: 100,
-              useNativeDriver: true,
-            }).start();
-            setSectionId(newSectionId);
-          }
-        }}
-        onScrollBeginDrag={() => {
-          setTimerOn(false);
-          setTabBarShow(true);
-        }}
-        renderItem={({ item, index }) => {
-          const inputRange = [
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-            (index + 1) * ITEM_SIZE,
-          ];
-          const opacity = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.8, 1, 0.8],
-          });
+            const scale = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.5, 0.7, 1, 0.7, 0.5],
+            });
 
-          const scale = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.8, 1, 0.8],
-          });
+            const indexOfFlaiListArray =
+              item.workoutNo - 1 < 0 ? 0 : item.workoutNo - 1;
 
-          const indexOfFlaiListArray =
-            item.workoutNo - 1 < 0 ? 0 : item.workoutNo - 1;
+            const flatListArrayIndex =
+              item.workoutNo == 0 ? 0 : item.workoutNo - 1;
+            const imageUri =
+              useTimerSetupState.timerSetup.workoutSetup.flatListArray[
+                flatListArrayIndex
+              ].image;
 
-          const flatListArrayIndex =
-            item.workoutNo == 0 ? 0 : item.workoutNo - 1;
-          const imageUri =
-            useTimerSetupState.timerSetup.workoutSetup.flatListArray[
-              flatListArrayIndex
-            ].image;
-
-          return (
-            <Animated.View
-              style={{
-                width: ITEM_SIZE,
-                height: height * 0.3,
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: 2,
-                backgroundColor: outPutColorByType(item.type).text,
-                opacity,
-                transform: [
-                  {
-                    scale,
-                  },
-                ],
-              }}
-            >
-              <Text style={{ fontSize: 25 }}>{item.type}</Text>
-              {/* <Text
+            return (
+              <Animated.View
+                style={{
+                  width: ITEM_SIZE,
+                  height: ITEM_SIZE,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderWidth: 2,
+                  backgroundColor: outPutColorByType(item.type).text,
+                  opacity,
+                  transform: [
+                    {
+                      scale,
+                    },
+                  ],
+                }}
+              >
+                {/* <Text style={{ fontSize: 25 }}>{item.type}</Text> */}
+                {/* <Text
                 style={[
                   styles.text,
                   {
@@ -337,55 +375,65 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               >
                 {item.id}
               </Text> */}
-              {!(imageUri == "") && (
-                <Image
-                  source={{ uri: imageUri }}
-                  style={{ width: ITEM_SIZE, height: ITEM_SIZE }}
-                />
-              )}
-              <Text style={{ fontSize: 25 }}>
-                {
-                  useTimerSetupState.timerSetup.workoutSetup.flatListArray[
-                    indexOfFlaiListArray
-                  ].name
-                }
-              </Text>
-            </Animated.View>
-          );
-        }}
-      />
-      <Button
-        disabled={!btnPressable || flatListScrolling}
-        title={timerOn ? "pause" : "play"}
-        onPress={toggle}
-      />
-      <Button
+                {!(imageUri == "") && (
+                  <Image
+                    source={{ uri: imageUri }}
+                    style={{ width: ITEM_SIZE, height: ITEM_SIZE }}
+                  />
+                )}
+                {/* <Text style={{ fontSize: 25 }}>
+                  {
+                    useTimerSetupState.timerSetup.workoutSetup.flatListArray[
+                      indexOfFlaiListArray
+                    ].name
+                  }
+                </Text> */}
+              </Animated.View>
+            );
+          }}
+        />
+        <View
+          style={{
+            height: "30%",
+            width: "100%",
+            borderWidth: 2,
+            flexDirection: "row",
+          }}
+        >
+          <View style={styles.flatListLowerSubContainer}>
+            <TextInput
+              ref={setInputRef}
+              defaultValue={"Set : " + timeData[0].setNo.toString()}
+              editable={false}
+            />
+          </View>
+          <View style={styles.flatListLowerSubContainer}>
+            <Button
+              disabled={!btnPressable || flatListScrolling}
+              title={timerOn ? "pause" : "play"}
+              onPress={toggle}
+            />
+          </View>
+          <View style={styles.flatListLowerSubContainer}>
+            <TextInput
+              ref={workoutInputRef}
+              defaultValue={"Workout : " + timeData[0].workoutNo.toString()}
+              editable={false}
+            />
+          </View>
+        </View>
+      </View>
+      {/* <Button
         disabled={!btnPressable || timerOn}
         onPress={reset}
         title="Reset"
-      />
-      <TextInput
+      /> */}
+      {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
         style={{ fontSize: 40 }}
         editable={false}
-      />
-      <TextInput
-        ref={sectionSecondsRemainsInputRef}
-        defaultValue={"0"}
-        style={{ fontSize: 40 }}
-        editable={false}
-      />
-      <TextInput
-        ref={setInputRef}
-        defaultValue={"Set : " + timeData[0].setNo.toString()}
-        editable={false}
-      />
-      <TextInput
-        ref={workoutInputRef}
-        defaultValue={"Workout : " + timeData[0].workoutNo.toString()}
-        editable={false}
-      />
+      /> */}
     </View>
   );
 }
@@ -401,5 +449,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     fontWeight: "900",
+  },
+  flatListLowerSubContainer: {
+    height: "100%",
+    width: "32%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
