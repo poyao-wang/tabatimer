@@ -38,6 +38,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [timeData, setTimeData] = useState(
     useTimerSetupState.timerSetup.workoutSetup.workoutArray
   );
+  const [flatListArray, setFlatListArray] = useState(
+    useTimerSetupState.timerSetup.workoutSetup.flatListArray
+  );
   // const [timeMax, setTimeMax] = useState(
   //   useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
   //     .end
@@ -157,7 +160,10 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     });
     flatlist?.current?.scrollToOffset({
       offset: 0,
-      animated: true,
+      animated: false,
+    });
+    setInputRef?.current?.setNativeProps({
+      text: "0" + " / " + useTimerSetupState.timerSetup.sets.value,
     });
 
     Animated.timing(backgroundAnimation, {
@@ -171,6 +177,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   useFocusEffect(
     React.useCallback(() => {
       if (useTimerSetupState.timerSetup.workoutSetup.updated) {
+        setFlatListArray(
+          useTimerSetupState.timerSetup.workoutSetup.flatListArray
+        );
         setTimeData(useTimerSetupState.timerSetup.workoutSetup.workoutArray);
         reset();
         useTimerSetupState.timerSetup.workoutSetup.updated = false;
@@ -206,12 +215,26 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useEffect(() => {
     if (timerOn) {
+      console.log("setNo", timeData[sectionId].setNo);
+      console.log("workoutNo", timeData[sectionId].workoutNo);
+      console.log("type", timeData[sectionId].type);
+      console.log("--------------");
+
+      let flatListIndex = timeData[sectionId].workoutNo - 1;
+      if (flatListIndex < 0) flatListIndex = 0;
+
       flatlist?.current?.scrollToOffset({
-        offset: ITEM_SIZE * sectionId,
+        offset: ITEM_SIZE * flatListIndex,
         animated: true,
       });
       sectionSeconds.setValue(0);
       backgroundAnimation.setValue(-height);
+      setInputRef?.current?.setNativeProps({
+        text:
+          timeData[sectionId].setNo.toString() +
+          " / " +
+          useTimerSetupState.timerSetup.sets.value,
+      });
       timerAnimationLoop();
     }
     changeBackgroundColor(outPutColorByType(timeData[sectionId].type).value);
@@ -227,18 +250,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useEffect(() => {
     const scrollXListener = scrollX.addListener(({ value }) => {
-      const newSectionId = scrollValueToSectionId(value);
-
-      setInputRef?.current?.setNativeProps({
-        text:
-          timeData[newSectionId].setNo.toString() +
-          " / " +
-          useTimerSetupState.timerSetup.sets.value,
-      });
+      const workoutNo = Math.round(value / ITEM_SIZE) + 1;
 
       workoutInputRef?.current?.setNativeProps({
         text:
-          timeData[newSectionId].workoutNo.toString() +
+          workoutNo.toString() +
           " / " +
           useTimerSetupState.timerSetup.workouts.value,
       });
@@ -332,7 +348,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           <Animated.FlatList
             initialNumToRender={10}
             ref={flatlist}
-            data={timeData}
+            data={flatListArray}
             keyExtractor={(item) => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -355,13 +371,26 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             onMomentumScrollEnd={() => {
               if (!timerOn) {
                 setFlatListScrolling(false);
+                const workoutNo = Math.round(scrollX._value / ITEM_SIZE) + 1;
+                let setNo = timeData[sectionId].setNo;
+                if (setNo <= 0) setNo = 1;
 
-                const newSectionId = scrollValueToSectionId(scrollX._value);
+                const totalWorkoutAmt =
+                  useTimerSetupState.timerSetup.workouts.value;
+
+                const newSectionId =
+                  1 + (setNo - 1) * 2 * totalWorkoutAmt + (workoutNo - 1) * 2;
 
                 totalSeconds.setValue(timeData[newSectionId].start);
                 sectionSeconds.setValue(0);
                 totalSecondsInputRef?.current?.setNativeProps({
                   text: timeData[newSectionId].start.toString(),
+                });
+                setInputRef?.current?.setNativeProps({
+                  text:
+                    timeData[newSectionId].setNo +
+                    " / " +
+                    useTimerSetupState.timerSetup.sets.value,
                 });
 
                 Animated.timing(backgroundAnimation, {
@@ -405,15 +434,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ],
               });
 
-              const indexOfFlaiListArray =
-                item.workoutNo - 1 < 0 ? 0 : item.workoutNo - 1;
+              let imageUri = item.image;
 
-              const flatListArrayIndex =
-                item.workoutNo == 0 ? 0 : item.workoutNo - 1;
-              const imageUri =
-                useTimerSetupState.timerSetup.workoutSetup.flatListArray[
-                  flatListArrayIndex
-                ].image;
+              if (!imageUri) imageUri = "";
 
               return (
                 <Animated.View
@@ -455,7 +478,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                         },
                       ]}
                     >
-                      {item.workoutNo}
+                      {item.id + 1}
                     </Text>
                   )}
                   {/* <Text style={{ fontSize: 25 }}>
@@ -530,12 +553,12 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           />
         </View>
       </View>
-      {/* <Button
+      <Button
         disabled={!btnPressable || timerOn}
         onPress={reset}
         title="Reset"
-      /> */}
-      <Button onPress={playSound} title="Sound" />
+      />
+      {/* <Button onPress={playSound} title="Sound" /> */}
       {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
