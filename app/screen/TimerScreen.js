@@ -10,8 +10,9 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
-
 import { useFocusEffect } from "@react-navigation/native";
+import { Audio } from "expo-av";
+
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 
@@ -45,6 +46,28 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [btnPressable, setBtnPressable] = useState(true);
   const [flatListScrolling, setFlatListScrolling] = useState(false);
   const [sectionId, setSectionId] = useState(0);
+
+  const [sound, setSound] = useState();
+
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/workout-start.mp3")
+    );
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   const longSide = width > height ? width : height;
   const shortside = width > height ? height : width;
@@ -512,6 +535,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         onPress={reset}
         title="Reset"
       /> */}
+      <Button onPress={playSound} title="Sound" />
       {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
