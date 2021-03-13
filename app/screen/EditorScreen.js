@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import CustomIcons from "../components/CustomIcons";
 
 const BORDER_WIDTH = 0;
 
@@ -87,14 +88,52 @@ function EditorScreen({ navigation, mainData }) {
   );
 
   return (
-    <View style={styles.container}>
-      {renderItem(mainData["prepareTime"])}
-      {renderItem(mainData["workoutTime"])}
-      {renderItem(mainData["restTime"])}
-      {renderItem(mainData["restTimeSets"])}
-      {renderItem(mainData["sets"])}
-      {renderItem(mainData["workouts"])}
-    </View>
+    <>
+      <View style={styles.container}>
+        {renderItem(mainData["prepareTime"])}
+        {renderItem(mainData["workoutTime"])}
+        {renderItem(mainData["restTime"])}
+        {renderItem(mainData["restTimeSets"])}
+        {renderItem(mainData["sets"])}
+        {renderItem(mainData["workouts"])}
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          bottom:
+            width > height
+              ? (height - centerContainerSize) / 2
+              : ((height - centerContainerSize) / 2 -
+                  centerContainerSize * 0.2) /
+                2,
+          left: width > height ? "5%" : (width - centerContainerSize) / 2,
+          flexDirection: width > height ? "column" : "row",
+          height:
+            width > height ? centerContainerSize : centerContainerSize * 0.24,
+          width:
+            width > height ? centerContainerSize * 0.24 : centerContainerSize,
+          borderWidth: BORDER_WIDTH,
+        }}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <CustomIcons
+            icnoName={"volume-high"}
+            size={centerContainerSize * 0.13}
+          />
+        </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <CustomIcons
+            icnoName={"restore"}
+            onPress={() => {}}
+            size={centerContainerSize * 0.13}
+          />
+        </View>
+      </View>
+    </>
   );
 }
 
