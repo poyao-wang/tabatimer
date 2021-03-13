@@ -109,7 +109,7 @@ const timerSetupDefaultData = {
   restTimeSets: {
     title: "Rest Time - Sets",
     subtitle: "Rest between Sets",
-    type: "number",
+    type: "time",
     value: 2,
   },
   sets: {
