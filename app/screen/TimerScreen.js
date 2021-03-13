@@ -114,6 +114,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
   const backgroundAnimation = React.useRef(new Animated.Value(-height)).current;
   const backgroundColorAnimation = React.useRef(new Animated.Value(0)).current;
+  const bottomViewAnimation = useRef(new Animated.Value(0)).current;
 
   const backgroundColorForScreen = backgroundColorAnimation.interpolate({
     inputRange: [0, 1, 2, 3],
@@ -124,10 +125,30 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       outPutColorByType("finished").text,
     ],
   });
+
+  const bottomViewOpacity = bottomViewAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
+  const bottomViewTranslateY = bottomViewAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, width > height ? height : height * 0.3],
+  });
+
   const scrollValueToSectionId = (scrollValue) => {
     const idMax = timeData.length - 1;
     const newSectionId = Math.round(scrollValue / ITEM_SIZE);
     return newSectionId <= 0 ? 0 : newSectionId >= idMax ? idMax : newSectionId;
+  };
+
+  const navBarAndBottomViewAnime = (show) => {
+    setTabBarShow(show);
+
+    Animated.timing(bottomViewAnimation, {
+      toValue: show ? 0 : 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
   function changeBackgroundColor(toValue) {
@@ -168,7 +189,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     ]).start(({ finished }) => {
       if (sectionId + 1 > timeData.length - 1) {
         setTimerOn(false);
-        setTabBarShow(true);
+        navBarAndBottomViewAnime(true);
         if (finished) {
           changeBackgroundColor(outPutColorByType("finished").value);
           playSound("finished");
@@ -182,12 +203,12 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   function toggle() {
     // if (sectionSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
-    setTabBarShow(timerOn);
+    navBarAndBottomViewAnime(timerOn);
   }
 
   function setPlusOrMinus(plus) {
     setTimerOn(false);
-    setTabBarShow(true);
+    navBarAndBottomViewAnime(true);
 
     const workoutNo = 1;
     let setNo = timeData[sectionId].setNo;
@@ -226,7 +247,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   function reset() {
     setTimerOn(false);
-    setTabBarShow(true);
+    navBarAndBottomViewAnime(true);
     totalSeconds.setValue(0);
     sectionSeconds.setValue(0);
     totalSecondsInputRef?.current?.setNativeProps({
@@ -265,7 +286,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useEffect(() => {
     setTimerOn(false);
-    setTabBarShow(true);
+    navBarAndBottomViewAnime(true);
     backgroundAnimation.setValue(
       -height *
         ((timeData[sectionId].duration - sectionSeconds._value) /
@@ -477,7 +498,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             }}
             onScrollBeginDrag={() => {
               setTimerOn(false);
-              setTabBarShow(true);
+              navBarAndBottomViewAnime(true);
             }}
             renderItem={({ item, index }) => {
               const inputRange = [
@@ -605,7 +626,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           </View>
         </View>
       </View>
-      <View
+      <Animated.View
         style={{
           position: "absolute",
           bottom:
@@ -614,19 +635,17 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               : ((height - CENTER_CONTAINER_SIZE) / 2 -
                   CENTER_CONTAINER_SIZE * 0.2) /
                 2,
-          left:
-            width > height
-              ? // ? (width - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.8
-                "5%"
-              : null,
-          // height: ITEM_SIZE * 0.6,
-          // width: "100%",
+          left: width > height ? "5%" : null,
           flexDirection: width > height ? "column" : "row",
           height: width > height ? CENTER_CONTAINER_SIZE : ITEM_SIZE * 0.6,
           width: width > height ? ITEM_SIZE * 0.8 : CENTER_CONTAINER_SIZE,
           borderWidth: BORDER_WIDTH,
-
-          // flexDirection: "row",
+          opacity: bottomViewOpacity,
+          transform: [
+            {
+              translateY: bottomViewTranslateY,
+            },
+          ],
         }}
       >
         <View style={styles.flatListLowerSubContainer}>
@@ -653,7 +672,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             size={CENTER_CONTAINER_SIZE * 0.13}
           />
         </View>
-      </View>
+      </Animated.View>
       {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
