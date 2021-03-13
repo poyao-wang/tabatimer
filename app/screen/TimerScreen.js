@@ -105,7 +105,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   const CENTER_CONTAINER_SIZE =
     shortSodeCal > longSideCal ? longSideCal : shortSodeCal;
-  const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.45);
+  const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.4);
   const ITEM_SPACING = (CENTER_CONTAINER_SIZE - ITEM_SIZE) / 2;
 
   const flatlist = useRef();
@@ -397,13 +397,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           borderWidth: BORDER_WIDTH,
           height: CENTER_CONTAINER_SIZE,
           width: CENTER_CONTAINER_SIZE,
-          justifyContent: "center",
+          // justifyContent: "center",
           alignItems: "center",
         }}
       >
         <View
           style={{
-            height: "40%",
+            height: "30%",
             width: "100%",
             borderWidth: BORDER_WIDTH,
             flexDirection: "row",
@@ -417,10 +417,10 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             style={[
               styles.text,
               {
-                fontSize: ITEM_SIZE * 0.7,
+                fontSize: ITEM_SIZE * 0.6,
                 borderWidth: BORDER_WIDTH,
                 width: ITEM_SIZE * 2,
-                height: ITEM_SIZE * 0.7,
+                height: ITEM_SIZE * 0.6,
               },
             ]}
             editable={false}
@@ -428,7 +428,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         </View>
         <View
           style={{
-            height: "50%",
+            height: "40%",
             width: "100%",
             borderWidth: BORDER_WIDTH,
             flexDirection: "row",
@@ -584,17 +584,59 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             }}
           />
         </View>
+        <View
+          style={{
+            height: "30%",
+            width: "100%",
+            borderWidth: BORDER_WIDTH,
+            flexDirection: "row",
+            // alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View style={styles.flatListLowerSubContainer}>
+            <TextInput
+              ref={setInputRef}
+              defaultValue={
+                timeData[0].setNo.toString() +
+                " / " +
+                useTimerSetupState.timerSetup.sets.value
+              }
+              editable={false}
+              style={{ fontSize: 30 }}
+            />
+          </View>
+          <View style={styles.flatListLowerSubContainer}>
+            <CustomIcons
+              icnoName={timerOn ? "pause-circle" : "play-circle"}
+              disabled={!btnPressable || flatListScrolling}
+              onPress={toggle}
+              size={ITEM_SIZE * 0.45}
+            />
+          </View>
+          <View style={styles.flatListLowerSubContainer}>
+            <TextInput
+              ref={workoutInputRef}
+              defaultValue={
+                timeData[0].workoutNo.toString() +
+                " / " +
+                useTimerSetupState.timerSetup.workouts.value
+              }
+              editable={false}
+              style={{ fontSize: 30 }}
+            />
+          </View>
+        </View>
       </View>
       <View
         style={{
           position: "absolute",
-          bottom:
-            width > height
-              ? null
-              : (height - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.6,
+          bottom: width > height ? null : "10%",
+          // : (height - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.6,
           left:
             width > height
-              ? (width - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.8
+              ? // ? (width - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.8
+                "5%"
               : null,
           // height: ITEM_SIZE * 0.6,
           // width: "100%",
@@ -607,50 +649,27 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         }}
       >
         <View style={styles.flatListLowerSubContainer}>
-          <Button
+          <CustomIcons
+            icnoName={"plus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(true)}
-            title="+"
-          />
-          <TextInput
-            ref={setInputRef}
-            defaultValue={
-              timeData[0].setNo.toString() +
-              " / " +
-              useTimerSetupState.timerSetup.sets.value
-            }
-            editable={false}
-            style={{ fontSize: 30 }}
-          />
-          <Button
-            disabled={!btnPressable || flatListScrolling || timerOn}
-            onPress={() => setPlusOrMinus(false)}
-            title="-"
+            size={ITEM_SIZE * 0.45}
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
           <CustomIcons
-            icnoName={timerOn ? "pause-circle" : "play-circle"}
-            disabled={!btnPressable || flatListScrolling}
-            onPress={toggle}
+            icnoName={"minus-circle"}
+            disabled={!btnPressable || flatListScrolling || timerOn}
+            onPress={() => setPlusOrMinus(false)}
             size={ITEM_SIZE * 0.45}
-          />
-          <Button
-            disabled={!btnPressable || timerOn}
-            onPress={reset}
-            title="Reset"
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
-          <TextInput
-            ref={workoutInputRef}
-            defaultValue={
-              timeData[0].workoutNo.toString() +
-              " / " +
-              useTimerSetupState.timerSetup.workouts.value
-            }
-            editable={false}
-            style={{ fontSize: 30 }}
+          <CustomIcons
+            icnoName={"replay"}
+            disabled={!btnPressable || timerOn}
+            onPress={reset}
+            size={ITEM_SIZE * 0.45}
           />
         </View>
       </View>
