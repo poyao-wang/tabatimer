@@ -52,11 +52,20 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   const [sound, setSound] = useState();
 
-  async function playSound() {
+  async function playSound(type) {
     console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync(
-      require("../assets/workout-start.mp3")
-    );
+
+    const { sound } =
+      type == "workOutStart"
+        ? await Audio.Sound.createAsync(require("../assets/workout-start.mp3"))
+        : type == "countDown"
+        ? await Audio.Sound.createAsync(require("../assets/count-down.mp3"))
+        : type == "rest"
+        ? await Audio.Sound.createAsync(require("../assets/rest-bell.mp3"))
+        : type == "finished"
+        ? await Audio.Sound.createAsync(require("../assets/finished.mp3"))
+        : undefined;
+
     setSound(sound);
 
     console.log("Playing Sound");
@@ -610,7 +619,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         onPress={reset}
         title="Reset"
       />
-      {/* <Button onPress={playSound} title="Sound" /> */}
+      <Button onPress={() => playSound("finished")} title="Sound" />
       {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
