@@ -15,6 +15,7 @@ import { Audio } from "expo-av";
 
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
+import FractionDisplay from "../components/FractionDisplay";
 
 const BORDER_WIDTH = 0;
 
@@ -219,10 +220,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       animated: false,
     });
     setInputRef?.current?.setNativeProps({
-      text:
-        timeData[newSectionId].setNo +
-        " / " +
-        useTimerSetupState.timerSetup.sets.value,
+      text: timeData[newSectionId].setNo.toString(),
     });
 
     Animated.timing(backgroundAnimation, {
@@ -246,7 +244,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       animated: false,
     });
     setInputRef?.current?.setNativeProps({
-      text: "1" + " / " + useTimerSetupState.timerSetup.sets.value,
+      text: "1",
     });
 
     Animated.timing(backgroundAnimation, {
@@ -303,10 +301,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       sectionSeconds.setValue(0);
       backgroundAnimation.setValue(-height);
       setInputRef?.current?.setNativeProps({
-        text:
-          timeData[sectionId].setNo.toString() +
-          " / " +
-          useTimerSetupState.timerSetup.sets.value,
+        text: timeData[sectionId].setNo.toString(),
       });
       timerAnimationLoop();
     }
@@ -325,10 +320,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       const workoutNo = Math.round(value / ITEM_SIZE) + 1;
 
       workoutInputRef?.current?.setNativeProps({
-        text:
-          workoutNo.toString() +
-          " / " +
-          useTimerSetupState.timerSetup.workouts.value,
+        text: workoutNo.toString(),
       });
     });
     const sectionSecondsListener = sectionSeconds.addListener(({ value }) => {
@@ -478,10 +470,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                   text: timeData[newSectionId].start.toString(),
                 });
                 setInputRef?.current?.setNativeProps({
-                  text:
-                    timeData[newSectionId].setNo +
-                    " / " +
-                    useTimerSetupState.timerSetup.sets.value,
+                  text: timeData[newSectionId].setNo.toString(),
                 });
 
                 Animated.timing(backgroundAnimation, {
@@ -569,7 +558,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                         },
                       ]}
                     >
-                      {item.id + 1}
+                      {(item.id + 1).toString()}
                     </Text>
                   )}
                   {/* <Text style={{ fontSize: 25 }}>
@@ -595,15 +584,12 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           }}
         >
           <View style={styles.flatListLowerSubContainer}>
-            <TextInput
-              ref={setInputRef}
-              defaultValue={
-                timeData[0].setNo.toString() +
-                " / " +
-                useTimerSetupState.timerSetup.sets.value
-              }
-              editable={false}
-              style={{ fontSize: 30 }}
+            <FractionDisplay
+              refs={setInputRef}
+              defaultValue={1}
+              totalAmount={useTimerSetupState.timerSetup.sets.value}
+              itemSize={ITEM_SIZE}
+              title="SET"
             />
           </View>
           <View style={styles.flatListLowerSubContainer}>
@@ -615,15 +601,12 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             />
           </View>
           <View style={styles.flatListLowerSubContainer}>
-            <TextInput
-              ref={workoutInputRef}
-              defaultValue={
-                timeData[0].workoutNo.toString() +
-                " / " +
-                useTimerSetupState.timerSetup.workouts.value
-              }
-              editable={false}
-              style={{ fontSize: 30 }}
+            <FractionDisplay
+              refs={workoutInputRef}
+              defaultValue={1}
+              totalAmount={useTimerSetupState.timerSetup.workouts.value}
+              itemSize={ITEM_SIZE}
+              title="WORK"
             />
           </View>
         </View>
@@ -653,7 +636,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             icnoName={"plus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(true)}
-            size={ITEM_SIZE * 0.45}
+            size={ITEM_SIZE * 0.4}
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
@@ -661,7 +644,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             icnoName={"minus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(false)}
-            size={ITEM_SIZE * 0.45}
+            size={ITEM_SIZE * 0.4}
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
@@ -669,7 +652,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             icnoName={"replay"}
             disabled={!btnPressable || timerOn}
             onPress={reset}
-            size={ITEM_SIZE * 0.45}
+            size={ITEM_SIZE * 0.4}
           />
         </View>
       </View>
