@@ -55,6 +55,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [tickingSound, setTickingSound] = useState();
 
   async function playTickingSound(type) {
+    if (!useTimerSetupState.timerSetup.settings.playSound) return;
     const { sound } =
       type == "tick"
         ? await Audio.Sound.createAsync(require("../assets/tick.mp3"))
@@ -67,6 +68,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }
 
   async function playSound(type) {
+    if (!useTimerSetupState.timerSetup.settings.playSound) return;
     const { sound } =
       type == "workOutStart"
         ? await Audio.Sound.createAsync(require("../assets/workout-start.mp3"))

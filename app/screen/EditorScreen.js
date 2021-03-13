@@ -126,8 +126,17 @@ function EditorScreen({ navigation, mainData, setMainData }) {
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <CustomIcons
-            icnoName={"volume-high"}
+            icnoName={
+              screenData.settings.playSound ? "volume-high" : "volume-off"
+            }
             size={centerContainerSize * 0.13}
+            onPress={() => {
+              const currentSetting = mainData.settings.playSound;
+              mainData.settings.playSound = !currentSetting;
+              setMainData(mainData);
+              setScreenData(JSON.parse(JSON.stringify(mainData)));
+              useCache.store(mainData);
+            }}
           />
         </View>
         <View

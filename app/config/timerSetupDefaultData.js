@@ -88,6 +88,7 @@ const timerSetupDefaultData = {
       },
     ],
   },
+  settings: { playSound: true },
   prepareTime: {
     title: "Preparation Time",
     subtitle: "Preparation before Start",
