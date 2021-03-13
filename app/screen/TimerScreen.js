@@ -275,12 +275,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   useEffect(() => {
     setTimerOn(false);
     setTabBarShow(true);
-    setTimeout(() => {
-      flatlist?.current?.scrollToOffset({
-        offset: ITEM_SIZE * sectionId,
-        animated: false,
-      });
-    }, 100);
     backgroundAnimation.setValue(
       -height *
         ((timeData[sectionId].duration - sectionSeconds._value) /
@@ -297,12 +291,8 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }, [timeData]);
 
   useEffect(() => {
+    changeBackgroundColor(outPutColorByType(timeData[sectionId].type).value);
     if (timerOn) {
-      console.log("setNo", timeData[sectionId].setNo);
-      console.log("workoutNo", timeData[sectionId].workoutNo);
-      console.log("type", timeData[sectionId].type);
-      console.log("--------------");
-
       let flatListIndex = timeData[sectionId].workoutNo - 1;
       if (flatListIndex < 0) flatListIndex = 0;
 
@@ -320,7 +310,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       });
       timerAnimationLoop();
     }
-    changeBackgroundColor(outPutColorByType(timeData[sectionId].type).value);
   }, [sectionId]);
 
   useEffect(() => {
@@ -665,12 +654,6 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           />
         </View>
       </View>
-      <Button
-        disabled={!btnPressable || timerOn}
-        onPress={reset}
-        title="Reset"
-      />
-      <Button onPress={() => playSound("finished")} title="Sound" />
       {/* <TextInput
         ref={totalSecondsInputRef}
         defaultValue={"0"}
