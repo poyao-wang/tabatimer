@@ -12,6 +12,9 @@ import React, { useEffect } from "react";
 import NumberPicker from "../components/NumberPicker";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import CustomIcons from "../components/CustomIcons";
+
+const BORDER_WIDTH = 0;
 
 function EditorDetailScreen({
   route,
@@ -162,6 +165,7 @@ function EditorDetailScreen({
           alignItems: "center",
           justifyContent: "center",
           padding: centerContainerSize * 0.05,
+          borderWidth: BORDER_WIDTH,
         }}
       >
         <Text style={{ fontSize: centerContainerSize * 0.09 }}>
@@ -176,33 +180,57 @@ function EditorDetailScreen({
         >
           {item.type == "time" ? timePicker() : numberPicker()}
         </View>
-        <Button
-          fontSize={30}
-          title="Ok"
-          onPress={() => {
-            item.value =
-              item.type == "time"
-                ? finalValue.minutes * 60 + finalValue.seconds
-                : finalValue.numbers;
-            mainData.workoutSetup.workoutArray = makeWorkoutsArray();
-            mainData.workoutSetup.updated = true;
-            if (item.title == "Workouts") {
-              mainData.workoutSetup.flatListArray = makeFlatListArray();
-              // console.log(makeFlatListArray());
-            }
-            setMainData(mainData);
-            useCache.store(mainData);
-            navigation.navigate("EditorScreen");
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            alignContent: "space-between",
+            borderWidth: BORDER_WIDTH,
           }}
-        />
-        <Button
+        >
+          <View style={styles.iconContainer}>
+            <CustomIcons
+              icnoName={"check-circle"}
+              onPress={() => {
+                item.value =
+                  item.type == "time"
+                    ? finalValue.minutes * 60 + finalValue.seconds
+                    : finalValue.numbers;
+                mainData.workoutSetup.workoutArray = makeWorkoutsArray();
+                mainData.workoutSetup.updated = true;
+                if (item.title == "Workouts") {
+                  mainData.workoutSetup.flatListArray = makeFlatListArray();
+                  // console.log(makeFlatListArray());
+                }
+                setMainData(mainData);
+                useCache.store(mainData);
+                navigation.navigate("EditorScreen");
+              }}
+              size={itemSize}
+              color="rgba(29, 195, 114,1)"
+            />
+          </View>
+          <View style={styles.iconContainer}>
+            <CustomIcons
+              icnoName={"close-circle"}
+              onPress={() => {
+                navigation.navigate("EditorScreen");
+              }}
+              size={itemSize}
+              color="rgba(243, 77, 77,1)"
+            />
+          </View>
+        </View>
+        {/* <Button
           fontSize={30}
           title="ValueCheck"
           onPress={() => {
             console.log(makeFlatListArray());
             console.log(item.title);
           }}
-        />
+        /> */}
       </View>
     </View>
   );
@@ -213,6 +241,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  iconContainer: {
+    flex: 1,
   },
 });
 export default EditorDetailScreen;
