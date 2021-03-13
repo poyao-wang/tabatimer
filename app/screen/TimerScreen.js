@@ -51,10 +51,21 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [sectionId, setSectionId] = useState(0);
 
   const [sound, setSound] = useState();
+  const [tickingSound, setTickingSound] = useState();
+
+  async function playTickingSound(type) {
+    const { sound } =
+      type == "tick"
+        ? await Audio.Sound.createAsync(require("../assets/tick.mp3"))
+        : type == "countDown"
+        ? await Audio.Sound.createAsync(require("../assets/count-down.mp3"))
+        : undefined;
+
+    setTickingSound(sound);
+    if (sound) await sound.playAsync();
+  }
 
   async function playSound(type) {
-    console.log("Loading Sound");
-
     const { sound } =
       type == "workOutStart"
         ? await Audio.Sound.createAsync(require("../assets/workout-start.mp3"))
@@ -67,15 +78,20 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         : undefined;
 
     setSound(sound);
-
-    console.log("Playing Sound");
-    await sound.playAsync();
+    if (sound) await sound.playAsync();
   }
+
+  React.useEffect(() => {
+    return tickingSound
+      ? () => {
+          tickingSound.unloadAsync();
+        }
+      : undefined;
+  }, [tickingSound]);
 
   React.useEffect(() => {
     return sound
       ? () => {
-          console.log("Unloading Sound");
           sound.unloadAsync();
         }
       : undefined;
@@ -100,6 +116,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const sectionSeconds = React.useRef(new Animated.Value(0)).current;
+  const sectionSecondsRemainsCeil = React.useRef(new Animated.Value(0)).current;
   const totalSeconds = React.useRef(new Animated.Value(0)).current;
   const backgroundAnimation = React.useRef(new Animated.Value(-height)).current;
   const backgroundColorAnimation = React.useRef(new Animated.Value(0)).current;
@@ -128,25 +145,40 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   }
 
   function timerAnimationLoop(startTime = 0) {
-    Animated.parallel([
-      Animated.timing(sectionSeconds, {
-        toValue: timeData[sectionId].duration,
-        duration: (timeData[sectionId].duration - startTime) * 1000,
-        useNativeDriver: true,
-        easing: Easing.linear,
-      }),
-      Animated.timing(backgroundAnimation, {
-        toValue: 0,
-        duration: (timeData[sectionId].duration - startTime) * 1000,
-        useNativeDriver: true,
-        easing: Easing.linear,
-      }),
+    const soundType =
+      timeData[sectionId].type == "prepare"
+        ? "rest"
+        : timeData[sectionId].type == "workout"
+        ? "workOutStart"
+        : timeData[sectionId].type == "rest"
+        ? "rest"
+        : "";
+
+    playSound(soundType);
+    Animated.sequence([
+      Animated.delay(300),
+      Animated.parallel([
+        Animated.timing(sectionSeconds, {
+          toValue: timeData[sectionId].duration,
+          duration: (timeData[sectionId].duration - startTime) * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+        Animated.timing(backgroundAnimation, {
+          toValue: 0,
+          duration: (timeData[sectionId].duration - startTime) * 1000,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        }),
+      ]),
     ]).start(({ finished }) => {
       if (sectionId + 1 > timeData.length - 1) {
         setTimerOn(false);
         setTabBarShow(true);
-        if (finished)
+        if (finished) {
           changeBackgroundColor(outPutColorByType("finished").value);
+          playSound("finished");
+        }
       } else {
         if (finished) setSectionId(sectionId + 1);
       }
@@ -315,9 +347,28 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       totalSecondsInputRef?.current?.setNativeProps({
         text: Math.ceil(totalSeconds._value).toString(),
       });
-      sectionSecondsRemainsInputRef?.current?.setNativeProps({
-        text: Math.ceil(timeData[sectionId].duration - value).toString(),
-      });
+
+      const newSectionSecondsRemainsCeil = Math.ceil(
+        timeData[sectionId].duration - value
+      );
+      if (newSectionSecondsRemainsCeil !== sectionSecondsRemainsCeil._value) {
+        if (timerOn) {
+          if (
+            newSectionSecondsRemainsCeil == 3 ||
+            newSectionSecondsRemainsCeil == 2 ||
+            newSectionSecondsRemainsCeil == 1
+          ) {
+            playTickingSound("countDown");
+          } else if (newSectionSecondsRemainsCeil == 0) {
+          } else {
+            playTickingSound("tick");
+          }
+        }
+        sectionSecondsRemainsCeil.setValue(newSectionSecondsRemainsCeil);
+        sectionSecondsRemainsInputRef?.current?.setNativeProps({
+          text: newSectionSecondsRemainsCeil.toString(),
+        });
+      }
     });
     return () => {
       scrollX.removeListener(scrollXListener);
