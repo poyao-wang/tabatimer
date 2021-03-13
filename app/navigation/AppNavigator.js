@@ -40,7 +40,12 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
         )}
       </Tab.Screen>
       <Tab.Screen name="Editor" options={{ iconName: "square-edit-outline" }}>
-        {() => <EditorNavigator useTimerSetupState={useTimerSetupState} />}
+        {() => (
+          <EditorNavigator
+            useTimerSetupState={useTimerSetupState}
+            setTabBarShow={useTabBarShowState.setTabBarShow}
+          />
+        )}
       </Tab.Screen>
       <Tab.Screen
         name="WorkoutList"

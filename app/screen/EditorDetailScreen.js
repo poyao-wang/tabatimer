@@ -7,13 +7,19 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import NumberPicker from "../components/NumberPicker";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
 
-function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
+function EditorDetailScreen({
+  route,
+  navigation,
+  mainData,
+  setMainData,
+  setTabBarShow,
+}) {
   const { width, height, centerContainerSize } = useWindowDimentions();
 
   const itemSize = Math.round(centerContainerSize * 0.15);
@@ -141,6 +147,11 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
 
     return newArray;
   };
+
+  useEffect(() => {
+    setTabBarShow(false);
+    return () => setTabBarShow(true);
+  }, []);
 
   return (
     <View style={styles.container}>
