@@ -73,12 +73,20 @@ function NumberPicker({ itemSize, numItems = 60, onScroll }) {
             style={{
               borderWidth: BORDER_WIDTH,
               height: itemSize,
-              aspectRatio: 1,
+              aspectRatio: 2,
               opacity,
               transform: [{ scale }],
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Text style={{ fontSize: itemSize * 0.8, textAlign: "center" }}>
+            <Text
+              style={{
+                fontSize: itemSize * 0.65,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
               {item.value}
             </Text>
           </Animated.View>

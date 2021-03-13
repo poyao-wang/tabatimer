@@ -98,14 +98,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       : undefined;
   }, [sound]);
 
-  const longSide = width > height ? width : height;
-  const shortside = width > height ? height : width;
-
-  const longSideCal = longSide * 0.6;
-  const shortSodeCal = shortside;
-
-  const CENTER_CONTAINER_SIZE =
-    shortSodeCal > longSideCal ? longSideCal : shortSodeCal;
+  const CENTER_CONTAINER_SIZE = windowDimentions.centerContainerSize;
   const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.4);
   const ITEM_SPACING = (CENTER_CONTAINER_SIZE - ITEM_SIZE) / 2;
 
@@ -399,7 +392,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             width: "100%",
             borderWidth: BORDER_WIDTH,
             flexDirection: "row",
-            // alignItems: "center",
+            alignItems: "center",
             justifyContent: "center",
           }}
         >
@@ -409,10 +402,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             style={[
               styles.text,
               {
-                fontSize: ITEM_SIZE * 0.6,
+                fontSize: ITEM_SIZE * 0.5,
+                textAlignVertical: "bottom",
                 borderWidth: BORDER_WIDTH,
                 width: ITEM_SIZE * 2,
-                height: ITEM_SIZE * 0.6,
+                height: "100%",
               },
             ]}
             editable={false}
@@ -507,9 +501,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 inputRange,
                 outputRange: [
                   -ITEM_SIZE * 0.5,
-                  -ITEM_SIZE * 0.2,
+                  -ITEM_SIZE * 0.1,
                   1,
-                  ITEM_SIZE * 0.2,
+                  ITEM_SIZE * 0.1,
                   ITEM_SIZE * 0.5,
                 ],
               });
@@ -614,8 +608,12 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       <View
         style={{
           position: "absolute",
-          bottom: width > height ? null : "10%",
-          // : (height - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.6,
+          bottom:
+            width > height
+              ? (height - CENTER_CONTAINER_SIZE) / 2
+              : ((height - CENTER_CONTAINER_SIZE) / 2 -
+                  CENTER_CONTAINER_SIZE * 0.2) /
+                2,
           left:
             width > height
               ? // ? (width - CENTER_CONTAINER_SIZE) / 2 - ITEM_SIZE * 0.8
@@ -636,7 +634,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             icnoName={"plus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(true)}
-            size={ITEM_SIZE * 0.4}
+            size={CENTER_CONTAINER_SIZE * 0.13}
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
@@ -644,15 +642,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             icnoName={"minus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(false)}
-            size={ITEM_SIZE * 0.4}
+            size={CENTER_CONTAINER_SIZE * 0.13}
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
           <CustomIcons
-            icnoName={"replay"}
+            icnoName={"restore"}
             disabled={!btnPressable || timerOn}
             onPress={reset}
-            size={ITEM_SIZE * 0.4}
+            size={CENTER_CONTAINER_SIZE * 0.13}
           />
         </View>
       </View>

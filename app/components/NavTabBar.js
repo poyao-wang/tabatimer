@@ -12,11 +12,11 @@ import {
 import colors from "../config/colors";
 
 function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
-  const { width, height } = useWindowDimentions();
+  const { width, height, centerContainerSize } = useWindowDimentions();
 
   const tabBarAnimation = useRef(new Animated.Value(0)).current;
 
-  const BAR_SIZE = width > height ? width * 0.1 : height * 0.1;
+  const BAR_SIZE = centerContainerSize * 0.2;
 
   const tabBarShowAnime = () => {
     Animated.timing(tabBarAnimation, {
@@ -60,10 +60,13 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
       alignItems: "center",
       justifyContent: "center",
       position: "absolute",
-      top: width > height ? (height - BAR_SIZE * 4) / 2 : "10%",
+      top:
+        width > height
+          ? (height - centerContainerSize) / 2
+          : ((height - centerContainerSize) / 2 - BAR_SIZE) / 2,
       flexDirection: width > height ? "column" : "row",
-      height: width > height ? null : BAR_SIZE,
-      width: width > height ? BAR_SIZE : null,
+      height: width > height ? centerContainerSize : BAR_SIZE,
+      width: width > height ? BAR_SIZE : centerContainerSize,
       aspectRatio: width > height ? 0.25 : 4,
       // backgroundColor: "#e6ebf2",
     },
@@ -164,7 +167,7 @@ function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
               >
                 <MaterialCommunityIcons //
                   name={iconName}
-                  size={BAR_SIZE * 0.7}
+                  size={centerContainerSize * 0.13}
                   color={colors.dark}
                   style={
                     {

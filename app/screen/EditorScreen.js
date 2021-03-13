@@ -14,14 +14,14 @@ import useWindowDimentions from "../hook/useWindowDimentions";
 const BORDER_WIDTH = 0;
 
 function EditorScreen({ navigation, mainData }) {
-  const { width, height } = useWindowDimentions();
+  const { width, height, centerContainerSize } = useWindowDimentions();
 
   const listDimentions = {
-    width: width > height ? height : width,
-    height: height,
+    width: centerContainerSize,
+    height: centerContainerSize,
   };
-  const ITEM_WIDTH = listDimentions.width * 0.9;
-  const ITEM_HEIGHT = listDimentions.height * 0.1;
+  const ITEM_WIDTH = listDimentions.width * 0.8;
+  const ITEM_HEIGHT = listDimentions.height * 0.15;
 
   const styles = StyleSheet.create({
     container: {

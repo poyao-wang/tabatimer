@@ -13,11 +13,20 @@ import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 
-const BORDER_WIDTH = 2;
+import useWindowDimentions from "../hook/useWindowDimentions";
+
+const BORDER_WIDTH = 0;
 
 function WorkoutListScreen({ navigation, mainData, setMainData }) {
-  const { width, height } = Dimensions.get("window");
+  const { width, height, centerContainerSize } = useWindowDimentions();
   const [data, setData] = useState(mainData.workoutSetup.flatListArray);
+
+  const listDimentions = {
+    width: centerContainerSize,
+    height: centerContainerSize,
+  };
+  const ITEM_WIDTH = listDimentions.width * 0.8;
+  const ITEM_HEIGHT = listDimentions.height * 0.15;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -49,7 +58,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             }}
           >
             {isActive && "↕"}
-            {index + " :"}
+            {index + 1 + " :"}
             {item.name}
           </Text>
         </TouchableOpacity>
@@ -58,30 +67,45 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
     [data]
   );
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
   return (
-    <View style={{ flex: 1 }}>
-      <DraggableFlatList
-        contentContainerStyle={{
-          paddingTop: height * 0.05,
-          paddingBottom: width > height ? height * 0.2 : height * 0.15,
+    <View style={styles.container}>
+      <View
+        style={{
+          width: centerContainerSize,
+          height: centerContainerSize,
+          borderWidth: BORDER_WIDTH,
         }}
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `draggable-item-${index}`}
-        onDragEnd={({ data }) => {
-          for (let i = 0; i < data.length; i++) {
-            data[i].id = i;
-          }
-          mainData.workoutSetup.flatListArray = data;
-          setMainData(mainData);
-          setData(data);
-        }}
-      />
+      >
+        <DraggableFlatList
+          bounces={false}
+          contentContainerStyle={{
+            paddingTop: 0,
+            paddingBottom: 0,
+          }}
+          style={{}}
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `draggable-item-${index}`}
+          onDragEnd={({ data }) => {
+            for (let i = 0; i < data.length; i++) {
+              data[i].id = i;
+            }
+            mainData.workoutSetup.flatListArray = data;
+            setMainData(mainData);
+            setData(data);
+          }}
+        />
+      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
 export default WorkoutListScreen;

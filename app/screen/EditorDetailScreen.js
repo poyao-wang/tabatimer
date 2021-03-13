@@ -11,11 +11,12 @@ import React from "react";
 
 import NumberPicker from "../components/NumberPicker";
 import useCache from "../utility/cache";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
-  const { width, height } = Dimensions.get("window");
+  const { width, height, centerContainerSize } = useWindowDimentions();
 
-  const itemSize = Math.round(width > height ? height * 0.1 : width * 0.1);
+  const itemSize = Math.round(centerContainerSize * 0.15);
   const selectorSize = itemSize * 5;
 
   const finalValue = { minutes: 0, seconds: 0, numbers: 0 };
@@ -143,43 +144,55 @@ function EditorDetailScreen({ route, navigation, mainData, setMainData }) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 40 }}>{item.title}</Text>
       <View
         style={{
-          width: selectorSize,
-          height: selectorSize,
-          flexDirection: "row",
+          width: centerContainerSize,
+          height: centerContainerSize,
+          alignItems: "center",
+          justifyContent: "center",
+          padding: centerContainerSize * 0.05,
         }}
       >
-        {item.type == "time" ? timePicker() : numberPicker()}
+        <Text style={{ fontSize: centerContainerSize * 0.09 }}>
+          {item.title}
+        </Text>
+        <View
+          style={{
+            width: selectorSize,
+            height: selectorSize,
+            flexDirection: "row",
+          }}
+        >
+          {item.type == "time" ? timePicker() : numberPicker()}
+        </View>
+        <Button
+          fontSize={30}
+          title="Ok"
+          onPress={() => {
+            item.value =
+              item.type == "time"
+                ? finalValue.minutes * 60 + finalValue.seconds
+                : finalValue.numbers;
+            mainData.workoutSetup.workoutArray = makeWorkoutsArray();
+            mainData.workoutSetup.updated = true;
+            if (item.title == "Workouts") {
+              mainData.workoutSetup.flatListArray = makeFlatListArray();
+              // console.log(makeFlatListArray());
+            }
+            setMainData(mainData);
+            useCache.store(mainData);
+            navigation.navigate("EditorScreen");
+          }}
+        />
+        <Button
+          fontSize={30}
+          title="ValueCheck"
+          onPress={() => {
+            console.log(makeFlatListArray());
+            console.log(item.title);
+          }}
+        />
       </View>
-      <Button
-        fontSize={30}
-        title="Ok"
-        onPress={() => {
-          item.value =
-            item.type == "time"
-              ? finalValue.minutes * 60 + finalValue.seconds
-              : finalValue.numbers;
-          mainData.workoutSetup.workoutArray = makeWorkoutsArray();
-          mainData.workoutSetup.updated = true;
-          if (item.title == "Workouts") {
-            mainData.workoutSetup.flatListArray = makeFlatListArray();
-            // console.log(makeFlatListArray());
-          }
-          setMainData(mainData);
-          useCache.store(mainData);
-          navigation.navigate("EditorScreen");
-        }}
-      />
-      <Button
-        fontSize={30}
-        title="ValueCheck"
-        onPress={() => {
-          console.log(makeFlatListArray());
-          console.log(item.title);
-        }}
-      />
     </View>
   );
 }
