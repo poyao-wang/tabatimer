@@ -150,6 +150,48 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     setTabBarShow(timerOn);
   }
 
+  function setPlusOrMinus(plus) {
+    setTimerOn(false);
+    setTabBarShow(true);
+
+    const workoutNo = 1;
+    let setNo = timeData[sectionId].setNo;
+    if (setNo == 0) setNo = 1;
+    setNo = plus ? setNo + 1 : setNo - 1;
+
+    const totalWorkoutAmt = useTimerSetupState.timerSetup.workouts.value;
+    const totalSetAmt = useTimerSetupState.timerSetup.sets.value;
+
+    if (setNo <= 0) return;
+    if (setNo > totalSetAmt) return;
+
+    const newSectionId =
+      1 + (setNo - 1) * 2 * totalWorkoutAmt + (workoutNo - 1) * 2;
+
+    totalSeconds.setValue(timeData[newSectionId].start);
+    sectionSeconds.setValue(0);
+    totalSecondsInputRef?.current?.setNativeProps({
+      text: timeData[newSectionId].start.toString(),
+    });
+    flatlist?.current?.scrollToOffset({
+      offset: 0,
+      animated: false,
+    });
+    setInputRef?.current?.setNativeProps({
+      text:
+        timeData[newSectionId].setNo +
+        " / " +
+        useTimerSetupState.timerSetup.sets.value,
+    });
+
+    Animated.timing(backgroundAnimation, {
+      toValue: -height,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+    setSectionId(newSectionId);
+  }
+
   function reset() {
     setTimerOn(false);
     setTabBarShow(true);
@@ -163,7 +205,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       animated: false,
     });
     setInputRef?.current?.setNativeProps({
-      text: "0" + " / " + useTimerSetupState.timerSetup.sets.value,
+      text: "1" + " / " + useTimerSetupState.timerSetup.sets.value,
     });
 
     Animated.timing(backgroundAnimation, {
@@ -516,6 +558,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         }}
       >
         <View style={styles.flatListLowerSubContainer}>
+          <Button
+            disabled={!btnPressable || flatListScrolling || timerOn}
+            onPress={() => setPlusOrMinus(true)}
+            title="+"
+          />
           <TextInput
             ref={setInputRef}
             defaultValue={
@@ -525,6 +572,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             }
             editable={false}
             style={{ fontSize: 30 }}
+          />
+          <Button
+            disabled={!btnPressable || flatListScrolling || timerOn}
+            onPress={() => setPlusOrMinus(false)}
+            title="-"
           />
         </View>
         <View style={styles.flatListLowerSubContainer}>
