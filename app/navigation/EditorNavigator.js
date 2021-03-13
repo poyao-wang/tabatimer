@@ -14,7 +14,13 @@ function EditorNavigator({ useTimerSetupState, setTabBarShow }) {
   return (
     <Stack.Navigator>
       <Stack.Screen name="EditorScreen" options={{ headerShown: false }}>
-        {(props) => <EditorScreen {...props} mainData={mainData} />}
+        {(props) => (
+          <EditorScreen
+            {...props}
+            mainData={mainData}
+            setMainData={setMainData}
+          />
+        )}
       </Stack.Screen>
       <Stack.Screen name="EditorDetailScreen" options={{ headerShown: false }}>
         {(props) => (

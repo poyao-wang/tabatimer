@@ -1,3 +1,5 @@
+import timerSetupDefaultData from "./timerSetupDefaultData";
+
 const makeWorkoutsArray = (mainData) => {
   let newArray = [];
   const setAmt = mainData.sets.value;
@@ -82,13 +84,34 @@ const makeFlatListArray = (mainData, workoutAmt) => {
 
   for (let i = 0; i < newArray.length; i++) {
     newArray[i].id = i;
-    if (!newArray[i].name) newArray[i].name = `workout${i}`;
+    if (!newArray[i].name) newArray[i].name = `workout${i + 1}`;
     if (!newArray[i].image) newArray[i].image = "";
   }
 
   return newArray;
 };
 
-const timeDataSetupFunctions = { makeWorkoutsArray, makeFlatListArray };
+const resetMainData = (mainData) => {
+  mainData.prepareTime.value = 5;
+  mainData.workoutTime.value = 4;
+  mainData.restTime.value = 3;
+  mainData.restTimeSets.value = 2;
+  mainData.sets.value = 2;
+  mainData.workouts.value = 2;
+
+  mainData.settings = { playSound: true };
+  mainData.workoutSetup.updated = true;
+  mainData.workoutSetup.workoutArray = makeWorkoutsArray(mainData);
+  mainData.workoutSetup.flatListArray = makeFlatListArray(
+    mainData,
+    mainData.workouts.value
+  );
+};
+
+const timeDataSetupFunctions = {
+  makeWorkoutsArray,
+  makeFlatListArray,
+  resetMainData,
+};
 
 export default timeDataSetupFunctions;

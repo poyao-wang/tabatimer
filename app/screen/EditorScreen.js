@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -8,14 +8,18 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import useCache from "../utility/cache";
 
 const BORDER_WIDTH = 0;
 
-function EditorScreen({ navigation, mainData }) {
+function EditorScreen({ navigation, mainData, setMainData }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
+  const [screenData, setScreenData] = useState(mainData);
 
   const listDimentions = {
     width: centerContainerSize,
@@ -67,35 +71,38 @@ function EditorScreen({ navigation, mainData }) {
     },
   });
 
-  const renderItem = (item) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("EditorDetailScreen", item);
-      }}
-      style={styles.itemContainer}
-    >
-      <View style={styles.titlesContainer}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.subtitle}>{item.subtitle}</Text>
-      </View>
-      <View style={styles.valueTextContainer}>
-        <Text style={styles.valueText}>
-          {item.value}
-          {" >"}
-        </Text>
-      </View>
-    </TouchableOpacity>
+  const renderItem = useCallback(
+    (item) => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("EditorDetailScreen", item);
+        }}
+        style={styles.itemContainer}
+      >
+        <View style={styles.titlesContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.subtitle}>{item.subtitle}</Text>
+        </View>
+        <View style={styles.valueTextContainer}>
+          <Text style={styles.valueText}>
+            {item.value}
+            {" >"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    ),
+    [screenData]
   );
 
   return (
     <>
       <View style={styles.container}>
-        {renderItem(mainData["prepareTime"])}
-        {renderItem(mainData["workoutTime"])}
-        {renderItem(mainData["restTime"])}
-        {renderItem(mainData["restTimeSets"])}
-        {renderItem(mainData["sets"])}
-        {renderItem(mainData["workouts"])}
+        {renderItem(screenData["prepareTime"])}
+        {renderItem(screenData["workoutTime"])}
+        {renderItem(screenData["restTime"])}
+        {renderItem(screenData["restTimeSets"])}
+        {renderItem(screenData["sets"])}
+        {renderItem(screenData["workouts"])}
       </View>
       <View
         style={{
@@ -128,7 +135,30 @@ function EditorScreen({ navigation, mainData }) {
         >
           <CustomIcons
             icnoName={"restore"}
-            onPress={() => {}}
+            onPress={() => {
+              Alert.alert(
+                "Reset To Default",
+                "Do you want to reset the settings?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      timeDataSetupFunctions.resetMainData(mainData);
+                      setMainData(mainData);
+                      setScreenData(JSON.parse(JSON.stringify(mainData)));
+                      setScreenData(mainData);
+                      useCache.store(mainData);
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
+            }}
             size={centerContainerSize * 0.13}
           />
         </View>
