@@ -8,6 +8,7 @@ function CustomIcons({
   size = 60,
   style,
   onPress,
+  onPressIn,
   disabled = false,
 }) {
   if (!icnoName) icnoName = "reload";
@@ -24,6 +25,7 @@ function CustomIcons({
     <TouchableOpacity
       disabled={disabled}
       onPress={onPress}
+      onPressIn={onPressIn}
       style={[styles.container, style]}
     >
       <MaterialCommunityIcons name={icnoName} size={size} color={color} />

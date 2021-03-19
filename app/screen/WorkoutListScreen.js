@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  Image,
 } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
@@ -14,62 +15,132 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 
 import useWindowDimentions from "../hook/useWindowDimentions";
+import colors from "../config/colors";
+import CustomIcons from "../components/CustomIcons";
 
 const BORDER_WIDTH = 0;
-
 function WorkoutListScreen({ navigation, mainData, setMainData }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
   const [data, setData] = useState(mainData.workoutSetup.flatListArray);
 
-  const listDimentions = {
-    width: centerContainerSize,
-    height: centerContainerSize,
-  };
-  const ITEM_WIDTH = listDimentions.width * 0.8;
-  const ITEM_HEIGHT = listDimentions.height * 0.15;
+  const containerHeight = centerContainerSize * 0.9;
+  const containerWidth = centerContainerSize * 0.9;
 
   useFocusEffect(
     React.useCallback(() => {
       setData(mainData.workoutSetup.flatListArray);
-
       return;
     }, [])
   );
 
-  const renderItem = useCallback(
-    ({ item, index, drag, isActive }) => {
-      return (
-        <TouchableOpacity
+  const renderItem = ({ item, index, drag, isActive }) => {
+    let imageUri = item.image;
+    return (
+      <View
+        style={{
+          height: centerContainerSize * 0.2,
+          alignItems: "center",
+          justifyContent: "center",
+          borderWidth: BORDER_WIDTH,
+          flexDirection: "row",
+        }}
+        onLongPress={drag}
+      >
+        <View style={styles.itemIconContainer}>
+          <CustomIcons
+            icnoName={"drag"}
+            onPressIn={drag}
+            size={centerContainerSize * 0.07}
+            color={colors.medium}
+          />
+        </View>
+        <View
           style={{
-            height: width > height ? height * 0.15 : height * 0.08,
+            borderWidth: BORDER_WIDTH,
+            height: "100%",
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: BORDER_WIDTH,
+            width: centerContainerSize * 0.15,
           }}
-          onPress={() => {
-            navigation.navigate("WorkoutListDetailScreen", item);
-          }}
-          onLongPress={drag}
         >
           <Text
             style={{
               fontWeight: "bold",
-              fontSize: width > height ? height * 0.07 : height * 0.03,
+              fontSize: centerContainerSize * 0.07,
             }}
           >
-            {isActive && "↕"}
-            {index + 1 + " :"}
-            {item.name}
+            {index + 1 + "."}
+            {/* {item.name} */}
           </Text>
-        </TouchableOpacity>
-      );
-    },
-    [data]
-  );
+        </View>
+        <View
+          style={{
+            width: centerContainerSize * 0.2,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: BORDER_WIDTH,
+          }}
+        >
+          {!(imageUri == "") && (
+            <View
+              style={{
+                borderRadius: centerContainerSize * 0.03,
+                borderWidth: BORDER_WIDTH,
+                overflow: "hidden",
+              }}
+            >
+              <Image
+                source={{ uri: imageUri }}
+                style={{
+                  width: centerContainerSize * 0.17,
+                  aspectRatio: 1,
+                }}
+              />
+            </View>
+          )}
+          {imageUri == "" && (
+            <CustomIcons
+              icnoName={"image-off"}
+              disabled={true}
+              size={centerContainerSize * 0.1}
+              color={colors.dark}
+            />
+          )}
+        </View>
+        <View style={styles.itemIconContainer}>
+          {isActive && (
+            <CustomIcons
+              icnoName={"arrow-up-down-bold"}
+              size={centerContainerSize * 0.1}
+              color={colors.medium}
+            />
+          )}
+        </View>
+        <View style={styles.itemIconContainer}>
+          <CustomIcons
+            icnoName={"image-plus"}
+            onPress={() => {
+              navigation.navigate("WorkoutListDetailScreen", item);
+            }}
+            size={centerContainerSize * 0.1}
+            color={colors.dark}
+          />
+        </View>
+      </View>
+    );
+  };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    itemIconContainer: {
+      height: "100%",
+      width: centerContainerSize * 0.1,
+      borderWidth: BORDER_WIDTH,
       alignItems: "center",
       justifyContent: "center",
     },
@@ -79,9 +150,11 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
     <View style={styles.container}>
       <View
         style={{
-          width: centerContainerSize,
-          height: centerContainerSize,
-          borderWidth: BORDER_WIDTH,
+          width: containerWidth,
+          height: containerHeight,
+          borderWidth: 3,
+          borderColor: colors.medium,
+          borderRadius: centerContainerSize * 0.04,
         }}
       >
         <DraggableFlatList
@@ -103,6 +176,16 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             setMainData(mainData);
             setData(data);
           }}
+          ItemSeparatorComponent={() => (
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderTopColor: colors.medium,
+                width: centerContainerSize * 0.8,
+                alignSelf: "center",
+              }}
+            />
+          )}
         />
       </View>
     </View>
