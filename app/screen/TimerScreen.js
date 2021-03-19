@@ -16,6 +16,7 @@ import { Audio } from "expo-av";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 import FractionDisplay from "../components/FractionDisplay";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 
 const BORDER_WIDTH = 0;
 
@@ -300,7 +301,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     // setTimeMax(timeData[timeData.length - 1].end);
     sectionSeconds.setValue(0);
     sectionSecondsRemainsInputRef?.current?.setNativeProps({
-      text: Math.ceil(timeData[0].end).toString(),
+      text: timeDataSetupFunctions
+        .totalSecToMinAndSec(timeData[0].end)
+        .mixedText.toString(),
     });
   }, [timeData]);
 
@@ -363,7 +366,9 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         }
         sectionSecondsRemainsCeil.setValue(newSectionSecondsRemainsCeil);
         sectionSecondsRemainsInputRef?.current?.setNativeProps({
-          text: newSectionSecondsRemainsCeil.toString(),
+          text: timeDataSetupFunctions
+            .totalSecToMinAndSec(newSectionSecondsRemainsCeil)
+            .mixedText.toString(),
         });
       }
     });

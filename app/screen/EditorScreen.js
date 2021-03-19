@@ -85,7 +85,10 @@ function EditorScreen({ navigation, mainData, setMainData }) {
         </View>
         <View style={styles.valueTextContainer}>
           <Text style={styles.valueText}>
-            {item.value}
+            {item.type == "number" && item.value}
+            {!(item.type == "number") &&
+              timeDataSetupFunctions.totalSecToMinAndSec(item.value)
+                .displayText}
             {" >"}
           </Text>
         </View>

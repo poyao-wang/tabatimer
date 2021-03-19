@@ -108,10 +108,19 @@ const resetMainData = (mainData) => {
   );
 };
 
+const totalSecToMinAndSec = (totalSec) => {
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec - 60 * min;
+  const displayText = ("00" + min).slice(-2) + ":" + ("00" + sec).slice(-2);
+  const mixedText = totalSec <= 60 ? totalSec.toString() : displayText;
+  return { min, sec, displayText, mixedText };
+};
+
 const timeDataSetupFunctions = {
   makeWorkoutsArray,
   makeFlatListArray,
   resetMainData,
+  totalSecToMinAndSec,
 };
 
 export default timeDataSetupFunctions;
