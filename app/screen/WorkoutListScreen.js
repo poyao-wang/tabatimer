@@ -99,6 +99,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
               data[i].id = i;
             }
             mainData.workoutSetup.flatListArray = data;
+            mainData.workoutSetup.updated = true;
             setMainData(mainData);
             setData(data);
           }}

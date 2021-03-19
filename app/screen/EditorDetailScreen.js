@@ -26,7 +26,7 @@ function EditorDetailScreen({
 }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
 
-  const itemSize = Math.round(centerContainerSize * 0.15);
+  const itemSize = Math.round(centerContainerSize * 0.13);
   const selectorSize = itemSize * 5;
 
   const finalValue = { minutes: 0, seconds: 0, numbers: 0 };
@@ -42,6 +42,13 @@ function EditorDetailScreen({
           finalValue.minutes = value;
         }}
       />
+      <Text
+        style={{
+          fontSize: itemSize * 0.7,
+        }}
+      >
+        :
+      </Text>
       <NumberPicker
         itemSize={itemSize}
         numItems={60}
@@ -55,7 +62,7 @@ function EditorDetailScreen({
     <>
       <NumberPicker
         itemSize={itemSize}
-        numItems={100}
+        numItems={31}
         onScroll={(value) => {
           finalValue.numbers = value;
         }}
@@ -80,7 +87,12 @@ function EditorDetailScreen({
           borderWidth: BORDER_WIDTH,
         }}
       >
-        <Text style={{ fontSize: centerContainerSize * 0.09 }}>
+        <Text
+          style={{
+            fontSize: centerContainerSize * 0.09,
+            borderWidth: BORDER_WIDTH,
+          }}
+        >
           {item.title}
         </Text>
         <View
@@ -88,6 +100,8 @@ function EditorDetailScreen({
             width: selectorSize,
             height: selectorSize,
             flexDirection: "row",
+            alignItems: "center",
+            borderWidth: BORDER_WIDTH,
           }}
         >
           {item.type == "time" ? timePicker() : numberPicker()}
@@ -107,9 +121,13 @@ function EditorDetailScreen({
               icnoName={"check-circle"}
               onPress={() => {
                 item.value =
-                  item.type == "time"
-                    ? finalValue.minutes * 60 + finalValue.seconds
-                    : finalValue.numbers;
+                  item.type == "number"
+                    ? finalValue.numbers < 1
+                      ? 1
+                      : finalValue.numbers
+                    : finalValue.minutes * 60 + finalValue.seconds < 5
+                    ? 5
+                    : finalValue.minutes * 60 + finalValue.seconds;
                 mainData.workoutSetup.workoutArray = timeDataSetupFunctions.makeWorkoutsArray(
                   mainData
                 );
@@ -117,7 +135,7 @@ function EditorDetailScreen({
                 if (item.title == "Workouts") {
                   mainData.workoutSetup.flatListArray = timeDataSetupFunctions.makeFlatListArray(
                     mainData,
-                    finalValue.numbers
+                    item.value
                   );
                   // console.log(makeFlatListArray());
                 }
