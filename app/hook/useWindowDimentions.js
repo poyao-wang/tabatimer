@@ -18,14 +18,16 @@ const useWindowDimentions = () => {
     objectTransform(Dimensions.get("window"))
   );
 
+  const onChange = ({ window }) => {
+    setWindowDimentions(objectTransform(window));
+  };
+
   useEffect(() => {
-    Dimensions.addEventListener("change", ({ window }) => {
-      setWindowDimentions(objectTransform(window));
-    });
+    Dimensions.addEventListener("change", onChange);
     return () => {
-      Dimensions.removeEventListener("change");
+      Dimensions.removeEventListener("change", onChange);
     };
-  }, []);
+  });
 
   return windowDimentions;
 };
