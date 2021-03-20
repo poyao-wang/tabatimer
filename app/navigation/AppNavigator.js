@@ -51,7 +51,12 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
         name="WorkoutList"
         options={{ iconName: "format-list-bulleted" }}
       >
-        {() => <WorkoutListNavigator useTimerSetupState={useTimerSetupState} />}
+        {() => (
+          <WorkoutListNavigator
+            useTimerSetupState={useTimerSetupState}
+            setTabBarShow={useTabBarShowState.setTabBarShow}
+          />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );
