@@ -17,12 +17,13 @@ import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 import FractionDisplay from "../components/FractionDisplay";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import colors from "../config/colors";
 
 const BORDER_WIDTH = 0;
 
 const outPutColorByType = (type) => {
   if (type == "prepare") return { value: 0, text: "rgba(200,200,200,0.7)" };
-  if (type == "prepare-dark") return { value: 0, text: "rgba(200,200,200,1)" };
+  if (type == "prepare-dark") return { value: 0, text: "rgba(150,150,150,1)" };
   if (type == "workout") return { value: 1, text: "rgba(249, 142, 142, 1)" };
   if (type == "workout-dark") return { value: 1, text: "rgba(243, 77, 77,1)" };
   if (type == "rest") return { value: 2, text: "rgba(79, 236, 160,1)" };
@@ -119,6 +120,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const backgroundAnimation = React.useRef(new Animated.Value(-height)).current;
   const backgroundColorAnimation = React.useRef(new Animated.Value(0)).current;
   const bottomViewAnimation = useRef(new Animated.Value(0)).current;
+  const sectionTypeTextOpacity = useRef(new Animated.Value(0)).current;
 
   const backgroundColorForScreen = backgroundColorAnimation.interpolate({
     inputRange: [0, 1, 2, 3],
@@ -129,6 +131,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
       outPutColorByType("finished").text,
     ],
   });
+  const colorForText = backgroundColorAnimation.interpolate({
+    inputRange: [0, 1, 2, 3],
+    outputRange: [
+      outPutColorByType("prepare-dark").text,
+      outPutColorByType("workout-dark").text,
+      outPutColorByType("rest-dark").text,
+      outPutColorByType("finished-dark").text,
+    ],
+  });
 
   const bottomViewOpacity = bottomViewAnimation.interpolate({
     inputRange: [0, 1],
@@ -137,6 +148,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const bottomViewTranslateY = bottomViewAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [0, width > height ? height : height * 0.3],
+  });
+
+  const sectionSecondsRemainsOpacity = sectionTypeTextOpacity.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
   });
 
   const scrollValueToSectionId = (scrollValue) => {
@@ -173,23 +189,43 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         ? "rest"
         : "";
 
+    const textAnime = Animated.sequence([
+      Animated.timing(sectionTypeTextOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.delay(500),
+      Animated.timing(sectionTypeTextOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    const countDownAnime = Animated.parallel([
+      Animated.timing(sectionSeconds, {
+        toValue: timeData[sectionId].duration,
+        duration: (timeData[sectionId].duration - startTime) * 1000,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+      Animated.timing(backgroundAnimation, {
+        toValue: 0,
+        duration: (timeData[sectionId].duration - startTime) * 1000,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+    ]);
+
     playSound(soundType);
-    Animated.sequence([
-      Animated.delay(300),
-      Animated.parallel([
-        Animated.timing(sectionSeconds, {
-          toValue: timeData[sectionId].duration,
-          duration: (timeData[sectionId].duration - startTime) * 1000,
-          useNativeDriver: true,
-          easing: Easing.linear,
-        }),
-        Animated.timing(backgroundAnimation, {
-          toValue: 0,
-          duration: (timeData[sectionId].duration - startTime) * 1000,
-          useNativeDriver: true,
-          easing: Easing.linear,
-        }),
+
+    Animated.parallel([
+      Animated.sequence([
+        Animated.delay(300), //
+        countDownAnime,
       ]),
+      textAnime,
     ]).start(({ finished }) => {
       if (sectionId + 1 > timeData.length - 1) {
         setTimerOn(false);
@@ -461,7 +497,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           alignItems: "center",
         }}
       >
-        <View
+        <Animated.View
           style={{
             height: "30%",
             width: "100%",
@@ -469,6 +505,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
+            opacity: sectionSecondsRemainsOpacity,
           }}
         >
           <TextInput
@@ -481,12 +518,37 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 textAlignVertical: "bottom",
                 borderWidth: BORDER_WIDTH,
                 width: ITEM_SIZE * 2,
-                height: "100%",
               },
             ]}
             editable={false}
           />
-        </View>
+        </Animated.View>
+        <Animated.View
+          style={{
+            position: "absolute",
+            height: "30%",
+            width: "100%",
+            borderWidth: BORDER_WIDTH,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: sectionTypeTextOpacity,
+          }}
+        >
+          <Animated.Text
+            style={[
+              styles.text,
+              {
+                fontSize: ITEM_SIZE * 0.45,
+                textAlignVertical: "bottom",
+                borderWidth: BORDER_WIDTH,
+                color: colorForText,
+              },
+            ]}
+          >
+            {timeData[sectionId].type.toUpperCase()}
+          </Animated.Text>
+        </Animated.View>
         <View
           style={{
             height: "40%",
@@ -581,11 +643,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                     height: ITEM_SIZE,
                     justifyContent: "center",
                     alignItems: "center",
-                    borderWidth: ITEM_SIZE * 0.07,
+                    borderWidth: ITEM_SIZE * 0.04,
                     borderRadius: ITEM_SIZE * 0.15,
-                    borderColor: outPutColorByType(item.type + "-dark").text,
+                    borderColor: colors.dark,
                     overflow: "hidden",
-                    backgroundColor: outPutColorByType(item.type).text,
+                    backgroundColor: colors.light,
                     opacity,
                     transform: [
                       {
@@ -602,7 +664,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                   {!(imageUri == "") && (
                     <Image
                       source={{ uri: imageUri }}
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: "101%", height: "101%" }}
                     />
                   )}
                   {imageUri == "" && (
