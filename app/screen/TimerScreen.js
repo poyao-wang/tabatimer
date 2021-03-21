@@ -264,6 +264,11 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     setInputRef?.current?.setNativeProps({
       text: "1",
     });
+    sectionSecondsRemainsInputRef?.current?.setNativeProps({
+      text: timeDataSetupFunctions
+        .totalSecToMinAndSec(timeData[0].end)
+        .mixedText.toString(),
+    });
 
     Animated.timing(backgroundAnimation, {
       toValue: -height,
