@@ -11,6 +11,8 @@ import {
   Alert,
   Platform,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
+
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
@@ -47,6 +49,11 @@ function EditorScreen({ navigation, mainData, setMainData }) {
       height: ITEM_HEIGHT,
       flexDirection: "row",
     },
+    iconContainer: {
+      borderWidth: BORDER_WIDTH,
+      justifyContent: "center",
+      alignItems: "center",
+    },
     titlesContainer: {
       borderWidth: BORDER_WIDTH,
     },
@@ -79,6 +86,18 @@ function EditorScreen({ navigation, mainData, setMainData }) {
     },
   });
 
+  const blink = {
+    0: {
+      scale: 1,
+    },
+    0.5: {
+      scale: 1.2,
+    },
+    1: {
+      scale: 1,
+    },
+  };
+
   const renderItem = useCallback(
     (item) => (
       <TouchableOpacity
@@ -97,9 +116,21 @@ function EditorScreen({ navigation, mainData, setMainData }) {
             {!(item.type == "number") &&
               timeDataSetupFunctions.totalSecToMinAndSec(item.value)
                 .displayText}
-            {" >"}
           </Text>
         </View>
+        <Animatable.View
+          animation={blink}
+          duration={300}
+          iterationDelay={2000}
+          iterationCount="infinite"
+          style={styles.iconContainer}
+        >
+          <CustomIcons
+            icnoName={"chevron-double-right"}
+            disabled={true}
+            size={ITEM_HEIGHT * 0.45}
+          />
+        </Animatable.View>
       </TouchableOpacity>
     ),
     [screenData]

@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 import { useFocusEffect } from "@react-navigation/native";
 import DraggableFlatList, {
@@ -28,6 +29,18 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
 
   const containerHeight = centerContainerSize * 0.9;
   const containerWidth = centerContainerSize * 0.9;
+
+  const blink = {
+    0: {
+      scale: 1,
+    },
+    0.5: {
+      scale: 1.05,
+    },
+    1: {
+      scale: 1,
+    },
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -120,7 +133,13 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             />
           )}
         </View>
-        <View style={styles.itemIconContainer}>
+        <Animatable.View
+          animation={blink}
+          duration={300}
+          iterationDelay={2000}
+          iterationCount="infinite"
+          style={styles.itemIconContainer}
+        >
           <CustomIcons
             icnoName={"image-plus"}
             onPress={() => {
@@ -129,7 +148,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             size={centerContainerSize * 0.1}
             color={colors.dark}
           />
-        </View>
+        </Animatable.View>
       </View>
     );
   };
