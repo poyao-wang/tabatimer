@@ -51,6 +51,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   const [btnPressable, setBtnPressable] = useState(true);
   const [flatListScrolling, setFlatListScrolling] = useState(false);
   const [sectionId, setSectionId] = useState(0);
+  const [screenFocused, setScreenFocused] = useState(false);
 
   const [sound, setSound] = useState();
   const [tickingSound, setTickingSound] = useState();
@@ -274,6 +275,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
   useFocusEffect(
     React.useCallback(() => {
+      setScreenFocused(true);
       if (useTimerSetupState.timerSetup.workoutSetup.updated) {
         setFlatListArray(
           useTimerSetupState.timerSetup.workoutSetup.flatListArray
@@ -283,18 +285,25 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         useTimerSetupState.timerSetup.workoutSetup.updated = false;
         useTimerSetupState.setTimerSetup(useTimerSetupState.timerSetup);
       }
-      return;
+      return () => {
+        setScreenFocused(false);
+      };
     }, [])
   );
 
   useEffect(() => {
-    setTimerOn(false);
-    navBarAndBottomViewAnime(true);
-    backgroundAnimation.setValue(
-      -height *
-        ((timeData[sectionId].duration - sectionSeconds._value) /
-          timeData[sectionId].duration)
-    );
+    if (screenFocused) {
+      setTimerOn(false);
+      backgroundAnimation.setValue(
+        -height *
+          ((timeData[sectionId].duration - sectionSeconds._value) /
+            timeData[sectionId].duration)
+      );
+      setTimeout(() => {
+        navBarAndBottomViewAnime(false);
+        navBarAndBottomViewAnime(true);
+      }, 500);
+    }
   }, [windowDimentions]);
 
   useEffect(() => {
@@ -675,7 +684,26 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
           <CustomIcons
             icnoName={"restore"}
             disabled={!btnPressable || timerOn}
-            onPress={reset}
+            onPress={() => {
+              Alert.alert(
+                "Reset Timer",
+                "Do you want to reset the Timer?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      reset();
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
+            }}
             size={CENTER_CONTAINER_SIZE * 0.13}
           />
         </View>
