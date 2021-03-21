@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import {
+  Alert,
   Animated,
   View,
   StyleSheet,
@@ -17,6 +18,8 @@ import DraggableFlatList, {
 import useWindowDimentions from "../hook/useWindowDimentions";
 import colors from "../config/colors";
 import CustomIcons from "../components/CustomIcons";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import useCache from "../utility/cache";
 
 const BORDER_WIDTH = 0;
 function WorkoutListScreen({ navigation, mainData, setMainData }) {
@@ -187,6 +190,63 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             />
           )}
         />
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          bottom:
+            width > height
+              ? (height - centerContainerSize) / 2
+              : ((height - centerContainerSize) / 2 -
+                  centerContainerSize * 0.2) /
+                2,
+          left: width > height ? "5%" : (width - centerContainerSize) / 2,
+          flexDirection: width > height ? "column" : "row",
+          height:
+            width > height ? centerContainerSize : centerContainerSize * 0.24,
+          width:
+            width > height ? centerContainerSize * 0.24 : centerContainerSize,
+          borderWidth: BORDER_WIDTH,
+        }}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <CustomIcons
+            icnoName={"delete-forever"}
+            onPress={() => {
+              Alert.alert(
+                "Delete All Images",
+                "Do you want to delete all images?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      timeDataSetupFunctions.resetFlatListArray(mainData);
+                      mainData.workoutSetup.updated = true;
+                      setMainData(mainData);
+                      setData(
+                        JSON.parse(
+                          JSON.stringify(mainData.workoutSetup.flatListArray)
+                        )
+                      );
+                      setData(mainData.workoutSetup.flatListArray);
+                      // setScreenData(JSON.parse(JSON.stringify(mainData)));
+                      // setScreenData(mainData);
+                      useCache.store(mainData);
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
+            }}
+            size={centerContainerSize * 0.13}
+          />
+        </View>
       </View>
     </View>
   );

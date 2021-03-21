@@ -91,6 +91,28 @@ const makeFlatListArray = (mainData, workoutAmt) => {
   return newArray;
 };
 
+const resetFlatListArray = (mainData, workoutAmt) => {
+  let newArray = [...mainData.workoutSetup.flatListArray];
+  let arrayLength = newArray.length;
+  if (arrayLength > workoutAmt) {
+    for (let i = 0; i < arrayLength - workoutAmt; i++) {
+      newArray.pop();
+    }
+  } else if (arrayLength < workoutAmt) {
+    for (let i = 0; i < workoutAmt - arrayLength; i++) {
+      newArray.push({});
+    }
+  }
+
+  for (let i = 0; i < newArray.length; i++) {
+    newArray[i].id = i;
+    if (!newArray[i].name) newArray[i].name = `workout${i + 1}`;
+    newArray[i].image = "";
+  }
+
+  return newArray;
+};
+
 const resetMainData = (mainData) => {
   mainData.prepareTime.value = 5;
   mainData.workoutTime.value = 4;
@@ -119,6 +141,7 @@ const totalSecToMinAndSec = (totalSec) => {
 const timeDataSetupFunctions = {
   makeWorkoutsArray,
   makeFlatListArray,
+  resetFlatListArray,
   resetMainData,
   totalSecToMinAndSec,
 };
