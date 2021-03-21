@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -20,6 +21,12 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import colors from "../config/colors";
 
 const BORDER_WIDTH = 0;
+const FONT_FAMILY =
+  Platform.OS === "ios"
+    ? "Menlo"
+    : Platform.OS === "android"
+    ? "monospace"
+    : null;
 
 const outPutColorByType = (type) => {
   if (type == "prepare") return { value: 0, text: "rgba(200,200,200,0.7)" };
@@ -538,6 +545,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 textAlignVertical: "bottom",
                 borderWidth: BORDER_WIDTH,
                 width: ITEM_SIZE * 2,
+                fontFamily: FONT_FAMILY,
               },
             ]}
             editable={false}

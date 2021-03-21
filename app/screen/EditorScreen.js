@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
@@ -16,6 +17,12 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 
 const BORDER_WIDTH = 0;
+const FONT_FAMILY =
+  Platform.OS === "ios"
+    ? "Courier"
+    : Platform.OS === "android"
+    ? "monospace"
+    : null;
 
 function EditorScreen({ navigation, mainData, setMainData }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
@@ -68,6 +75,7 @@ function EditorScreen({ navigation, mainData, setMainData }) {
       textAlign: "right",
       color: "black",
       fontWeight: "bold",
+      fontFamily: FONT_FAMILY,
     },
   });
 
