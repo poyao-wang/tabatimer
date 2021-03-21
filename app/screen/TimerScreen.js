@@ -273,6 +273,39 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     setSectionId(0);
   }
 
+  function scrollingChangeSection() {
+    const workoutNo = Math.round(scrollX._value / ITEM_SIZE) + 1;
+    let setNo = timeData[sectionId].setNo;
+    if (setNo <= 0) setNo = 1;
+
+    const totalWorkoutAmt = useTimerSetupState.timerSetup.workouts.value;
+
+    const newSectionId =
+      1 + (setNo - 1) * 2 * totalWorkoutAmt + (workoutNo - 1) * 2;
+    totalSeconds.setValue(timeData[newSectionId].start);
+    sectionSeconds.setValue(0);
+
+    sectionSecondsRemainsInputRef?.current?.setNativeProps({
+      text: timeDataSetupFunctions
+        .totalSecToMinAndSec(useTimerSetupState.timerSetup.workoutTime.value)
+        .mixedText.toString(),
+    });
+
+    totalSecondsInputRef?.current?.setNativeProps({
+      text: timeData[newSectionId].start.toString(),
+    });
+    setInputRef?.current?.setNativeProps({
+      text: timeData[newSectionId].setNo.toString(),
+    });
+
+    Animated.timing(backgroundAnimation, {
+      toValue: -height,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+    setSectionId(newSectionId);
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       setScreenFocused(true);
@@ -485,36 +518,23 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             onMomentumScrollEnd={() => {
               if (!timerOn) {
                 setFlatListScrolling(false);
-                const workoutNo = Math.round(scrollX._value / ITEM_SIZE) + 1;
-                let setNo = timeData[sectionId].setNo;
-                if (setNo <= 0) setNo = 1;
-
-                const totalWorkoutAmt =
-                  useTimerSetupState.timerSetup.workouts.value;
-
-                const newSectionId =
-                  1 + (setNo - 1) * 2 * totalWorkoutAmt + (workoutNo - 1) * 2;
-
-                totalSeconds.setValue(timeData[newSectionId].start);
-                sectionSeconds.setValue(0);
-                totalSecondsInputRef?.current?.setNativeProps({
-                  text: timeData[newSectionId].start.toString(),
-                });
-                setInputRef?.current?.setNativeProps({
-                  text: timeData[newSectionId].setNo.toString(),
-                });
-
-                Animated.timing(backgroundAnimation, {
-                  toValue: -height,
-                  duration: 100,
-                  useNativeDriver: true,
-                }).start();
-                setSectionId(newSectionId);
+                scrollingChangeSection();
               }
             }}
             onScrollBeginDrag={() => {
               setTimerOn(false);
               navBarAndBottomViewAnime(true);
+            }}
+            onScrollEndDrag={() => {
+              setFlatListScrolling(false);
+              const totalWorkoutAmt =
+                useTimerSetupState.timerSetup.workouts.value;
+              const atTheEnd =
+                scrollX._value == ITEM_SIZE * (totalWorkoutAmt - 1);
+              const atTheStart = scrollX._value == 0;
+              if (atTheEnd || atTheStart) {
+                scrollingChangeSection();
+              }
             }}
             renderItem={({ item, index }) => {
               const inputRange = [
