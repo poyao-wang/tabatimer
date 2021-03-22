@@ -139,10 +139,10 @@ const totalSecToMinAndSec = (totalSec) => {
 };
 
 const checkImageUri = (uri) => {
-  const source = typeof uri === "string" ? { uri } : uri;
+  let source = typeof uri === "string" ? { uri } : uri;
 
-  if (!uri) uri = "";
-  return uri;
+  if (!uri) source = null;
+  return source;
 };
 
 const timeDataSetupFunctions = {

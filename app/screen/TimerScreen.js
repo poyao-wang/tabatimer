@@ -696,13 +696,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 >
                   {/* <Text style={{ fontSize: 25 }}>{item.type}</Text> */}
 
-                  {!(imageUri == "") && (
+                  {imageUri && (
                     <Image
                       source={imageUri}
                       style={{ width: "101%", height: "101%" }}
                     />
                   )}
-                  {imageUri == "" && (
+                  {!imageUri && (
                     <Text
                       style={[
                         styles.text,

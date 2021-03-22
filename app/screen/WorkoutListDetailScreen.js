@@ -56,7 +56,7 @@ function WorkoutListDetailScreen({
           [{ resize: { width: 300 } }], // resize to width of 300 and preserve aspect ratio
           { compress: 0.7, format: "jpeg", base64: true }
         );
-        setImageUri(resizedPhoto.uri);
+        setImageUri(timeDataSetupFunctions.checkImageUri(resizedPhoto.uri));
         const imageUri = "data:image/jpeg;base64," + resizedPhoto.base64;
         mainData.workoutSetup.flatListArray[item.id].image = imageUri;
         mainData.workoutSetup.updated = true;

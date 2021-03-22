@@ -98,7 +98,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             borderWidth: BORDER_WIDTH,
           }}
         >
-          {!(imageUri == "") && (
+          {imageUri && (
             <View
               style={{
                 borderRadius: centerContainerSize * 0.03,
@@ -115,7 +115,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
               />
             </View>
           )}
-          {imageUri == "" && (
+          {!imageUri && (
             <CustomIcons
               icnoName={"image-off"}
               disabled={true}
