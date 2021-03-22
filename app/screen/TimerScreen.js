@@ -393,6 +393,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
   );
 
   useEffect(() => {
+    sectionTypeTextOpacity.setValue(0);
+    Animated.timing(sectionTypeTextOpacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  useEffect(() => {
     if (screenFocused) {
       setTimerOn(false);
       backgroundAnimation.setValue(
