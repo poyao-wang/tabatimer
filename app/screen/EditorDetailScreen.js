@@ -137,11 +137,12 @@ function EditorDetailScreen({
                     mainData,
                     item.value
                   );
-                  // console.log(makeFlatListArray());
+                  // console.log(mainData.workoutSetup.flatListArray);
                 }
                 setMainData(mainData);
                 useCache.store(mainData);
                 navigation.navigate("EditorScreen");
+                // console.log(mainData.workoutSetup.workoutArray);
               }}
               size={itemSize}
               color="rgba(29, 195, 114,1)"
