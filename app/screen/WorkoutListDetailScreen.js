@@ -16,6 +16,7 @@ import useCache from "../utility/cache";
 import CustomIcons from "../components/CustomIcons";
 import colors from "../config/colors";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 
 const BORDER_WIDTH = 0;
 
@@ -43,7 +44,7 @@ function WorkoutListDetailScreen({
 
   useEffect(() => {
     requestPermission();
-    setImageUri(item.image == "" ? null : item.image);
+    setImageUri(timeDataSetupFunctions.checkImageUri(item.image));
   }, []);
 
   const selectImage = async () => {
@@ -106,7 +107,7 @@ function WorkoutListDetailScreen({
         >
           {imageUri && (
             <Image
-              source={{ uri: imageUri }}
+              source={imageUri}
               style={{ width: "100%", height: "100%" }}
             />
           )}

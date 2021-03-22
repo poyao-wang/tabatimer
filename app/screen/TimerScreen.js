@@ -660,9 +660,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
                 ],
               });
 
-              let imageUri = item.image;
-
-              if (!imageUri) imageUri = "";
+              let imageUri = timeDataSetupFunctions.checkImageUri(item.image);
 
               return (
                 <Animated.View
@@ -691,7 +689,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
 
                   {!(imageUri == "") && (
                     <Image
-                      source={{ uri: imageUri }}
+                      source={imageUri}
                       style={{ width: "101%", height: "101%" }}
                     />
                   )}

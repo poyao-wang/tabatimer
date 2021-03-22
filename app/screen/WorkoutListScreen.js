@@ -50,7 +50,7 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
   );
 
   const renderItem = ({ item, index, drag, isActive }) => {
-    let imageUri = item.image;
+    let imageUri = timeDataSetupFunctions.checkImageUri(item.image);
     return (
       <View
         style={{
@@ -107,9 +107,9 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
               }}
             >
               <Image
-                source={{ uri: imageUri }}
+                source={imageUri}
                 style={{
-                  width: centerContainerSize * 0.17,
+                  height: "90%",
                   aspectRatio: 1,
                 }}
               />

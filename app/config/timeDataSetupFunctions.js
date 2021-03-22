@@ -114,12 +114,12 @@ const resetFlatListArray = (mainData, workoutAmt) => {
 };
 
 const resetMainData = (mainData) => {
-  mainData.prepareTime.value = 5;
-  mainData.workoutTime.value = 4;
-  mainData.restTime.value = 3;
-  mainData.restTimeSets.value = 2;
-  mainData.sets.value = 2;
-  mainData.workouts.value = 2;
+  mainData.prepareTime.value = 15;
+  mainData.workoutTime.value = 30;
+  mainData.restTime.value = 10;
+  mainData.restTimeSets.value = 30;
+  mainData.sets.value = 3;
+  mainData.workouts.value = 6;
 
   mainData.settings = { playSound: true };
   mainData.workoutSetup.updated = true;
@@ -138,7 +138,15 @@ const totalSecToMinAndSec = (totalSec) => {
   return { min, sec, displayText, mixedText };
 };
 
+const checkImageUri = (uri) => {
+  const source = typeof uri === "string" ? { uri } : uri;
+
+  if (!uri) uri = "";
+  return uri;
+};
+
 const timeDataSetupFunctions = {
+  checkImageUri,
   makeWorkoutsArray,
   makeFlatListArray,
   resetFlatListArray,
