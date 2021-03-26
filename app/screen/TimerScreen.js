@@ -386,6 +386,13 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
         useTimerSetupState.timerSetup.workoutSetup.updated = false;
         useTimerSetupState.setTimerSetup(useTimerSetupState.timerSetup);
       }
+
+      backgroundAnimation.setValue(
+        -height *
+          ((timeData[sectionId].duration - sectionSeconds._value) /
+            timeData[sectionId].duration)
+      );
+
       return () => {
         setScreenFocused(false);
       };
