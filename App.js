@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, Animated, Dimensions } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import * as Localization from "expo-localization";
 
 import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
 
@@ -19,12 +20,34 @@ export default function App() {
   const [language, setLanguage] = useState("eng");
   const [uiText, setUiText] = useState(uiTextDefaultData["eng"]);
 
+  const lanCodeTransfer = (deviceLanCode) => {
+    return deviceLanCode == "ja"
+      ? "jpn"
+      : deviceLanCode == "zh"
+      ? "cht"
+      : "eng";
+  };
+
+  const deviceLanguage = lanCodeTransfer(Localization.locale.split("-")[0]);
+
   const readFromCache = async () => {
     const result = await useCache.get();
-    console.log("cache loaded");
     if (result) {
+      if (!result.settings.language) {
+        result.settings.language = deviceLanguage;
+        useCache.store(result);
+      }
       setTimerSetup(result);
+      setLanguage(result.settings.language);
+    } else {
+      setLanguage(deviceLanguage);
     }
+  };
+
+  const setLanAndStoreToCache = (languageCode) => {
+    setLanguage(languageCode);
+    timerSetup.settings.language = languageCode;
+    useCache.store(timerSetup);
   };
 
   useEffect(() => {
@@ -43,7 +66,7 @@ export default function App() {
             <WelcomeScreen
               {...props}
               onSetLanguage={(languageCode) => {
-                setLanguage(languageCode);
+                setLanAndStoreToCache(languageCode);
               }}
               language={language}
             />

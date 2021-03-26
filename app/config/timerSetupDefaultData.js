@@ -360,7 +360,7 @@ const timerSetupDefaultData = {
       },
     ],
   },
-  settings: { playSound: true },
+  settings: { playSound: true, language: "eng" },
   prepareTime: {
     title: "Preparation Time",
     subtitle: "Preparation before Start",
