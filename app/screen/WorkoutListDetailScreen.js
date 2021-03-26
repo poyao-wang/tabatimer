@@ -26,6 +26,7 @@ function WorkoutListDetailScreen({
   mainData,
   setMainData,
   setTabBarShow,
+  uiText,
 }) {
   const windowDimentions = useWindowDimentions();
   const { width, height, centerContainerSize } = windowDimentions;
@@ -39,7 +40,7 @@ function WorkoutListDetailScreen({
 
   const requestPermission = async () => {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
-    if (!granted) alert("You need to enable permission to access the library.");
+    if (!granted) alert(uiText.workoutListDetailScreen.alertCameraPermission);
   };
 
   useEffect(() => {

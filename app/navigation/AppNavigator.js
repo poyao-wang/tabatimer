@@ -15,7 +15,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
+function AppNavigator({
+  useTimerSetupState,
+  useTabBarShowState,
+  navigation,
+  useLanguageSetting: { uiText },
+}) {
   React.useEffect(
     () =>
       navigation.addListener("beforeRemove", (e) => {
@@ -36,6 +41,7 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
           <TimerScreen
             setTabBarShow={useTabBarShowState.setTabBarShow}
             useTimerSetupState={useTimerSetupState}
+            uiText={uiText}
           />
         )}
       </Tab.Screen>
@@ -44,6 +50,7 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
           <EditorNavigator
             useTimerSetupState={useTimerSetupState}
             setTabBarShow={useTabBarShowState.setTabBarShow}
+            uiText={uiText}
           />
         )}
       </Tab.Screen>
@@ -55,6 +62,7 @@ function AppNavigator({ useTimerSetupState, useTabBarShowState, navigation }) {
           <WorkoutListNavigator
             useTimerSetupState={useTimerSetupState}
             setTabBarShow={useTabBarShowState.setTabBarShow}
+            uiText={uiText}
           />
         )}
       </Tab.Screen>

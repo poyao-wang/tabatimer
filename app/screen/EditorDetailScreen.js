@@ -26,12 +26,14 @@ function EditorDetailScreen({
 }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
 
-  const itemSize = Math.round(centerContainerSize * 0.13);
+  const itemSize = Math.round(centerContainerSize * 0.12);
   const selectorSize = itemSize * 5;
 
   const finalValue = { minutes: 0, seconds: 0, numbers: 0 };
 
-  const item = route.params;
+  const item = route.params.item;
+  const title = route.params.title;
+  const subtitle = route.params.subtitle;
 
   const timePicker = () => (
     <>
@@ -93,7 +95,17 @@ function EditorDetailScreen({
             borderWidth: BORDER_WIDTH,
           }}
         >
-          {item.title}
+          {title}
+        </Text>
+        <Text
+          style={{
+            fontSize: centerContainerSize * 0.05,
+            borderWidth: BORDER_WIDTH,
+            paddingTop: centerContainerSize * 0.05,
+            opacity: 0.5,
+          }}
+        >
+          {subtitle}
         </Text>
         <View
           style={{

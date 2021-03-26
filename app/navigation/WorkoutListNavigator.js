@@ -10,7 +10,7 @@ import WorkoutListDetailScreen from "../screen/WorkoutListDetailScreen";
 
 const Stack = createStackNavigator();
 
-function WorkoutListNavigator({ useTimerSetupState, setTabBarShow }) {
+function WorkoutListNavigator({ useTimerSetupState, setTabBarShow, uiText }) {
   const mainData = useTimerSetupState.timerSetup;
   const setMainData = useTimerSetupState.setTimerSetup;
   return (
@@ -21,6 +21,7 @@ function WorkoutListNavigator({ useTimerSetupState, setTabBarShow }) {
             {...props}
             mainData={mainData}
             setMainData={setMainData}
+            uiText={uiText}
           />
         )}
       </Stack.Screen>
@@ -34,6 +35,7 @@ function WorkoutListNavigator({ useTimerSetupState, setTabBarShow }) {
             mainData={mainData}
             setMainData={setMainData}
             setTabBarShow={setTabBarShow}
+            uiText={uiText}
           />
         )}
       </Stack.Screen>

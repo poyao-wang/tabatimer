@@ -26,7 +26,7 @@ const FONT_FAMILY =
     ? "monospace"
     : null;
 
-function EditorScreen({ navigation, mainData, setMainData }) {
+function EditorScreen({ navigation, mainData, setMainData, uiText }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
   const [screenData, setScreenData] = useState(mainData);
 
@@ -99,16 +99,16 @@ function EditorScreen({ navigation, mainData, setMainData }) {
   };
 
   const renderItem = useCallback(
-    (item) => (
+    (item, title, subtitle) => (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("EditorDetailScreen", item);
+          navigation.navigate("EditorDetailScreen", { item, title, subtitle });
         }}
         style={styles.itemContainer}
       >
         <View style={styles.titlesContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
         <View style={styles.valueTextContainer}>
           <Text style={styles.valueText}>
@@ -139,12 +139,36 @@ function EditorScreen({ navigation, mainData, setMainData }) {
   return (
     <>
       <View style={styles.container}>
-        {renderItem(screenData["prepareTime"])}
-        {renderItem(screenData["workoutTime"])}
-        {renderItem(screenData["restTime"])}
-        {renderItem(screenData["restTimeSets"])}
-        {renderItem(screenData["sets"])}
-        {renderItem(screenData["workouts"])}
+        {renderItem(
+          screenData["prepareTime"],
+          uiText.editorScreen["prepareTime"].title,
+          uiText.editorScreen["prepareTime"].subtitle
+        )}
+        {renderItem(
+          screenData["workoutTime"],
+          uiText.editorScreen["workoutTime"].title,
+          uiText.editorScreen["workoutTime"].subtitle
+        )}
+        {renderItem(
+          screenData["restTime"],
+          uiText.editorScreen["restTime"].title,
+          uiText.editorScreen["restTime"].subtitle
+        )}
+        {renderItem(
+          screenData["restTimeSets"],
+          uiText.editorScreen["restTimeSets"].title,
+          uiText.editorScreen["restTimeSets"].subtitle
+        )}
+        {renderItem(
+          screenData["sets"],
+          uiText.editorScreen["sets"].title,
+          uiText.editorScreen["sets"].subtitle
+        )}
+        {renderItem(
+          screenData["workouts"],
+          uiText.editorScreen["workouts"].title,
+          uiText.editorScreen["workouts"].subtitle
+        )}
       </View>
       <View
         style={{
@@ -188,16 +212,15 @@ function EditorScreen({ navigation, mainData, setMainData }) {
             icnoName={"restore"}
             onPress={() => {
               Alert.alert(
-                "Reset To Default",
-                "Do you want to reset the settings?",
+                uiText.editorScreen.resetAlertTitle,
+                uiText.editorScreen.resetAlertMsg,
                 [
                   {
-                    text: "Cancel",
+                    text: uiText.editorScreen.resetAlertCancel,
                     onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
                   },
                   {
-                    text: "OK",
+                    text: uiText.editorScreen.resetAlertOk,
                     onPress: () => {
                       timeDataSetupFunctions.resetMainData(mainData);
                       setMainData(mainData);

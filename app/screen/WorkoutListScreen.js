@@ -23,7 +23,7 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 
 const BORDER_WIDTH = 0;
-function WorkoutListScreen({ navigation, mainData, setMainData }) {
+function WorkoutListScreen({ navigation, mainData, setMainData, uiText }) {
   const { width, height, centerContainerSize } = useWindowDimentions();
   const [data, setData] = useState(mainData.workoutSetup.flatListArray);
 
@@ -235,15 +235,15 @@ function WorkoutListScreen({ navigation, mainData, setMainData }) {
             icnoName={"delete-forever"}
             onPress={() => {
               Alert.alert(
-                "Delete All Images",
-                "Do you want to delete all images?",
+                uiText.workoutListScreen.resetAlertTitle,
+                uiText.workoutListScreen.resetAlertMsg,
                 [
                   {
-                    text: "Cancel",
+                    text: uiText.workoutListScreen.resetAlertCancel,
                     onPress: () => console.log("Cancel Pressed"),
                   },
                   {
-                    text: "OK",
+                    text: uiText.workoutListScreen.resetAlertOk,
                     onPress: () => {
                       timeDataSetupFunctions.resetFlatListArray(mainData);
                       mainData.workoutSetup.updated = true;

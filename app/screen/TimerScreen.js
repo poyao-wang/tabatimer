@@ -41,7 +41,11 @@ const outPutColorByType = (type) => {
   return "gray";
 };
 
-export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
+export default function TimerScreen({
+  setTabBarShow,
+  useTimerSetupState,
+  uiText,
+}) {
   const windowDimentions = useWindowDimentions();
   const { width, height } = windowDimentions;
 
@@ -186,6 +190,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
     const idMax = timeData.length - 1;
     const newSectionId = Math.round(scrollValue / ITEM_SIZE);
     return newSectionId <= 0 ? 0 : newSectionId >= idMax ? idMax : newSectionId;
+  };
+
+  const sectionTypeTextTrans = (textFromTimeData) => {
+    if (textFromTimeData == "prepare")
+      return uiText.timerScreen.sectionTypePrepare;
+    if (textFromTimeData == "workout")
+      return uiText.timerScreen.sectionTypeWorkout;
+    if (textFromTimeData == "rest") return uiText.timerScreen.sectionTypeRest;
+    return null;
   };
 
   const navBarAndBottomViewAnime = (show) => {
@@ -590,7 +603,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               },
             ]}
           >
-            {timeData[sectionId].type.toUpperCase()}
+            {sectionTypeTextTrans(timeData[sectionId].type)}
           </Animated.Text>
         </Animated.View>
         <View
@@ -749,7 +762,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               defaultValue={1}
               totalAmount={useTimerSetupState.timerSetup.sets.value}
               itemSize={ITEM_SIZE}
-              title="SET"
+              title={uiText.timerScreen.fractionDisplayTitleLeft}
             />
           </View>
           <View style={styles.flatListLowerSubContainer}>
@@ -766,7 +779,7 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
               defaultValue={1}
               totalAmount={useTimerSetupState.timerSetup.workouts.value}
               itemSize={ITEM_SIZE}
-              title="WORK"
+              title={uiText.timerScreen.fractionDisplayTitleRight}
             />
           </View>
         </View>
@@ -815,16 +828,15 @@ export default function TimerScreen({ setTabBarShow, useTimerSetupState }) {
             disabled={!btnPressable || timerOn}
             onPress={() => {
               Alert.alert(
-                "Reset Timer",
-                "Do you want to reset the Timer?",
+                uiText.timerScreen.resetAlertTitle,
+                uiText.timerScreen.resetAlertMsg,
                 [
                   {
-                    text: "Cancel",
+                    text: uiText.timerScreen.resetAlertCancel,
                     onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
                   },
                   {
-                    text: "OK",
+                    text: uiText.timerScreen.resetAlertOk,
                     onPress: () => {
                       reset();
                     },

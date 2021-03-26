@@ -9,12 +9,15 @@ import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
 import AppNavigator from "./app/navigation/AppNavigator";
 import WelcomeScreen from "./app/screen/WelcomeScreen";
 import useCache from "./app/utility/cache";
+import uiTextDefaultData from "./app/config/uiTextDefaultData";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
   const [timerSetup, setTimerSetup] = useState(timerSetupDefaultData);
+  const [language, setLanguage] = useState("eng");
+  const [uiText, setUiText] = useState(uiTextDefaultData["eng"]);
 
   const readFromCache = async () => {
     const result = await useCache.get();
@@ -44,6 +47,7 @@ export default function App() {
               {...props}
               useTabBarShowState={{ tabBarShow, setTabBarShow }}
               useTimerSetupState={{ timerSetup, setTimerSetup }}
+              useLanguageSetting={{ uiText, setLanguage }}
             />
           )}
         </Stack.Screen>
