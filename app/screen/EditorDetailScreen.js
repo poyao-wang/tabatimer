@@ -91,7 +91,7 @@ function EditorDetailScreen({
       >
         <Text
           style={{
-            fontSize: centerContainerSize * 0.09,
+            fontSize: centerContainerSize * 0.08,
             borderWidth: BORDER_WIDTH,
           }}
         >
