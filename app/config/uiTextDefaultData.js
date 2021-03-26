@@ -135,11 +135,11 @@ const uiTextDefaultData = {
         subtitle: "循環間的休息時間",
       },
       sets: {
-        title: "循環",
+        title: "循　　環",
         subtitle: "循環次數",
       },
       workouts: {
-        title: "動作",
+        title: "動　　作",
         subtitle: "動作數量",
       },
       resetAlertTitle: "重置設定",
