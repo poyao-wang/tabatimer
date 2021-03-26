@@ -11,6 +11,7 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import WelcomeScreen from "./app/screen/WelcomeScreen";
 import useCache from "./app/utility/cache";
 import uiTextDefaultData from "./app/config/uiTextDefaultData";
+import { navigationRef } from "./app/navigation/rootNavigation";
 
 const Stack = createStackNavigator();
 
@@ -59,7 +60,7 @@ export default function App() {
   }, [language]);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator mode="card" backBehavior="none">
         <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }}>
           {(props) => (

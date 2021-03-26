@@ -17,6 +17,7 @@ import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
+import rootNavigation from "../navigation/rootNavigation";
 
 const BORDER_WIDTH = 0;
 const FONT_FAMILY =
@@ -232,6 +233,17 @@ function EditorScreen({ navigation, mainData, setMainData, uiText }) {
                 ],
                 { cancelable: false }
               );
+            }}
+            size={centerContainerSize * 0.13}
+          />
+        </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <CustomIcons
+            icnoName={"translate"}
+            onPress={() => {
+              rootNavigation.navigate("WelcomeScreen");
             }}
             size={centerContainerSize * 0.13}
           />

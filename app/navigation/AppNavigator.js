@@ -21,14 +21,14 @@ function AppNavigator({
   navigation,
   useLanguageSetting: { uiText },
 }) {
-  React.useEffect(
-    () =>
-      navigation.addListener("beforeRemove", (e) => {
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-      }),
-    [navigation]
-  );
+  // React.useEffect(
+  //   () =>
+  //     navigation.addListener("beforeRemove", (e) => {
+  //       // Prevent default behavior of leaving the screen
+  //       e.preventDefault();
+  //     }),
+  //   [navigation]
+  // );
 
   return (
     <Tab.Navigator
