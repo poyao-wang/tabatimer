@@ -31,11 +31,23 @@ export default function App() {
     readFromCache();
   }, []);
 
+  useEffect(() => {
+    setUiText(uiTextDefaultData[language]);
+  }, [language]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator mode="card" backBehavior="none">
         <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }}>
-          {(props) => <WelcomeScreen {...props} />}
+          {(props) => (
+            <WelcomeScreen
+              {...props}
+              onSetLanguage={(languageCode) => {
+                setLanguage(languageCode);
+              }}
+              language={language}
+            />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="AppNavigator"

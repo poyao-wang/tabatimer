@@ -24,13 +24,43 @@ const blink = {
   },
 };
 
-function WelcomeScreen({ navigation }) {
+function WelcomeScreen({ navigation, language, onSetLanguage }) {
   const windowDimentions = useWindowDimentions();
+  const { width, height, centerContainerSize } = windowDimentions;
   const CENTER_CONTAINER_SIZE = windowDimentions.centerContainerSize;
   const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.4);
 
   const middleIconShow = useRef(new Animated.Value(0)).current;
   const playButtonShow = useRef(new Animated.Value(0)).current;
+
+  const engBtnActive = useRef(new Animated.Value(0)).current;
+  const jpnBtnActive = useRef(new Animated.Value(0)).current;
+  const chtBtnActive = useRef(new Animated.Value(0)).current;
+
+  const engBtnOpacity = engBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.5, 1],
+  });
+  const jpnBtnOpacity = jpnBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.5, 1],
+  });
+  const chtBtnOpacity = chtBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.5, 1],
+  });
+  const engBtnScale = engBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.2],
+  });
+  const jpnBtnScale = jpnBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.2],
+  });
+  const chtBtnScale = chtBtnActive.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.2],
+  });
 
   useEffect(() => {
     Animated.sequence([
@@ -51,6 +81,30 @@ function WelcomeScreen({ navigation }) {
       }),
     ]).start();
   }, []);
+
+  useEffect(() => {
+    languageAnime(language);
+  }, [language]);
+
+  const languageAnime = (lanCode) => {
+    Animated.parallel([
+      Animated.timing(engBtnActive, {
+        toValue: lanCode === "eng" ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(jpnBtnActive, {
+        toValue: lanCode === "jpn" ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(chtBtnActive, {
+        toValue: lanCode === "cht" ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
 
   return (
     <View style={styles.container}>
@@ -135,6 +189,95 @@ function WelcomeScreen({ navigation }) {
           </Animatable.View>
         </Animated.View>
       </View>
+      <Animated.View
+        style={{
+          position: "absolute",
+          bottom:
+            width > height
+              ? (height - centerContainerSize) / 2
+              : ((height - centerContainerSize) / 2 -
+                  centerContainerSize * 0.2) /
+                2,
+          left: width > height ? "5%" : (width - centerContainerSize) / 2,
+          flexDirection: width > height ? "column" : "row",
+          height:
+            width > height ? centerContainerSize : centerContainerSize * 0.24,
+          width:
+            width > height ? centerContainerSize * 0.24 : centerContainerSize,
+          borderWidth: BORDER_WIDTH,
+          opacity: playButtonShow,
+        }}
+      >
+        <Animated.View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: jpnBtnOpacity,
+            transform: [
+              {
+                scale: jpnBtnScale,
+              },
+            ],
+          }}
+        >
+          <CustomIcons
+            icnoName={"alpha-j-box"}
+            textBelow="日本語"
+            onPress={() => {
+              onSetLanguage("jpn");
+            }}
+            size={centerContainerSize * 0.13}
+            color={colors.medium}
+          />
+        </Animated.View>
+        <Animated.View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: engBtnOpacity,
+            transform: [
+              {
+                scale: engBtnScale,
+              },
+            ],
+          }}
+        >
+          <CustomIcons
+            icnoName={"alpha-e-box"}
+            textBelow="English"
+            size={centerContainerSize * 0.13}
+            onPress={() => {
+              onSetLanguage("eng");
+            }}
+            color={colors.medium}
+          />
+        </Animated.View>
+        <Animated.View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: chtBtnOpacity,
+            transform: [
+              {
+                scale: chtBtnScale,
+              },
+            ],
+          }}
+        >
+          <CustomIcons
+            icnoName={"alpha-c-box"}
+            textBelow="中　文"
+            onPress={() => {
+              onSetLanguage("cht");
+            }}
+            size={centerContainerSize * 0.13}
+            color={colors.medium}
+          />
+        </Animated.View>
+      </Animated.View>
     </View>
   );
 }

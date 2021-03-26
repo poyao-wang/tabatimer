@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 function CustomIcons({
   icnoName = "reload",
+  textBelow = null,
   color = colors.dark,
   size = 60,
   style,
@@ -29,6 +30,7 @@ function CustomIcons({
       style={[styles.container, style]}
     >
       <MaterialCommunityIcons name={icnoName} size={size} color={color} />
+      {textBelow && <Text style={{ fontSize: size * 0.2 }}>{textBelow}</Text>}
     </TouchableOpacity>
   );
 }
