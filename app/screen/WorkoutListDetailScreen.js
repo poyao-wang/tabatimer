@@ -1,13 +1,15 @@
 import {
+  Alert,
   Animated,
-  View,
+  Button,
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
   StyleSheet,
   Text,
-  Button,
-  FlatList,
-  Dimensions,
-  Image,
   TouchableOpacity,
+  View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -39,8 +41,44 @@ function WorkoutListDetailScreen({
   const item = route.params;
 
   const requestPermission = async () => {
-    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
-    if (!granted) alert(uiText.workoutListDetailScreen.alertCameraPermission);
+    const photosPermissionsStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+    if (!photosPermissionsStatus.granted) {
+      if (photosPermissionsStatus.canAskAgain) {
+        Alert.alert(
+          "Photos Access Required",
+          "To use your own images for workouts, please allow TabaTimer to access Photos on your device.",
+          [
+            {
+              text: "Cancel",
+              onPress: () => navigation.navigate("WorkoutListScreen"),
+            },
+            {
+              text: "Ok",
+              onPress: async () => {
+                const {
+                  granted,
+                } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (!granted) {
+                  navigation.navigate("WorkoutListScreen");
+                }
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        navigation.navigate("WorkoutListScreen");
+        Alert.alert(
+          "Photos Access Required",
+          Platform.OS === "android"
+            ? "To use your own images for workouts, go to Settings→Apps & notifications→TabaTimer→Permissions→Storage, and allow TabaTimer to access photos on your device."
+            : "To use your own images for workouts, go to Settings→TabaTimer→Photos, and allow TabaTimer to access photos on your device.",
+          [{ text: "Ok" }],
+          { cancelable: false }
+        );
+      }
+    }
   };
 
   useEffect(() => {
