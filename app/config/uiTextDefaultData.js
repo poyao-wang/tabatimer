@@ -48,8 +48,13 @@ const uiTextDefaultData = {
       resetAlertCancel: "Cancel",
     },
     workoutListDetailScreen: {
-      alertCameraPermission:
-        "Please enable camera permission to access the photo library.",
+      alertPhotosPermissionTitle: "Photos Access Required",
+      alertPhotosPermissionMsg:
+        "To use your own images for workouts, please allow TabaTimer to access Photos on your device.",
+      alertPhotosPermissionOk: "Ok",
+      alertPhotosPermissionCancel: "Cancel",
+      alertPhotosPermissionMsgAndroid: `To use your own images for workouts, go to "Settings" → "Apps & notifications" → "TabaTimer" → "Permissions" → "Storage", and allow TabaTimer to access photos on your device.`,
+      alertPhotosPermissionMsgIos: `To use your own images for workouts, go to "Settings" → "TabaTimer" → "Photos", and allow TabaTimer to access photos on your device.`,
     },
   },
   jpn: {
@@ -101,8 +106,13 @@ const uiTextDefaultData = {
       resetAlertCancel: "いいえ",
     },
     workoutListDetailScreen: {
-      alertCameraPermission:
-        "写真アルバムのアクセスにはカメラの権限が必要です。",
+      alertPhotosPermissionTitle: "写真へのアクセスが必要",
+      alertPhotosPermissionMsg:
+        "レーニングにカスタムな写真を使用したい場合、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
+      alertPhotosPermissionOk: "はい",
+      alertPhotosPermissionCancel: "いいえ",
+      alertPhotosPermissionMsgAndroid: `レーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "アプリと通知" → "TabaTimer" → "権限" → "ストレージ"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
+      alertPhotosPermissionMsgIos: `レーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "TabaTimer" → "写真"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
     },
   },
   cht: {
@@ -154,7 +164,13 @@ const uiTextDefaultData = {
       resetAlertCancel: "取消",
     },
     workoutListDetailScreen: {
-      alertCameraPermission: "請開啟相機權限以存取相簿。",
+      alertPhotosPermissionTitle: "需要照片取用權限",
+      alertPhotosPermissionMsg:
+        "若想使用的自定義的照片進行健身，請允許TabaTimer取用裝置上的照片。",
+      alertPhotosPermissionOk: "好",
+      alertPhotosPermissionCancel: "取消",
+      alertPhotosPermissionMsgAndroid: `若想使用的自定義的照片進行健身，請至裝置上的"設定" → "應用程式和通知" → "TabaTimer" → "權限" → "儲存空間"，並允許TabaTimer取用裝置上的照片。`,
+      alertPhotosPermissionMsgIos: `若想使用的自定義的照片進行健身，請至裝置上的"設定" → "TabaTimer" → "照片"，並允許TabaTimer取用裝置上的照片。`,
     },
   },
 };

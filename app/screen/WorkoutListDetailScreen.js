@@ -46,15 +46,15 @@ function WorkoutListDetailScreen({
     if (!photosPermissionsStatus.granted) {
       if (photosPermissionsStatus.canAskAgain) {
         Alert.alert(
-          "Photos Access Required",
-          "To use your own images for workouts, please allow TabaTimer to access Photos on your device.",
+          uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
+          uiText.workoutListDetailScreen.alertPhotosPermissionMsg,
           [
             {
-              text: "Cancel",
+              text: uiText.workoutListDetailScreen.alertPhotosPermissionCancel,
               onPress: () => navigation.navigate("WorkoutListScreen"),
             },
             {
-              text: "Ok",
+              text: uiText.workoutListDetailScreen.alertPhotosPermissionOk,
               onPress: async () => {
                 const {
                   granted,
@@ -70,11 +70,11 @@ function WorkoutListDetailScreen({
       } else {
         navigation.navigate("WorkoutListScreen");
         Alert.alert(
-          "Photos Access Required",
+          uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
           Platform.OS === "android"
-            ? "To use your own images for workouts, go to Settings→Apps & notifications→TabaTimer→Permissions→Storage, and allow TabaTimer to access photos on your device."
-            : "To use your own images for workouts, go to Settings→TabaTimer→Photos, and allow TabaTimer to access photos on your device.",
-          [{ text: "Ok" }],
+            ? uiText.workoutListDetailScreen.alertPhotosPermissionMsgAndroid
+            : uiText.workoutListDetailScreen.alertPhotosPermissionMsgIos,
+          [{ text: uiText.workoutListDetailScreen.alertPhotosPermissionOk }],
           { cancelable: false }
         );
       }
