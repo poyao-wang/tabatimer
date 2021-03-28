@@ -108,11 +108,11 @@ const uiTextDefaultData = {
     workoutListDetailScreen: {
       alertPhotosPermissionTitle: "写真へのアクセスが必要",
       alertPhotosPermissionMsg:
-        "レーニングにカスタムな写真を使用したい場合、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
+        "トレーニングにカスタムな写真を使用したい場合、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
       alertPhotosPermissionOk: "はい",
       alertPhotosPermissionCancel: "いいえ",
-      alertPhotosPermissionMsgAndroid: `レーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "アプリと通知" → "TabaTimer" → "権限" → "ストレージ"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
-      alertPhotosPermissionMsgIos: `レーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "TabaTimer" → "写真"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
+      alertPhotosPermissionMsgAndroid: `トレーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "アプリと通知" → "TabaTimer" → "権限" → "ストレージ"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
+      alertPhotosPermissionMsgIos: `トレーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "TabaTimer" → "写真"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
     },
   },
   cht: {
