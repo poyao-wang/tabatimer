@@ -17,7 +17,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.poyaowang.tabatimer",
-      "buildNumber": "1.1.2"
+      "buildNumber": "1.1.2",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleDevelopmentRegion": "en-US",
+        "NSPhotoLibraryUsageDescription": "TabaTimer uses photos provided by the user for custom workout images. In order to use custom images for workouts, please allow TabaTimer to access Photos on your device."
+      }
     },
     "android": {
       "package": "com.poyaowang.tabatimer",
@@ -26,6 +31,22 @@
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#f2f2f2"
       }
+    },
+    "locales": {
+      "en": "languages/en.json",
+      "en-US": "languages/en.json",
+      "ja": "languages/ja.json",
+      "ja_JP": "languages/ja.json",
+      "zh": "languages/zh.json",
+      "zh_Hans": "languages/zh.json",
+      "zh_Hans_CN": "languages/zh.json",
+      "zh_Hans_HK": "languages/zh.json",
+      "zh_Hans_MO": "languages/zh.json",
+      "zh_Hans_SG": "languages/zh.json",
+      "zh_Hant": "languages/zh.json",
+      "zh_Hant_HK": "languages/zh.json",
+      "zh_Hant_MO": "languages/zh.json",
+      "zh_Hant_TW": "languages/zh.json"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
