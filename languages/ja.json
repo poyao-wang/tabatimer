@@ -1,3 +1,5 @@
 {
-  "NSPhotoLibraryUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上の写真へのアクセスを許可してください。"
+  "NSPhotoLibraryUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
+  "NSPhotoLibraryAddUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
+  "NSCameraUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上のカメラと写真へのアクセスを許可してください。"
 }

@@ -1,3 +1,5 @@
 {
-  "NSPhotoLibraryUsageDescription": "TabaTimer取用使用者提供的照片於健身動作圖示。若要使用的自定義的照片進行健身，請允許TabaTimer取用裝置上的照片。"
+  "NSPhotoLibraryUsageDescription": "TabaTimer取用使用者提供的照片於健身動作圖示。若要使用的自定義的照片進行健身，請允許TabaTimer取用裝置上的照片。",
+  "NSPhotoLibraryAddUsageDescription": "TabaTimer取用使用者提供的照片於健身動作圖示。若要使用的自定義的照片進行健身，請允許TabaTimer存取裝置上的照片。",
+  "NSCameraUsageDescription": "TabaTimer取用使用者提供的照片於健身動作圖示。若要使用的自定義的照片進行健身，請允許TabaTimer取用裝置上的相機以及照片。"
 }
