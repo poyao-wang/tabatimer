@@ -12,6 +12,7 @@ import EditorNavigator from "../navigation/EditorNavigator";
 import WorkoutListNavigator from "../navigation/WorkoutListNavigator";
 import TimerScreen from "../screen/TimerScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AccountScreen from "../screen/AccountScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -60,6 +61,15 @@ function AppNavigator({
       >
         {() => (
           <WorkoutListNavigator
+            useTimerSetupState={useTimerSetupState}
+            setTabBarShow={useTabBarShowState.setTabBarShow}
+            uiText={uiText}
+          />
+        )}
+      </Tab.Screen>
+      <Tab.Screen name="Account" options={{ iconName: "account-cog" }}>
+        {() => (
+          <AccountScreen
             useTimerSetupState={useTimerSetupState}
             setTabBarShow={useTabBarShowState.setTabBarShow}
             uiText={uiText}
