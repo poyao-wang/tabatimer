@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.14.3",
     "expo": "^41.0.0",
     "expo-av": "~9.1.2",
+    "expo-google-app-auth": "^8.1.7",
     "expo-image-manipulator": "~9.1.0",
     "expo-image-picker": "~10.1.4",
     "expo-localization": "~10.1.0",
