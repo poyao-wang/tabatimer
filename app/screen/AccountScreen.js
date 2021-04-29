@@ -38,13 +38,13 @@ const iosClientId = IOS_CLIENT_ID;
 
 const androidClientId = "ANDROID_CLIENT_ID";
 
-function AccountScreen({ navigation, mainData, setMainData, uiText }) {
+function AccountScreen() {
   const { width, height, centerContainerSize } = useWindowDimentions();
 
   const containerHeight = centerContainerSize * 0.9;
   const containerWidth = centerContainerSize * 0.9;
 
-  console.log(IOS_CLIENT_ID);
+  console.log(iosClientId);
 
   const isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {

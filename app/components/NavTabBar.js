@@ -11,7 +11,14 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 
-function NavTabBar({ state, descriptors, navigation, tabBarShowState }) {
+import { useContext } from "react";
+import { MainContext } from "../config/MainContext";
+
+function NavTabBar({ state, descriptors, navigation }) {
+  const {
+    tabBar: { tabBarShow: tabBarShowState },
+  } = useContext(MainContext);
+
   const { width, height, centerContainerSize } = useWindowDimentions();
 
   const tabBarAnimation = useRef(new Animated.Value(0)).current;

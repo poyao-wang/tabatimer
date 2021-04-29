@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import {
   Alert,
   Animated,
@@ -21,9 +21,14 @@ import colors from "../config/colors";
 import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
+import { MainContext } from "../config/MainContext";
 
 const BORDER_WIDTH = 0;
-function WorkoutListScreen({ navigation, mainData, setMainData, uiText }) {
+function WorkoutListScreen({ navigation }) {
+  const {
+    timer: { timerSetup: mainData, setTimerSetup: setMainData },
+    language: { uiText },
+  } = useContext(MainContext);
   const { width, height, centerContainerSize } = useWindowDimentions();
   const [data, setData] = useState(mainData.workoutSetup.flatListArray);
 

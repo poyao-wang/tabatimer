@@ -15,6 +15,7 @@ import { navigationRef } from "./app/navigation/rootNavigation";
 
 import * as firebase from "firebase";
 import { firebaseConfig } from "./config";
+import { MainContext } from "./app/config/MainContext";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -66,33 +67,34 @@ export default function App() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator mode="card" backBehavior="none">
-        <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }}>
-          {(props) => (
-            <WelcomeScreen
-              {...props}
-              onSetLanguage={(languageCode) => {
-                setLanAndStoreToCache(languageCode);
-              }}
-              language={language}
-            />
-          )}
-        </Stack.Screen>
-        <Stack.Screen
-          name="AppNavigator"
-          options={{ headerShown: false, gestureEnabled: false }}
-          // options={{ headerShown: false }}
-        >
-          {(props) => (
-            <AppNavigator
-              {...props}
-              useTabBarShowState={{ tabBarShow, setTabBarShow }}
-              useTimerSetupState={{ timerSetup, setTimerSetup }}
-              useLanguageSetting={{ uiText, setLanguage }}
-            />
-          )}
-        </Stack.Screen>
-      </Stack.Navigator>
+      <MainContext.Provider
+        value={{
+          tabBar: { tabBarShow, setTabBarShow },
+          timer: { timerSetup, setTimerSetup },
+          language: { uiText, setLanguage },
+        }}
+      >
+        <Stack.Navigator mode="card" backBehavior="none">
+          <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }}>
+            {(props) => (
+              <WelcomeScreen
+                {...props}
+                onSetLanguage={(languageCode) => {
+                  setLanAndStoreToCache(languageCode);
+                }}
+                language={language}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen
+            name="AppNavigator"
+            options={{ headerShown: false, gestureEnabled: false }}
+            // options={{ headerShown: false }}
+          >
+            {(props) => <AppNavigator {...props} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </MainContext.Provider>
     </NavigationContainer>
   );
 }

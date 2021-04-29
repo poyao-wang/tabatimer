@@ -10,34 +10,17 @@ import WorkoutListDetailScreen from "../screen/WorkoutListDetailScreen";
 
 const Stack = createStackNavigator();
 
-function WorkoutListNavigator({ useTimerSetupState, setTabBarShow, uiText }) {
-  const mainData = useTimerSetupState.timerSetup;
-  const setMainData = useTimerSetupState.setTimerSetup;
+function WorkoutListNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="WorkoutListScreen" options={{ headerShown: false }}>
-        {(props) => (
-          <WorkoutListScreen
-            {...props}
-            mainData={mainData}
-            setMainData={setMainData}
-            uiText={uiText}
-          />
-        )}
+        {(props) => <WorkoutListScreen {...props} />}
       </Stack.Screen>
       <Stack.Screen
         name="WorkoutListDetailScreen"
         options={{ headerShown: false }}
       >
-        {(props) => (
-          <WorkoutListDetailScreen
-            {...props}
-            mainData={mainData}
-            setMainData={setMainData}
-            setTabBarShow={setTabBarShow}
-            uiText={uiText}
-          />
-        )}
+        {(props) => <WorkoutListDetailScreen {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

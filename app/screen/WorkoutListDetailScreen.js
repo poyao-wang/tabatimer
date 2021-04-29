@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import useCache from "../utility/cache";
@@ -19,17 +19,17 @@ import CustomIcons from "../components/CustomIcons";
 import colors from "../config/colors";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import { MainContext } from "../config/MainContext";
 
 const BORDER_WIDTH = 0;
 
-function WorkoutListDetailScreen({
-  route,
-  navigation,
-  mainData,
-  setMainData,
-  setTabBarShow,
-  uiText,
-}) {
+function WorkoutListDetailScreen({ route, navigation }) {
+  const {
+    tabBar: { setTabBarShow },
+    timer: { timerSetup: mainData, setTimerSetup: setMainData },
+    language: { uiText },
+  } = useContext(MainContext);
+
   const windowDimentions = useWindowDimentions();
   const { width, height, centerContainerSize } = windowDimentions;
 

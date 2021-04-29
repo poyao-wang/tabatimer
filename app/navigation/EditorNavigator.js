@@ -8,30 +8,14 @@ import timerSetupDefaultData from "../config/timerSetupDefaultData";
 
 const Stack = createStackNavigator();
 
-function EditorNavigator({ useTimerSetupState, setTabBarShow, uiText }) {
-  const mainData = useTimerSetupState.timerSetup;
-  const setMainData = useTimerSetupState.setTimerSetup;
+function EditorNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="EditorScreen" options={{ headerShown: false }}>
-        {(props) => (
-          <EditorScreen
-            {...props}
-            mainData={mainData}
-            setMainData={setMainData}
-            uiText={uiText}
-          />
-        )}
+        {(props) => <EditorScreen {...props} />}
       </Stack.Screen>
       <Stack.Screen name="EditorDetailScreen" options={{ headerShown: false }}>
-        {(props) => (
-          <EditorDetailScreen
-            {...props}
-            mainData={mainData}
-            setMainData={setMainData}
-            setTabBarShow={setTabBarShow}
-          />
-        )}
+        {(props) => <EditorDetailScreen {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

@@ -10,7 +10,7 @@ import {
   View,
   Platform,
 } from "react-native";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Audio } from "expo-av";
 
@@ -19,6 +19,7 @@ import CustomIcons from "../components/CustomIcons";
 import FractionDisplay from "../components/FractionDisplay";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import colors from "../config/colors";
+import { MainContext } from "../config/MainContext";
 
 const BORDER_WIDTH = 0;
 const FONT_FAMILY =
@@ -41,11 +42,12 @@ const outPutColorByType = (type) => {
   return "gray";
 };
 
-export default function TimerScreen({
-  setTabBarShow,
-  useTimerSetupState,
-  uiText,
-}) {
+export default function TimerScreen() {
+  const {
+    timer: useTimerSetupState,
+    tabBar: { setTabBarShow },
+    language: { uiText },
+  } = useContext(MainContext);
   const windowDimentions = useWindowDimentions();
   const { width, height } = windowDimentions;
 

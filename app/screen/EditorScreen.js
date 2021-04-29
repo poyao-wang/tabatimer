@@ -19,6 +19,9 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import rootNavigation from "../navigation/rootNavigation";
 
+import { useContext } from "react";
+import { MainContext } from "../config/MainContext";
+
 const BORDER_WIDTH = 0;
 const FONT_FAMILY =
   Platform.OS === "ios"
@@ -27,7 +30,11 @@ const FONT_FAMILY =
     ? "monospace"
     : null;
 
-function EditorScreen({ navigation, mainData, setMainData, uiText }) {
+function EditorScreen({ navigation }) {
+  const {
+    timer: { timerSetup: mainData, setTimerSetup: setMainData },
+    language: { uiText },
+  } = useContext(MainContext);
   const { width, height, centerContainerSize } = useWindowDimentions();
   const [screenData, setScreenData] = useState(mainData);
 

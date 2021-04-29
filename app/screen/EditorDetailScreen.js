@@ -15,15 +15,17 @@ import useWindowDimentions from "../hook/useWindowDimentions";
 import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 
+import { useContext } from "react";
+import { MainContext } from "../config/MainContext";
+
 const BORDER_WIDTH = 0;
 
-function EditorDetailScreen({
-  route,
-  navigation,
-  mainData,
-  setMainData,
-  setTabBarShow,
-}) {
+function EditorDetailScreen({ route, navigation }) {
+  const {
+    tabBar: { setTabBarShow },
+    timer: { timerSetup: mainData, setTimerSetup: setMainData },
+  } = useContext(MainContext);
+
   const { width, height, centerContainerSize } = useWindowDimentions();
 
   const itemSize = Math.round(centerContainerSize * 0.12);

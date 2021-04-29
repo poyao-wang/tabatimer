@@ -16,12 +16,7 @@ import AccountScreen from "../screen/AccountScreen";
 
 const Tab = createBottomTabNavigator();
 
-function AppNavigator({
-  useTimerSetupState,
-  useTabBarShowState,
-  navigation,
-  useLanguageSetting: { uiText },
-}) {
+function AppNavigator() {
   // React.useEffect(
   //   () =>
   //     navigation.addListener("beforeRemove", (e) => {
@@ -32,49 +27,21 @@ function AppNavigator({
   // );
 
   return (
-    <Tab.Navigator
-      tabBar={(props) => (
-        <NavTabBar {...props} tabBarShowState={useTabBarShowState.tabBarShow} />
-      )}
-    >
+    <Tab.Navigator tabBar={(props) => <NavTabBar {...props} />}>
       <Tab.Screen name="Timer" options={{ iconName: "timer" }}>
-        {() => (
-          <TimerScreen
-            setTabBarShow={useTabBarShowState.setTabBarShow}
-            useTimerSetupState={useTimerSetupState}
-            uiText={uiText}
-          />
-        )}
+        {() => <TimerScreen />}
       </Tab.Screen>
       <Tab.Screen name="Editor" options={{ iconName: "square-edit-outline" }}>
-        {() => (
-          <EditorNavigator
-            useTimerSetupState={useTimerSetupState}
-            setTabBarShow={useTabBarShowState.setTabBarShow}
-            uiText={uiText}
-          />
-        )}
+        {() => <EditorNavigator />}
       </Tab.Screen>
       <Tab.Screen
         name="WorkoutList"
         options={{ iconName: "format-list-bulleted" }}
       >
-        {() => (
-          <WorkoutListNavigator
-            useTimerSetupState={useTimerSetupState}
-            setTabBarShow={useTabBarShowState.setTabBarShow}
-            uiText={uiText}
-          />
-        )}
+        {() => <WorkoutListNavigator />}
       </Tab.Screen>
       <Tab.Screen name="Account" options={{ iconName: "account-cog" }}>
-        {() => (
-          <AccountScreen
-            useTimerSetupState={useTimerSetupState}
-            setTabBarShow={useTabBarShowState.setTabBarShow}
-            uiText={uiText}
-          />
-        )}
+        {() => <AccountScreen />}
       </Tab.Screen>
     </Tab.Navigator>
   );
