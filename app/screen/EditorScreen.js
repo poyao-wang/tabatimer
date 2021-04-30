@@ -1,26 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
-  Dimensions,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Switch,
-  View,
-  Text,
-  TouchableOpacity,
   Alert,
   Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 
-import useWindowDimentions from "../hook/useWindowDimentions";
+import { MainContext } from "../config/MainContext";
 import CustomIcons from "../components/CustomIcons";
+import rootNavigation from "../navigation/rootNavigation";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
-import rootNavigation from "../navigation/rootNavigation";
-
-import { useContext } from "react";
-import { MainContext } from "../config/MainContext";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 const FONT_FAMILY =

@@ -1,27 +1,15 @@
-import React, { useState, useCallback, useContext } from "react";
-import {
-  Alert,
-  Animated,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-  Image,
-} from "react-native";
-import * as Animatable from "react-native-animatable";
-
+import React, { useContext, useState } from "react";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import DraggableFlatList, {
-  RenderItemParams,
-} from "react-native-draggable-flatlist";
+import * as Animatable from "react-native-animatable";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
-import useWindowDimentions from "../hook/useWindowDimentions";
+import { MainContext } from "../config/MainContext";
 import colors from "../config/colors";
 import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
-import { MainContext } from "../config/MainContext";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 function WorkoutListScreen({ navigation }) {
@@ -259,8 +247,6 @@ function WorkoutListScreen({ navigation }) {
                         )
                       );
                       setData(mainData.workoutSetup.flatListArray);
-                      // setScreenData(JSON.parse(JSON.stringify(mainData)));
-                      // setScreenData(mainData);
                       useCache.store(mainData);
                     },
                   },

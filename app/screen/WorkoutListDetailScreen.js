@@ -1,9 +1,5 @@
 import {
   Alert,
-  Animated,
-  Button,
-  Dimensions,
-  FlatList,
   Image,
   Platform,
   StyleSheet,
@@ -11,15 +7,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
-import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
-import useCache from "../utility/cache";
-import CustomIcons from "../components/CustomIcons";
-import colors from "../config/colors";
-import useWindowDimentions from "../hook/useWindowDimentions";
-import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import * as ImagePicker from "expo-image-picker";
+import React, { useContext, useEffect, useState } from "react";
+
 import { MainContext } from "../config/MainContext";
+import colors from "../config/colors";
+import CustomIcons from "../components/CustomIcons";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
+import useCache from "../utility/cache";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 
@@ -184,8 +181,6 @@ function WorkoutListDetailScreen({ route, navigation }) {
             />
           )}
         </View>
-        {/* <Button fontSize={30} title="selectImage" onPress={selectImage} />
-      <Button fontSize={30} title="deleteImage" onPress={deleteImage} /> */}
         <View
           style={{
             flexDirection: "row",

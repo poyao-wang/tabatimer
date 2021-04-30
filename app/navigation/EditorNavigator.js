@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import EditorScreen from "../screen/EditorScreen";
-
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StyleSheet } from "react-native";
+
 import EditorDetailScreen from "../screen/EditorDetailScreen";
-import timerSetupDefaultData from "../config/timerSetupDefaultData";
+import EditorScreen from "../screen/EditorScreen";
 
 const Stack = createStackNavigator();
 

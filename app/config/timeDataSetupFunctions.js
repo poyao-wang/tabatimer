@@ -1,5 +1,3 @@
-import timerSetupDefaultData from "./timerSetupDefaultData";
-
 const makeWorkoutsArray = (mainData) => {
   let newArray = [];
   const setAmt = mainData.sets.value;

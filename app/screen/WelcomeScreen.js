@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Button, Text, Image, Animated } from "react-native";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";
+import React, { useEffect, useRef } from "react";
 
-import colors from "../config/colors";
-import useWindowDimentions from "../hook/useWindowDimentions";
-import CustomIcons from "../components/CustomIcons";
 import AppIconSvg from "../components/AppIconSvg";
+import colors from "../config/colors";
+import CustomIcons from "../components/CustomIcons";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 

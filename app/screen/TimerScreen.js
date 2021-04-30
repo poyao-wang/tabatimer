@@ -1,25 +1,24 @@
 import {
   Alert,
   Animated,
-  Button,
   Easing,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   View,
-  Platform,
 } from "react-native";
-import React, { useEffect, useState, useRef, useContext } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import { Audio } from "expo-av";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
-import useWindowDimentions from "../hook/useWindowDimentions";
+import { MainContext } from "../config/MainContext";
+import colors from "../config/colors";
 import CustomIcons from "../components/CustomIcons";
 import FractionDisplay from "../components/FractionDisplay";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
-import colors from "../config/colors";
-import { MainContext } from "../config/MainContext";
+import useWindowDimentions from "../hook/useWindowDimentions";
 
 const BORDER_WIDTH = 0;
 const FONT_FAMILY =
@@ -57,10 +56,6 @@ export default function TimerScreen() {
   const [flatListArray, setFlatListArray] = useState(
     useTimerSetupState.timerSetup.workoutSetup.flatListArray
   );
-  // const [timeMax, setTimeMax] = useState(
-  //   useTimerSetupState.timerSetup.workoutSetup.workoutArray[timeData.length - 1]
-  //     .end
-  // );
   const [timerOn, setTimerOn] = useState(false);
   const [btnPressable, setBtnPressable] = useState(true);
   const [flatListScrolling, setFlatListScrolling] = useState(false);
@@ -283,7 +278,6 @@ export default function TimerScreen() {
   }
 
   function toggle() {
-    // if (sectionSeconds._value >= timeMax) return Alert.alert("End");
     setTimerOn(!timerOn);
     navBarAndBottomViewAnime(timerOn);
   }
@@ -529,7 +523,6 @@ export default function TimerScreen() {
           {
             height,
             width,
-            // backgroundColor: "red",
             backgroundColor: backgroundColorForScreen,
           },
         ]}
@@ -551,7 +544,6 @@ export default function TimerScreen() {
           borderWidth: BORDER_WIDTH,
           height: CENTER_CONTAINER_SIZE,
           width: CENTER_CONTAINER_SIZE,
-          // justifyContent: "center",
           alignItems: "center",
         }}
       >
@@ -736,13 +728,6 @@ export default function TimerScreen() {
                       {(item.id + 1).toString()}
                     </Text>
                   )}
-                  {/* <Text style={{ fontSize: 25 }}>
-                  {
-                    useTimerSetupState.timerSetup.workoutSetup.flatListArray[
-                      indexOfFlaiListArray
-                    ].name
-                  }
-                </Text> */}
                 </Animated.View>
               );
             }}
@@ -754,7 +739,6 @@ export default function TimerScreen() {
             width: "100%",
             borderWidth: BORDER_WIDTH,
             flexDirection: "row",
-            // alignItems: "center",
             justifyContent: "center",
           }}
         >
@@ -851,12 +835,6 @@ export default function TimerScreen() {
           />
         </View>
       </Animated.View>
-      {/* <TextInput
-        ref={totalSecondsInputRef}
-        defaultValue={"0"}
-        style={{ fontSize: 40 }}
-        editable={false}
-      /> */}
     </View>
   );
 }
@@ -874,8 +852,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   flatListLowerSubContainer: {
-    // height: "100%",
-    // width: "32%",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

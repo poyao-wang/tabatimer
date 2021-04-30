@@ -1,31 +1,15 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import EditorDetailScreen from "../screen/EditorDetailScreen";
-import timerSetupDefaultData from "../config/timerSetupDefaultData";
-import NavTabBar from "../components/NavTabBar";
 
-import EditorScreen from "../screen/EditorScreen";
-import WorkoutListScreen from "../screen/WorkoutListScreen";
-import EditorNavigator from "../navigation/EditorNavigator";
-import WorkoutListNavigator from "../navigation/WorkoutListNavigator";
-import TimerScreen from "../screen/TimerScreen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AccountScreen from "../screen/AccountScreen";
+import EditorNavigator from "../navigation/EditorNavigator";
+import NavTabBar from "../components/NavTabBar";
+import TimerScreen from "../screen/TimerScreen";
+import WorkoutListNavigator from "../navigation/WorkoutListNavigator";
 
 const Tab = createBottomTabNavigator();
 
 function AppNavigator() {
-  // React.useEffect(
-  //   () =>
-  //     navigation.addListener("beforeRemove", (e) => {
-  //       // Prevent default behavior of leaving the screen
-  //       e.preventDefault();
-  //     }),
-  //   [navigation]
-  // );
-
   return (
     <Tab.Navigator tabBar={(props) => <NavTabBar {...props} />}>
       <Tab.Screen name="Timer" options={{ iconName: "timer" }}>

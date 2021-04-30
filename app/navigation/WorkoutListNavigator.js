@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import EditorScreen from "../screen/EditorScreen";
-
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import EditorDetailScreen from "../screen/EditorDetailScreen";
-import timerSetupDefaultData from "../config/timerSetupDefaultData";
-import WorkoutListScreen from "../screen/WorkoutListScreen";
+
 import WorkoutListDetailScreen from "../screen/WorkoutListDetailScreen";
+import WorkoutListScreen from "../screen/WorkoutListScreen";
 
 const Stack = createStackNavigator();
 
@@ -26,7 +22,4 @@ function WorkoutListNavigator() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
 export default WorkoutListNavigator;

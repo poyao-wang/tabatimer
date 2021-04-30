@@ -1,22 +1,12 @@
-import {
-  Animated,
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  FlatList,
-  Dimensions,
-} from "react-native";
-import React, { useEffect } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import React, { useEffect, useContext } from "react";
 
+import { MainContext } from "../config/MainContext";
+import CustomIcons from "../components/CustomIcons";
 import NumberPicker from "../components/NumberPicker";
+import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
-import CustomIcons from "../components/CustomIcons";
-import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
-
-import { useContext } from "react";
-import { MainContext } from "../config/MainContext";
 
 const BORDER_WIDTH = 0;
 
@@ -151,12 +141,10 @@ function EditorDetailScreen({ route, navigation }) {
                     mainData,
                     item.value
                   );
-                  // console.log(mainData.workoutSetup.flatListArray);
                 }
                 setMainData(mainData);
                 useCache.store(mainData);
                 navigation.navigate("EditorScreen");
-                // console.log(mainData.workoutSetup.workoutArray);
               }}
               size={itemSize}
               color="rgba(29, 195, 114,1)"
@@ -173,14 +161,6 @@ function EditorDetailScreen({ route, navigation }) {
             />
           </View>
         </View>
-        {/* <Button
-          fontSize={30}
-          title="ValueCheck"
-          onPress={() => {
-            console.log(makeFlatListArray());
-            console.log(item.title);
-          }}
-        /> */}
       </View>
     </View>
   );
