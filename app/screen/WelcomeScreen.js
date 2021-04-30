@@ -34,14 +34,14 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
   const playButtonShow = useRef(new Animated.Value(0)).current;
 
   const engBtnActive = useRef(new Animated.Value(0)).current;
-  const jpnBtnActive = useRef(new Animated.Value(0)).current;
+  const jaBtnActive = useRef(new Animated.Value(0)).current;
   const chtBtnActive = useRef(new Animated.Value(0)).current;
 
   const engBtnOpacity = engBtnActive.interpolate({
     inputRange: [0, 1],
     outputRange: [0.5, 1],
   });
-  const jpnBtnOpacity = jpnBtnActive.interpolate({
+  const jaBtnOpacity = jaBtnActive.interpolate({
     inputRange: [0, 1],
     outputRange: [0.5, 1],
   });
@@ -53,7 +53,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
     inputRange: [0, 1],
     outputRange: [1, 1.2],
   });
-  const jpnBtnScale = jpnBtnActive.interpolate({
+  const jaBtnScale = jaBtnActive.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 1.2],
   });
@@ -89,17 +89,17 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
   const languageAnime = (lanCode) => {
     Animated.parallel([
       Animated.timing(engBtnActive, {
-        toValue: lanCode === "eng" ? 1 : 0,
+        toValue: lanCode === "en" ? 1 : 0,
         duration: 200,
         useNativeDriver: true,
       }),
-      Animated.timing(jpnBtnActive, {
-        toValue: lanCode === "jpn" ? 1 : 0,
+      Animated.timing(jaBtnActive, {
+        toValue: lanCode === "ja" ? 1 : 0,
         duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(chtBtnActive, {
-        toValue: lanCode === "cht" ? 1 : 0,
+        toValue: lanCode === "zh_Hant_TW" ? 1 : 0,
         duration: 200,
         useNativeDriver: true,
       }),
@@ -213,10 +213,10 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-            opacity: jpnBtnOpacity,
+            opacity: jaBtnOpacity,
             transform: [
               {
-                scale: jpnBtnScale,
+                scale: jaBtnScale,
               },
             ],
           }}
@@ -225,7 +225,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
             icnoName={"alpha-j-box"}
             textBelow="日本語"
             onPress={() => {
-              onSetLanguage("jpn");
+              onSetLanguage("ja");
             }}
             size={centerContainerSize * 0.13}
             color={colors.medium}
@@ -249,7 +249,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
             textBelow="English"
             size={centerContainerSize * 0.13}
             onPress={() => {
-              onSetLanguage("eng");
+              onSetLanguage("en");
             }}
             color={colors.medium}
           />
@@ -271,7 +271,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
             icnoName={"alpha-c-box"}
             textBelow="中　文"
             onPress={() => {
-              onSetLanguage("cht");
+              onSetLanguage("zh_Hant_TW");
             }}
             size={centerContainerSize * 0.13}
             color={colors.medium}

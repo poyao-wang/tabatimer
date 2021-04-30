@@ -24,15 +24,15 @@ const Stack = createStackNavigator();
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
   const [timerSetup, setTimerSetup] = useState(timerSetupDefaultData);
-  const [language, setLanguage] = useState("eng");
-  const [uiText, setUiText] = useState(uiTextDefaultData["eng"]);
+  const [language, setLanguage] = useState("en");
+  const [uiText, setUiText] = useState(uiTextDefaultData["en"]);
 
   const lanCodeTransfer = (deviceLanCode) => {
     return deviceLanCode == "ja"
-      ? "jpn"
+      ? "ja"
       : deviceLanCode == "zh"
-      ? "cht"
-      : "eng";
+      ? "zh_Hant_TW"
+      : "en";
   };
 
   const deviceLanguage = lanCodeTransfer(Localization.locale.split("-")[0]);

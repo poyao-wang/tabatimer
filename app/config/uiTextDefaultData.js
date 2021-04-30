@@ -1,5 +1,5 @@
 const uiTextDefaultData = {
-  eng: {
+  en: {
     timerScreen: {
       sectionTypeWorkout: "WORKOUT",
       sectionTypeRest: "REST",
@@ -57,7 +57,7 @@ const uiTextDefaultData = {
       alertPhotosPermissionMsgIos: `To use your own images for workouts, go to "Settings" → "TabaTimer" → "Photos", and allow TabaTimer to access photos on your device.`,
     },
   },
-  jpn: {
+  ja: {
     timerScreen: {
       sectionTypeWorkout: "運　動",
       sectionTypeRest: "休　憩",
@@ -115,7 +115,7 @@ const uiTextDefaultData = {
       alertPhotosPermissionMsgIos: `トレーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "TabaTimer" → "写真"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
     },
   },
-  cht: {
+  zh_Hant_TW: {
     timerScreen: {
       sectionTypeWorkout: "運　動",
       sectionTypeRest: "休　息",
