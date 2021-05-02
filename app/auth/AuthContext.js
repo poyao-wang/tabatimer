@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as firebase from "firebase";
 import signInWithGoogleAsync from "./signInWithGoogleAsync";
+import signInWithFacebookAsync from "./signInWithFacebookAsync";
 
 const AuthContext = createContext();
 
@@ -23,6 +24,11 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, signInWithGoogleAsync, logout };
+  const value = {
+    currentUser,
+    signInWithGoogleAsync,
+    signInWithFacebookAsync,
+    logout,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

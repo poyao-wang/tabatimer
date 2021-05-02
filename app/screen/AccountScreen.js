@@ -13,7 +13,12 @@ function AccountScreen() {
   const containerHeight = centerContainerSize * 0.9;
   const containerWidth = centerContainerSize * 0.9;
 
-  const { currentUser, signInWithGoogleAsync, logout } = useAuth();
+  const {
+    currentUser,
+    signInWithGoogleAsync,
+    signInWithFacebookAsync,
+    logout,
+  } = useAuth();
 
   const styles = StyleSheet.create({
     container: {
@@ -43,6 +48,14 @@ function AccountScreen() {
             justifyContent: "center",
           }}
         >
+          <TouchableOpacity
+            style={styles.googleLoginBtn}
+            onPress={() => {
+              signInWithFacebookAsync();
+            }}
+          >
+            <Text>Login With Facebook</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.googleLoginBtn}
             onPress={() => {
