@@ -2,7 +2,7 @@
   "expo": {
     "name": "TabaTimer",
     "slug": "TabaTimer",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "default",
     "icon": "./app/assets/icon.png",
     "splash": {
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.poyaowang.tabatimer",
-      "buildNumber": "1.2.0",
+      "buildNumber": "1.2.1",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleDevelopmentRegion": "en-US",
@@ -34,7 +34,7 @@
     },
     "android": {
       "package": "com.poyaowang.tabatimer",
-      "versionCode": 10,
+      "versionCode": 11,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#f2f2f2"
