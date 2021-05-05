@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 function CustomIcons({
-  icnoName = "reload",
+  iconName = "reload",
   textBelow = null,
   color = colors.dark,
   size = 60,
@@ -12,7 +12,7 @@ function CustomIcons({
   onPressIn,
   disabled = false,
 }) {
-  if (!icnoName) icnoName = "reload";
+  if (!iconName) iconName = "reload";
 
   const styles = StyleSheet.create({
     container: {
@@ -29,7 +29,7 @@ function CustomIcons({
       onPressIn={onPressIn}
       style={[styles.container, style]}
     >
-      <MaterialCommunityIcons name={icnoName} size={size} color={color} />
+      <MaterialCommunityIcons name={iconName} size={size} color={color} />
       {textBelow && <Text style={{ fontSize: size * 0.2 }}>{textBelow}</Text>}
     </TouchableOpacity>
   );

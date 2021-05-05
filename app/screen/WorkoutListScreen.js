@@ -57,7 +57,7 @@ function WorkoutListScreen({ navigation }) {
       >
         <View style={styles.itemIconContainer}>
           <CustomIcons
-            icnoName={"drag"}
+            iconName={"drag"}
             onPressIn={drag}
             size={centerContainerSize * 0.07}
             color={colors.medium}
@@ -110,7 +110,7 @@ function WorkoutListScreen({ navigation }) {
           )}
           {!imageUri && (
             <CustomIcons
-              icnoName={"image-off"}
+              iconName={"image-off"}
               disabled={true}
               size={centerContainerSize * 0.1}
               color={colors.dark}
@@ -120,7 +120,7 @@ function WorkoutListScreen({ navigation }) {
         <View style={styles.itemIconContainer}>
           {isActive && (
             <CustomIcons
-              icnoName={"arrow-up-down-bold"}
+              iconName={"arrow-up-down-bold"}
               size={centerContainerSize * 0.1}
               color={colors.medium}
             />
@@ -134,7 +134,7 @@ function WorkoutListScreen({ navigation }) {
           style={styles.itemIconContainer}
         >
           <CustomIcons
-            icnoName={"image-plus"}
+            iconName={"image-plus"}
             onPress={() => {
               navigation.navigate("WorkoutListDetailScreen", item);
             }}
@@ -225,7 +225,7 @@ function WorkoutListScreen({ navigation }) {
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <CustomIcons
-            icnoName={"delete-forever"}
+            iconName={"delete-forever"}
             onPress={() => {
               Alert.alert(
                 uiText.workoutListScreen.resetAlertTitle,

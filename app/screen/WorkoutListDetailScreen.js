@@ -165,7 +165,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
               }}
             >
               <CustomIcons
-                icnoName={"delete-forever"}
+                iconName={"delete-forever"}
                 onPress={deleteImage}
                 size={itemSize * 0.9}
                 color={colors.dark}
@@ -174,7 +174,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
           )}
           {!imageUri && (
             <CustomIcons
-              icnoName={"plus"}
+              iconName={"plus"}
               onPress={selectImage}
               size={itemSize * 2.5}
               color={colors.medium}
@@ -193,7 +193,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
         >
           <View style={styles.iconContainer}>
             <CustomIcons
-              icnoName={"arrow-left-bold-circle"}
+              iconName={"arrow-left-bold-circle"}
               onPress={() => {
                 navigation.navigate("WorkoutListScreen");
               }}

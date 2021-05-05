@@ -128,7 +128,7 @@ function EditorScreen({ navigation }) {
           style={styles.iconContainer}
         >
           <CustomIcons
-            icnoName={"chevron-double-right"}
+            iconName={"chevron-double-right"}
             disabled={true}
             size={ITEM_HEIGHT * 0.45}
           />
@@ -194,7 +194,7 @@ function EditorScreen({ navigation }) {
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <CustomIcons
-            icnoName={
+            iconName={
               screenData.settings.playSound ? "volume-high" : "volume-off"
             }
             size={centerContainerSize * 0.13}
@@ -211,7 +211,7 @@ function EditorScreen({ navigation }) {
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <CustomIcons
-            icnoName={"restore"}
+            iconName={"restore"}
             onPress={() => {
               Alert.alert(
                 uiText.editorScreen.resetAlertTitle,
@@ -242,7 +242,7 @@ function EditorScreen({ navigation }) {
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <CustomIcons
-            icnoName={"translate"}
+            iconName={"translate"}
             onPress={() => {
               rootNavigation.navigate("WelcomeScreen");
             }}

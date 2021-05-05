@@ -122,7 +122,7 @@ function EditorDetailScreen({ route, navigation }) {
         >
           <View style={styles.iconContainer}>
             <CustomIcons
-              icnoName={"check-circle"}
+              iconName={"check-circle"}
               onPress={() => {
                 item.value =
                   item.type == "number"
@@ -152,7 +152,7 @@ function EditorDetailScreen({ route, navigation }) {
           </View>
           <View style={styles.iconContainer}>
             <CustomIcons
-              icnoName={"close-circle"}
+              iconName={"close-circle"}
               onPress={() => {
                 navigation.navigate("EditorScreen");
               }}

@@ -753,7 +753,7 @@ export default function TimerScreen() {
           </View>
           <View style={styles.flatListLowerSubContainer}>
             <CustomIcons
-              icnoName={timerOn ? "pause-circle" : "play-circle"}
+              iconName={timerOn ? "pause-circle" : "play-circle"}
               disabled={!btnPressable || flatListScrolling}
               onPress={toggle}
               size={ITEM_SIZE * 0.45}
@@ -794,7 +794,7 @@ export default function TimerScreen() {
       >
         <View style={styles.flatListLowerSubContainer}>
           <CustomIcons
-            icnoName={"plus-circle"}
+            iconName={"plus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(true)}
             size={CENTER_CONTAINER_SIZE * 0.13}
@@ -802,7 +802,7 @@ export default function TimerScreen() {
         </View>
         <View style={styles.flatListLowerSubContainer}>
           <CustomIcons
-            icnoName={"minus-circle"}
+            iconName={"minus-circle"}
             disabled={!btnPressable || flatListScrolling || timerOn}
             onPress={() => setPlusOrMinus(false)}
             size={CENTER_CONTAINER_SIZE * 0.13}
@@ -810,7 +810,7 @@ export default function TimerScreen() {
         </View>
         <View style={styles.flatListLowerSubContainer}>
           <CustomIcons
-            icnoName={"restore"}
+            iconName={"restore"}
             disabled={!btnPressable || timerOn}
             onPress={() => {
               Alert.alert(

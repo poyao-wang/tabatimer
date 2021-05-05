@@ -180,7 +180,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
             iterationCount="infinite"
           >
             <CustomIcons
-              icnoName="play-circle"
+              iconName="play-circle"
               onPress={() => {
                 navigation.navigate("AppNavigator");
               }}
@@ -222,7 +222,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
           }}
         >
           <CustomIcons
-            icnoName={"alpha-j-box"}
+            iconName={"alpha-j-box"}
             textBelow="日本語"
             onPress={() => {
               onSetLanguage("ja");
@@ -245,7 +245,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
           }}
         >
           <CustomIcons
-            icnoName={"alpha-e-box"}
+            iconName={"alpha-e-box"}
             textBelow="English"
             size={centerContainerSize * 0.13}
             onPress={() => {
@@ -268,7 +268,7 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
           }}
         >
           <CustomIcons
-            icnoName={"alpha-c-box"}
+            iconName={"alpha-c-box"}
             textBelow="中　文"
             onPress={() => {
               onSetLanguage("zh_Hant_TW");
