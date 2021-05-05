@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import useWindowDimentions from "../hook/useWindowDimentions";
 import colors from "../config/colors";
@@ -69,9 +69,19 @@ function AccountScreen() {
             onPress={() => {
               logout();
             }}
+            onLongPress={() => {
+              Alert.alert(JSON.stringify(currentUser, null, 2));
+            }}
           >
             <Text>
-              {currentUser?.displayName ? currentUser.displayName : "no user"}
+              {!currentUser
+                ? "Not signed in."
+                : !currentUser.displayName
+                ? "No user name."
+                : currentUser.displayName}
+              {currentUser
+                ? " Signed in with " + currentUser.providerData[0]?.providerId
+                : null}
             </Text>
           </TouchableOpacity>
         </View>
