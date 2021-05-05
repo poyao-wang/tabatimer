@@ -17,6 +17,7 @@ import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import signInWithFacebookAuthSessionAsyncBtn from "../auth/signInWithFacebookAuthSessionAsyncBtn";
 
 const BORDER_WIDTH = 1;
 
@@ -170,6 +171,7 @@ function AccountScreen() {
             />
           )}
         </View>
+        {signInWithFacebookAuthSessionAsyncBtn()}
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
           icons={[
