@@ -30,7 +30,8 @@
           "reservedClientId": "com.googleusercontent.apps.1010997725186-jnt9mn7ikqnc99o4lmegmk01pddv8prd"
         }
       },
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "usesAppleSignIn": true
     },
     "android": {
       "package": "com.poyaowang.tabatimer",

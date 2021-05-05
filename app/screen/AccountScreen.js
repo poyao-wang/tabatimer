@@ -1,5 +1,13 @@
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 import useWindowDimentions from "../hook/useWindowDimentions";
 import colors from "../config/colors";
@@ -15,6 +23,7 @@ function AccountScreen() {
 
   const {
     currentUser,
+    signInWithAppleAsync,
     signInWithGoogleAsync,
     signInWithFacebookAsync,
     logout,
@@ -29,7 +38,7 @@ function AccountScreen() {
     },
     googleLoginBtn: {
       width: containerHeight * 0.7,
-      height: containerHeight * 0.3,
+      height: containerHeight * 0.2,
       borderWidth: BORDER_WIDTH,
     },
   });
@@ -84,6 +93,21 @@ function AccountScreen() {
                 : null}
             </Text>
           </TouchableOpacity>
+          {Platform.OS === "ios" && (
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={5}
+              style={{ width: 200, height: 44 }}
+              onPress={() => {
+                signInWithAppleAsync();
+              }}
+            />
+          )}
         </View>
       </View>
     </>

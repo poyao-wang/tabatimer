@@ -3,6 +3,7 @@ import * as firebase from "firebase";
 
 import signInWithFacebookAsync from "./signInWithFacebookAsync";
 import signInWithGoogleAsync from "./signInWithGoogleAsync";
+import signInWithAppleAsync from "./signInWithAppleAsync";
 
 const AuthContext = createContext();
 
@@ -27,6 +28,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    signInWithAppleAsync,
     signInWithGoogleAsync: signInWithGoogleAsync.StandAlone,
     signInWithFacebookAsync,
     logout,
