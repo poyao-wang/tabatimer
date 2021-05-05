@@ -46,7 +46,7 @@ export default async function signInWithAppleAsync(params) {
         firebase
           .database()
           .ref("/users/" + result.user.uid)
-          .set({
+          .update({
             additionalUserInfo: result.additionalUserInfo,
           });
       });

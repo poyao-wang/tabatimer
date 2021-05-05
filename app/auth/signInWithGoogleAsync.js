@@ -34,7 +34,7 @@ const onSignIn = (googleUser) => {
         firebase
           .database()
           .ref("/users/" + result.user.uid)
-          .set({
+          .update({
             additionalUserInfo: result.additionalUserInfo,
           });
       })

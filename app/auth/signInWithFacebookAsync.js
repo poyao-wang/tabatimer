@@ -33,7 +33,7 @@ export default async function signInWithFacebookAsync(params) {
           firebase
             .database()
             .ref("/users/" + result.user.uid)
-            .set({
+            .update({
               additionalUserInfo: result.additionalUserInfo,
             });
         });
