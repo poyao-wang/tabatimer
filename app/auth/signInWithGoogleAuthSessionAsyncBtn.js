@@ -7,7 +7,7 @@ import { Button } from "react-native";
 
 import {
   IOS_STANDALONE_APP_CLIENT_ID,
-  ANDROID_CLIENT_ID,
+  ANDROID_STANDALONE_APP_CLIENT_ID,
   EXPO_CLIENT_ID,
   WEB_CLIENT_ID,
 } from "@env";
@@ -16,7 +16,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function signInWithGoogleAuthSessionAsyncBtn() {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    androidClientId: ANDROID_CLIENT_ID,
+    androidClientId: ANDROID_STANDALONE_APP_CLIENT_ID,
     expoClientId: EXPO_CLIENT_ID,
     iosClientId: IOS_STANDALONE_APP_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
