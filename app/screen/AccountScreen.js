@@ -37,7 +37,6 @@ function AccountScreen() {
     currentUser,
     signInWithAppleAsync,
     signInWithGoogleAsync,
-    signInWithFacebookAsync,
     logout,
   } = useAuth();
 
@@ -120,14 +119,6 @@ function AccountScreen() {
             justifyContent: "center",
           }}
         >
-          <TouchableOpacity
-            style={styles.googleLoginBtn}
-            onPress={() => {
-              signInWithFacebookAsync();
-            }}
-          >
-            <Text>Login With Facebook</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.googleLoginBtn}
             onPress={() => {

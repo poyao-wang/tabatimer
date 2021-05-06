@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as firebase from "firebase";
 
-import signInWithFacebookAsync from "./signInWithFacebookAsync";
 import signInWithGoogleAsync from "./signInWithGoogleAsync";
 import signInWithAppleAsync from "./signInWithAppleAsync";
 
@@ -30,7 +29,6 @@ export function AuthProvider({ children }) {
     currentUser,
     signInWithAppleAsync,
     signInWithGoogleAsync: signInWithGoogleAsync.StandAlone,
-    signInWithFacebookAsync,
     logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
