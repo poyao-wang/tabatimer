@@ -1,6 +1,4 @@
 import * as React from "react";
-import * as WebBrowser from "expo-web-browser";
-import { ResponseType } from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
 import firebase from "firebase";
 import { Button } from "react-native";
@@ -12,9 +10,7 @@ import {
   WEB_CLIENT_ID,
 } from "@env";
 
-WebBrowser.maybeCompleteAuthSession();
-
-export default function signInWithGoogleAuthSessionAsyncBtn() {
+function byExpoAuthSession() {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     androidClientId: ANDROID_STANDALONE_APP_CLIENT_ID,
     expoClientId: EXPO_CLIENT_ID,
@@ -57,3 +53,7 @@ export default function signInWithGoogleAuthSessionAsyncBtn() {
     />
   );
 }
+
+const GoogleSignInBtn = byExpoAuthSession;
+
+export default GoogleSignInBtn;

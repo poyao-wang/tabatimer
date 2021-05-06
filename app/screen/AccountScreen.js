@@ -17,7 +17,7 @@ import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
-import signInWithGoogleAuthSessionAsyncBtn from "../auth/signInWithGoogleAuthSessionAsyncBtn";
+import GoogleSignInBtn from "../auth/GoogleSignInBtn";
 import FacebookSignInBtn from "../auth/FacebookSignInBtn";
 
 const BORDER_WIDTH = 1;
@@ -33,12 +33,7 @@ function AccountScreen() {
     language: { uiText },
   } = useContext(MainContext);
 
-  const {
-    currentUser,
-    signInWithAppleAsync,
-    signInWithGoogleAsync,
-    logout,
-  } = useAuth();
+  const { currentUser, signInWithAppleAsync, logout } = useAuth();
 
   const mainDataToString = (mainData) => {
     if (mainData) {
@@ -122,14 +117,6 @@ function AccountScreen() {
           <TouchableOpacity
             style={styles.googleLoginBtn}
             onPress={() => {
-              signInWithGoogleAsync();
-            }}
-          >
-            <Text>Login With Google</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.googleLoginBtn}
-            onPress={() => {
               logout();
             }}
             onLongPress={() => {
@@ -162,9 +149,9 @@ function AccountScreen() {
               }}
             />
           )}
+          {FacebookSignInBtn()}
+          {GoogleSignInBtn()}
         </View>
-        {FacebookSignInBtn()}
-        {signInWithGoogleAuthSessionAsyncBtn()}
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
           icons={[
