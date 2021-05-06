@@ -18,6 +18,7 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import signInWithFacebookAuthSessionAsyncBtn from "../auth/signInWithFacebookAuthSessionAsyncBtn";
+import signInWithGoogleAuthSessionAsyncBtn from "../auth/signInWithGoogleAuthSessionAsyncBtn";
 
 const BORDER_WIDTH = 1;
 
@@ -172,6 +173,7 @@ function AccountScreen() {
           )}
         </View>
         {signInWithFacebookAuthSessionAsyncBtn()}
+        {signInWithGoogleAuthSessionAsyncBtn()}
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
           icons={[
