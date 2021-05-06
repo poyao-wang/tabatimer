@@ -17,8 +17,8 @@ import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
-import signInWithFacebookAuthSessionAsyncBtn from "../auth/signInWithFacebookAuthSessionAsyncBtn";
 import signInWithGoogleAuthSessionAsyncBtn from "../auth/signInWithGoogleAuthSessionAsyncBtn";
+import FacebookSignInBtn from "../auth/FacebookSignInBtn";
 
 const BORDER_WIDTH = 1;
 
@@ -172,7 +172,7 @@ function AccountScreen() {
             />
           )}
         </View>
-        {signInWithFacebookAuthSessionAsyncBtn()}
+        {FacebookSignInBtn()}
         {signInWithGoogleAuthSessionAsyncBtn()}
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}

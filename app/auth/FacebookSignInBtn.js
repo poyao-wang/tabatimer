@@ -1,19 +1,14 @@
 import * as React from "react";
-import * as WebBrowser from "expo-web-browser";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import { ResponseType } from "expo-auth-session";
 import firebase from "firebase";
 import { Button } from "react-native";
+import { FACEBOOK_APP_ID } from "@env";
 
-WebBrowser.maybeCompleteAuthSession();
-
-export default function signInWithFacebookAuthSessionAsyncBtn() {
+function signInWithFacebookAuthSessionAsyncBtn() {
   const [request, response, promptAsync] = Facebook.useAuthRequest({
     responseType: ResponseType.Token,
-    webClientId: "780300276005493",
-    iosClientId: "780300276005493",
-    androidClientId: "780300276005493",
-    expoClientId: "780300276005493",
+    clientId: FACEBOOK_APP_ID,
   });
 
   React.useEffect(() => {
@@ -54,3 +49,7 @@ export default function signInWithFacebookAuthSessionAsyncBtn() {
     />
   );
 }
+
+const FacebookSignInBtn = signInWithFacebookAuthSessionAsyncBtn;
+
+export default FacebookSignInBtn;
