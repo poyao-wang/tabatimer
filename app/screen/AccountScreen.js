@@ -21,6 +21,7 @@ import useWindowDimentions from "../hook/useWindowDimentions";
 import AppleSignInBtn from "../auth/AppleSignInBtn";
 
 const BORDER_WIDTH = 0;
+const isAndroid = Platform.OS === "android";
 
 function AccountScreen() {
   const { width, height, centerContainerSize } = useWindowDimentions();
@@ -35,39 +36,7 @@ function AccountScreen() {
 
   const { currentUser, logout, loading, setLoading } = useAuth();
 
-  const translationText = {
-    title: "User Account",
-    subtitle: {
-      noUser: "Sign in for upload / download settings",
-      withUserBeforeProvidor: " Signed in with ",
-      withUserAfterProvidor: "",
-    },
-    signOutBtnText: "Sign out",
-    uploadBtn: {
-      alertMainTitle: "Upload Settings",
-      alertMainMsg:
-        "This will overwrite the settings on your account. Continue?",
-      alertMainOkBtnText: "Ok",
-      alertMainCancelBtnText: "Cancel",
-      alertSucceedTitle: "Succeed",
-      alertSucceedMsg: "Setting uploaded.",
-      alertErrorTitle: "Error",
-      textBelow: "Upload",
-    },
-    downloadBtn: {
-      alertMainTitle: "Download Settings",
-      alertMainMsg:
-        "This will overwrite the settings on your device. Continue?",
-      alertMainOkBtnText: "Ok",
-      alertMainCancelBtnText: "Cancel",
-      alertSucceedTitle: "Succeed",
-      alertSucceedMsg: "Setting downloaded.",
-      alertErrorTitle: "Error",
-      alertNoDataTitle: "No Data",
-      alertNoDataMsg: "No data in your account.",
-      textBelow: "Download",
-    },
-  };
+  const translationText = uiText.accountScreen;
 
   const mainDataToString = (mainData) => {
     if (mainData) {
@@ -216,11 +185,16 @@ function AccountScreen() {
       justifyContent: "center",
       alignItems: "center",
       width: centerContainerSize * 0.8,
-      height: centerContainerSize * 0.13,
+      height: isAndroid
+        ? centerContainerSize * 0.2
+        : centerContainerSize * 0.13,
       borderWidth: BORDER_WIDTH,
     },
     subtitle: {
-      fontSize: centerContainerSize * 0.04,
+      textAlign: "center",
+      fontSize: isAndroid
+        ? centerContainerSize * 0.035
+        : centerContainerSize * 0.04,
       marginTop: centerContainerSize * 0.02,
     },
   });

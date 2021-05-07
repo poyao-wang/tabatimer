@@ -56,6 +56,39 @@ const uiTextDefaultData = {
       alertPhotosPermissionMsgAndroid: `To use your own images for workouts, go to "Settings" → "Apps & notifications" → "TabaTimer" → "Permissions" → "Storage", and allow TabaTimer to access photos on your device.`,
       alertPhotosPermissionMsgIos: `To use your own images for workouts, go to "Settings" → "TabaTimer" → "Photos", and allow TabaTimer to access photos on your device.`,
     },
+    accountScreen: {
+      title: "User Account",
+      subtitle: {
+        noUser: "Sign in for upload / download settings",
+        withUserBeforeProvidor: " Signed in with ",
+        withUserAfterProvidor: "",
+      },
+      signOutBtnText: "Sign out",
+      uploadBtn: {
+        alertMainTitle: "Upload Settings",
+        alertMainMsg:
+          "This will overwrite the settings on your account. Continue?",
+        alertMainOkBtnText: "Ok",
+        alertMainCancelBtnText: "Cancel",
+        alertSucceedTitle: "Succeed",
+        alertSucceedMsg: "Setting uploaded.",
+        alertErrorTitle: "Error",
+        textBelow: "Upload",
+      },
+      downloadBtn: {
+        alertMainTitle: "Download Settings",
+        alertMainMsg:
+          "This will overwrite the settings on your device. Continue?",
+        alertMainOkBtnText: "Ok",
+        alertMainCancelBtnText: "Cancel",
+        alertSucceedTitle: "Succeed",
+        alertSucceedMsg: "Setting downloaded.",
+        alertErrorTitle: "Error",
+        alertNoDataTitle: "No Data",
+        alertNoDataMsg: "No data in your account.",
+        textBelow: "Download",
+      },
+    },
   },
   ja: {
     timerScreen: {
@@ -114,6 +147,38 @@ const uiTextDefaultData = {
       alertPhotosPermissionMsgAndroid: `トレーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "アプリと通知" → "TabaTimer" → "権限" → "ストレージ"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
       alertPhotosPermissionMsgIos: `トレーニングにカスタムな写真を使用したい場合、デバイス上の"設定" → "TabaTimer" → "写真"で、TabaTimerにデバイス上の写真へのアクセスを許可してください。`,
     },
+    accountScreen: {
+      title: "アカウント",
+      subtitle: {
+        noUser: `サインインして、設定を アップロード / ダウンロード`,
+        withUserBeforeProvidor: " は ",
+        withUserAfterProvidor: " でログインした",
+      },
+      signOutBtnText: "ログアウト",
+      uploadBtn: {
+        alertMainTitle: "設定アップロード",
+        alertMainMsg:
+          "アカウントに保存した設定が上書きされます。よろしいですか？",
+        alertMainOkBtnText: "はい",
+        alertMainCancelBtnText: "いいえ",
+        alertSucceedTitle: "成功",
+        alertSucceedMsg: "設定をアップロードしました。",
+        alertErrorTitle: "エラー",
+        textBelow: "アップロード",
+      },
+      downloadBtn: {
+        alertMainTitle: "設定ダウンロード",
+        alertMainMsg: "デバイスの設定が上書きされます。よろしいですか？",
+        alertMainOkBtnText: "はい",
+        alertMainCancelBtnText: "いいえ",
+        alertSucceedTitle: "成功",
+        alertSucceedMsg: "設定をダウンロードしました。",
+        alertErrorTitle: "エラー",
+        alertNoDataTitle: "データなし",
+        alertNoDataMsg: "アカウントにデータがありません。",
+        textBelow: "ダウンロード",
+      },
+    },
   },
   zh_Hant_TW: {
     timerScreen: {
@@ -171,6 +236,37 @@ const uiTextDefaultData = {
       alertPhotosPermissionCancel: "取消",
       alertPhotosPermissionMsgAndroid: `若想使用的自定義的照片進行健身，請至裝置上的"設定" → "應用程式和通知" → "TabaTimer" → "權限" → "儲存空間"，並允許TabaTimer取用裝置上的照片。`,
       alertPhotosPermissionMsgIos: `若想使用的自定義的照片進行健身，請至裝置上的"設定" → "TabaTimer" → "照片"，並允許TabaTimer取用裝置上的照片。`,
+    },
+    accountScreen: {
+      title: "使用者帳號",
+      subtitle: {
+        noUser: "請登錄帳號以 上傳 / 下載 使用者設定",
+        withUserBeforeProvidor: " 以 ",
+        withUserAfterProvidor: " 帳號登入",
+      },
+      signOutBtnText: "登　出",
+      uploadBtn: {
+        alertMainTitle: "上傳使用者設定",
+        alertMainMsg: "這將覆寫您帳戶上儲存的設定。確定繼續嗎？",
+        alertMainOkBtnText: "好",
+        alertMainCancelBtnText: "取消",
+        alertSucceedTitle: "成功",
+        alertSucceedMsg: "成功上傳使用者設定.",
+        alertErrorTitle: "錯誤",
+        textBelow: "上傳設定",
+      },
+      downloadBtn: {
+        alertMainTitle: "下載使用者設定",
+        alertMainMsg: "這將覆寫此裝置上的設定。確定繼續嗎？",
+        alertMainOkBtnText: "好",
+        alertMainCancelBtnText: "取消",
+        alertSucceedTitle: "成功",
+        alertSucceedMsg: "成功下載使用者設定.",
+        alertErrorTitle: "錯誤",
+        alertNoDataTitle: "沒有數據",
+        alertNoDataMsg: "您的帳戶中沒有數據。",
+        textBelow: "下載設定",
+      },
     },
   },
 };
