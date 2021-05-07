@@ -35,6 +35,40 @@ function AccountScreen() {
 
   const { currentUser, logout, loading, setLoading } = useAuth();
 
+  const translationText = {
+    title: "User Account",
+    subtitle: {
+      noUser: "Sign in for upload / download settings",
+      withUserBeforeProvidor: " Signed in with ",
+      withUserAfterProvidor: "",
+    },
+    signOutBtnText: "Sign out",
+    uploadBtn: {
+      alertMainTitle: "Upload Settings",
+      alertMainMsg:
+        "This will overwrite the settings on your account. Continue?",
+      alertMainOkBtnText: "Ok",
+      alertMainCancelBtnText: "Cancel",
+      alertSucceedTitle: "Succeed",
+      alertSucceedMsg: "Setting uploaded.",
+      alertErrorTitle: "Error",
+      textBelow: "Upload",
+    },
+    downloadBtn: {
+      alertMainTitle: "Download Settings",
+      alertMainMsg:
+        "This will overwrite the settings on your device. Continue?",
+      alertMainOkBtnText: "Ok",
+      alertMainCancelBtnText: "Cancel",
+      alertSucceedTitle: "Succeed",
+      alertSucceedMsg: "Setting downloaded.",
+      alertErrorTitle: "Error",
+      alertNoDataTitle: "No Data",
+      alertNoDataMsg: "No data in your account.",
+      textBelow: "Download",
+    },
+  };
+
   const mainDataToString = (mainData) => {
     if (mainData) {
       const prepareTime = mainData?.prepareTime?.value;
@@ -98,11 +132,15 @@ function AccountScreen() {
     return (
       <Text style={styles.subtitle}>
         {!currentUser
-          ? "Sign in for upload / download settings"
+          ? translationText.subtitle.noUser
           : !currentUser.displayName
           ? ""
           : currentUser.displayName}
-        {currentUser ? " Signed in with " + providerText() : null}
+        {currentUser
+          ? translationText.subtitle.withUserBeforeProvidor +
+            providerText() +
+            translationText.subtitle.withUserAfterProvidor
+          : null}
       </Text>
     );
   };
@@ -130,7 +168,7 @@ function AccountScreen() {
         </View>
         <AuthButton
           centerContainerSize={centerContainerSize}
-          btnText="Sign out"
+          btnText={translationText.signOutBtnText}
           iconName="logout"
           onPress={() => {
             logout();
@@ -201,7 +239,7 @@ function AccountScreen() {
           }}
         >
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>User Account</Text>
+            <Text style={styles.title}>{translationText.title}</Text>
           </View>
           {loading && <LoadingView />}
           {!currentUser && !loading && <SigninBtns />}
@@ -214,15 +252,15 @@ function AccountScreen() {
               iconName: "cloud-upload",
               onPress: () => {
                 Alert.alert(
-                  "Upload Settings",
-                  "This will overwrite the settings on your account. Continue?",
+                  translationText.uploadBtn.alertMainTitle,
+                  translationText.uploadBtn.alertMainMsg,
                   [
                     {
-                      text: "Cancel",
+                      text: translationText.uploadBtn.alertMainCancelBtnText,
                       onPress: () => console.log("Cancel Pressed"),
                     },
                     {
-                      text: "Ok",
+                      text: translationText.uploadBtn.alertMainOkBtnText,
                       onPress: async () => {
                         try {
                           setLoading(true);
@@ -231,9 +269,15 @@ function AccountScreen() {
                             mainDataToString(mainData)
                           );
                           setLoading(false);
-                          Alert.alert("Succeed", "Setting uploaded.");
+                          Alert.alert(
+                            translationText.uploadBtn.alertSucceedTitle,
+                            translationText.uploadBtn.alertSucceedMsg
+                          );
                         } catch (error) {
-                          Alert.alert("Error", error.message);
+                          Alert.alert(
+                            translationText.uploadBtn.alertErrorTitle,
+                            error.message
+                          );
                           setLoading(false);
                         }
                       },
@@ -242,22 +286,22 @@ function AccountScreen() {
                   { cancelable: false }
                 );
               },
-              textBelow: "Upload",
+              textBelow: translationText.uploadBtn.textBelow,
               disabled: !currentUser || loading,
             },
             {
               iconName: "cloud-download",
               onPress: () => {
                 Alert.alert(
-                  "Download Settings",
-                  "This will overwrite the settings on your device. Continue?",
+                  translationText.downloadBtn.alertMainTitle,
+                  translationText.downloadBtn.alertMainMsg,
                   [
                     {
-                      text: "Cancel",
+                      text: translationText.downloadBtn.alertMainCancelBtnText,
                       onPress: () => console.log("Cancel Pressed"),
                     },
                     {
-                      text: "Ok",
+                      text: translationText.downloadBtn.alertMainOkBtnText,
                       onPress: async () => {
                         try {
                           setLoading(true);
@@ -266,15 +310,21 @@ function AccountScreen() {
                           );
                           stringToSetMainData(result.val());
                           setLoading(false);
-                          Alert.alert("Succeed", "Setting downloaded.");
+                          Alert.alert(
+                            translationText.downloadBtn.alertSucceedTitle,
+                            translationText.downloadBtn.alertSucceedMsg
+                          );
                         } catch (error) {
                           setLoading(false);
                           if (error.message === "noData")
                             return Alert.alert(
-                              "No Data",
-                              "No data in your account."
+                              translationText.downloadBtn.alertNoDataTitle,
+                              translationText.downloadBtn.alertNoDataMsg
                             );
-                          Alert.alert("Error", error.message);
+                          Alert.alert(
+                            translationText.downloadBtn.alertErrorTitle,
+                            error.message
+                          );
                         }
                       },
                     },
@@ -282,7 +332,7 @@ function AccountScreen() {
                   { cancelable: false }
                 );
               },
-              textBelow: "Download",
+              textBelow: translationText.downloadBtn.textBelow,
               disabled: !currentUser || loading,
             },
           ]}
