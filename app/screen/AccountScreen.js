@@ -1,5 +1,10 @@
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
-import * as AppleAuthentication from "expo-apple-authentication";
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useContext } from "react";
 
 import { MainContext } from "../config/MainContext";
@@ -12,6 +17,7 @@ import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import AppleSignInBtn from "../auth/AppleSignInBtn";
 
 const BORDER_WIDTH = 0;
 
@@ -26,7 +32,7 @@ function AccountScreen() {
     language: { uiText },
   } = useContext(MainContext);
 
-  const { currentUser, signInWithAppleAsync, logout } = useAuth();
+  const { currentUser, logout, loading, setLoading } = useAuth();
 
   const mainDataToString = (mainData) => {
     if (mainData) {
@@ -106,23 +112,7 @@ function AccountScreen() {
           <SubTitle />
         </View>
         {Platform.OS === "ios" && (
-          <AppleAuthentication.AppleAuthenticationButton
-            buttonType={
-              AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-            }
-            buttonStyle={
-              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-            }
-            cornerRadius={centerContainerSize * 0.02}
-            style={{
-              width: centerContainerSize * 0.7,
-              height: centerContainerSize * 0.12,
-              margin: centerContainerSize * 0.02,
-            }}
-            onPress={() => {
-              signInWithAppleAsync();
-            }}
-          />
+          <AppleSignInBtn centerContainerSize={centerContainerSize} />
         )}
         {FacebookSignInBtn(centerContainerSize)}
         {GoogleSignInBtn(centerContainerSize)}
@@ -144,6 +134,14 @@ function AccountScreen() {
             logout();
           }}
         />
+      </View>
+    );
+  };
+
+  const LoadingView = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <ActivityIndicator size="large" />
       </View>
     );
   };
@@ -203,8 +201,9 @@ function AccountScreen() {
           <View style={styles.titleContainer}>
             <Text style={styles.title}>User Account</Text>
           </View>
-          {!currentUser && <SigninBtns />}
-          {currentUser && <SignOutBtns />}
+          {loading && <LoadingView />}
+          {!currentUser && !loading && <SigninBtns />}
+          {currentUser && !loading && <SignOutBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}

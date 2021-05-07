@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as Google from "expo-auth-session/providers/google";
 import firebase from "firebase";
-import { Button } from "react-native";
 
 import {
   IOS_STANDALONE_APP_CLIENT_ID,
@@ -10,6 +9,7 @@ import {
   WEB_CLIENT_ID,
 } from "@env";
 import AuthButton from "./AuthButton";
+import { useAuth } from "./AuthContext";
 
 function byExpoAuthSession(centerContainerSize) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -19,29 +19,30 @@ function byExpoAuthSession(centerContainerSize) {
     webClientId: WEB_CLIENT_ID,
   });
 
-  React.useEffect(() => {
+  const { setLoading } = useAuth();
+
+  const firebaseSignIn = async (response) => {
     if (response?.type === "success") {
+      setLoading(true);
+
       const { id_token } = response.params;
 
       const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
-      firebase
+      const userFromFirebase = await firebase
         .auth()
-        .signInWithCredential(credential)
-        .then(function (result) {
-          if (result.additionalUserInfo?.isNewUser) {
-            console.log("User signed up for the first time.");
-          } else {
-            console.log("User signed in.");
-          }
+        .signInWithCredential(credential);
 
-          firebase
-            .database()
-            .ref("/users/" + result.user.uid)
-            .update({
-              additionalUserInfo: result.additionalUserInfo,
-            });
+      await firebase
+        .database()
+        .ref("/users/" + userFromFirebase.user.uid)
+        .update({
+          additionalUserInfo: userFromFirebase.additionalUserInfo,
         });
     }
+  };
+
+  React.useEffect(() => {
+    firebaseSignIn(response);
   }, [response]);
 
   return (
