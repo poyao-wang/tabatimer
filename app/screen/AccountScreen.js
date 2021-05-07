@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Platform,
   StyleSheet,
   Text,
@@ -58,6 +59,7 @@ function AccountScreen() {
   };
 
   const stringToSetMainData = (inputText) => {
+    if (!inputText) throw new Error("noData");
     const parsedObject = JSON.parse(inputText);
     const {
       prepareTime,
@@ -211,22 +213,77 @@ function AccountScreen() {
             {
               iconName: "cloud-upload",
               onPress: () => {
-                cloudDbFunctions.upload(
-                  currentUser.uid,
-                  mainDataToString(mainData)
+                Alert.alert(
+                  "Upload Settings",
+                  "This will overwrite the settings on your account. Continue?",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                    },
+                    {
+                      text: "Ok",
+                      onPress: async () => {
+                        try {
+                          setLoading(true);
+                          await cloudDbFunctions.upload(
+                            currentUser.uid,
+                            mainDataToString(mainData)
+                          );
+                          setLoading(false);
+                          Alert.alert("Succeed", "Setting uploaded.");
+                        } catch (error) {
+                          Alert.alert("Error", error.message);
+                          setLoading(false);
+                        }
+                      },
+                    },
+                  ],
+                  { cancelable: false }
                 );
               },
-              textBelow: "upload",
-              disabled: !currentUser,
+              textBelow: "Upload",
+              disabled: !currentUser || loading,
             },
             {
               iconName: "cloud-download",
-              onPress: async () => {
-                const result = await cloudDbFunctions.download(currentUser.uid);
-                stringToSetMainData(result.val());
+              onPress: () => {
+                Alert.alert(
+                  "Download Settings",
+                  "This will overwrite the settings on your device. Continue?",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                    },
+                    {
+                      text: "Ok",
+                      onPress: async () => {
+                        try {
+                          setLoading(true);
+                          const result = await cloudDbFunctions.download(
+                            currentUser.uid
+                          );
+                          stringToSetMainData(result.val());
+                          setLoading(false);
+                          Alert.alert("Succeed", "Setting downloaded.");
+                        } catch (error) {
+                          setLoading(false);
+                          if (error.message === "noData")
+                            return Alert.alert(
+                              "No Data",
+                              "No data in your account."
+                            );
+                          Alert.alert("Error", error.message);
+                        }
+                      },
+                    },
+                  ],
+                  { cancelable: false }
+                );
               },
-              textBelow: "download",
-              disabled: !currentUser,
+              textBelow: "Download",
+              disabled: !currentUser || loading,
             },
           ]}
         />

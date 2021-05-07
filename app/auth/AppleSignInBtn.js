@@ -21,6 +21,7 @@ function AppleSignInBtn({ centerContainerSize }) {
 
   async function signInWithAppleAsync() {
     try {
+      setLoading(true);
       const nonceString = nonceGen(32);
 
       const result = await AppleAuthentication.signInAsync({
@@ -30,8 +31,6 @@ function AppleSignInBtn({ centerContainerSize }) {
         ],
         state: nonceString,
       });
-
-      setLoading(true);
 
       const provider = new firebase.auth.OAuthProvider("apple.com");
       const authCredential = provider.credential({

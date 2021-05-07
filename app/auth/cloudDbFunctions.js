@@ -1,5 +1,4 @@
 import * as firebase from "firebase";
-import { Alert } from "react-native";
 
 const upload = async (uid, value) => {
   try {
@@ -8,7 +7,7 @@ const upload = async (uid, value) => {
       .ref("/users/" + uid + "/timerSetup")
       .set(value);
   } catch (error) {
-    Alert.alert("error", JSON.stringify(error.message));
+    throw error;
   }
 };
 
@@ -18,10 +17,9 @@ const download = async (uid) => {
       .database()
       .ref("/users/" + uid + "/timerSetup")
       .get();
-
     return result;
   } catch (error) {
-    Alert.alert("error", JSON.stringify(error.message));
+    throw error;
   }
 };
 
