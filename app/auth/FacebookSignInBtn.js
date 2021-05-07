@@ -5,6 +5,7 @@ import * as React from "react";
 import Constants from "expo-constants";
 import firebase from "firebase";
 import * as ExpoFacebook from "expo-facebook";
+import * as Localization from "expo-localization";
 
 import { FACEBOOK_APP_ID } from "@env";
 import AuthButton from "./AuthButton";
@@ -13,11 +14,19 @@ import { useAuth } from "./AuthContext";
 const isNative = Constants.appOwnership !== "expo" && Platform.OS !== "web";
 const isAndroid = Platform.OS === "android";
 
+const deviceLanguage = Localization.locale.split("-")[0];
+const btnText =
+  deviceLanguage === "ja"
+    ? "Facebookでログイン"
+    : deviceLanguage === "zh"
+    ? "使用Facebook登入"
+    : "Log in With Facebook";
+
 const buttonReturn = (onPress, centerContainerSize) => (
   <AuthButton
     centerContainerSize={centerContainerSize}
     color="#4267b2"
-    btnText="Log in With Facebook"
+    btnText={btnText}
     onPress={onPress}
     iconName="facebook"
   />

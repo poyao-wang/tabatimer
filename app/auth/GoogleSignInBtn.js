@@ -1,5 +1,6 @@
-import * as React from "react";
 import * as Google from "expo-auth-session/providers/google";
+import * as Localization from "expo-localization";
+import * as React from "react";
 import firebase from "firebase";
 
 import {
@@ -10,6 +11,14 @@ import {
 } from "@env";
 import AuthButton from "./AuthButton";
 import { useAuth } from "./AuthContext";
+
+const deviceLanguage = Localization.locale.split("-")[0];
+const btnText =
+  deviceLanguage === "ja"
+    ? "Googleでサインイン"
+    : deviceLanguage === "zh"
+    ? "使用Google登入"
+    : "Sign in with Google";
 
 function byExpoAuthSession(centerContainerSize) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -47,7 +56,7 @@ function byExpoAuthSession(centerContainerSize) {
 
   return (
     <AuthButton
-      btnText="Sign in with Google"
+      btnText={btnText}
       color="#df4a32"
       centerContainerSize={centerContainerSize}
       iconName="google"
