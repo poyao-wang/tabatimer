@@ -1,26 +1,19 @@
-import React, { useContext } from "react";
-import {
-  Alert,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import * as AppleAuthentication from "expo-apple-authentication";
+import React, { useContext } from "react";
 
 import { MainContext } from "../config/MainContext";
 import { useAuth } from "../auth/AuthContext";
+import AuthButton from "../auth/AuthButton";
 import cloudDbFunctions from "../auth/cloudDbFunctions";
-import colors from "../config/colors";
+import FacebookSignInBtn from "../auth/FacebookSignInBtn";
+import GoogleSignInBtn from "../auth/GoogleSignInBtn";
 import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
-import GoogleSignInBtn from "../auth/GoogleSignInBtn";
-import FacebookSignInBtn from "../auth/FacebookSignInBtn";
 
-const BORDER_WIDTH = 1;
+const BORDER_WIDTH = 0;
 
 function AccountScreen() {
   const { width, height, centerContainerSize } = useWindowDimentions();
@@ -86,6 +79,75 @@ function AccountScreen() {
     useCache.store(mainData);
   };
 
+  const SubTitle = () => {
+    const providerText = () => {
+      const textFeomFirebaseAuth = currentUser.providerData[0]?.providerId;
+      if (textFeomFirebaseAuth === "apple.com") return "Apple";
+      if (textFeomFirebaseAuth === "facebook.com") return "Facebook";
+      if (textFeomFirebaseAuth === "google.com") return "Google";
+    };
+
+    return (
+      <Text style={styles.subtitle}>
+        {!currentUser
+          ? "Sign in for upload / download settings"
+          : !currentUser.displayName
+          ? ""
+          : currentUser.displayName}
+        {currentUser ? " Signed in with " + providerText() : null}
+      </Text>
+    );
+  };
+
+  const SigninBtns = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <View style={styles.subtitleContainer}>
+          <SubTitle />
+        </View>
+        {Platform.OS === "ios" && (
+          <AppleAuthentication.AppleAuthenticationButton
+            buttonType={
+              AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+            }
+            buttonStyle={
+              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+            }
+            cornerRadius={centerContainerSize * 0.02}
+            style={{
+              width: centerContainerSize * 0.7,
+              height: centerContainerSize * 0.12,
+              margin: centerContainerSize * 0.02,
+            }}
+            onPress={() => {
+              signInWithAppleAsync();
+            }}
+          />
+        )}
+        {FacebookSignInBtn(centerContainerSize)}
+        {GoogleSignInBtn(centerContainerSize)}
+      </View>
+    );
+  };
+
+  const SignOutBtns = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <View style={styles.subtitleContainer}>
+          <SubTitle />
+        </View>
+        <AuthButton
+          centerContainerSize={centerContainerSize}
+          btnText="Sign out"
+          iconName="logout"
+          onPress={() => {
+            logout();
+          }}
+        />
+      </View>
+    );
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -93,10 +155,35 @@ function AccountScreen() {
       justifyContent: "center",
       borderWidth: BORDER_WIDTH,
     },
-    googleLoginBtn: {
-      width: containerHeight * 0.7,
-      height: containerHeight * 0.2,
+    btnsContainer: {
+      justifyContent: "center",
+      alignItems: "center",
       borderWidth: BORDER_WIDTH,
+      height: centerContainerSize * 0.63,
+      width: centerContainerSize * 0.8,
+    },
+    titleContainer: {
+      width: centerContainerSize * 0.9,
+      height: centerContainerSize * 0.15,
+      borderWidth: BORDER_WIDTH,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    title: {
+      fontSize: centerContainerSize * 0.08,
+      fontWeight: "600",
+      letterSpacing: 2,
+    },
+    subtitleContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: centerContainerSize * 0.8,
+      height: centerContainerSize * 0.13,
+      borderWidth: BORDER_WIDTH,
+    },
+    subtitle: {
+      fontSize: centerContainerSize * 0.04,
+      marginTop: centerContainerSize * 0.02,
     },
   });
 
@@ -108,49 +195,16 @@ function AccountScreen() {
             width: containerWidth,
             height: containerHeight,
             borderWidth: BORDER_WIDTH,
-            borderColor: colors.dark,
             borderRadius: centerContainerSize * 0.04,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <TouchableOpacity
-            style={styles.googleLoginBtn}
-            onPress={() => {
-              logout();
-            }}
-            onLongPress={() => {
-              Alert.alert(JSON.stringify(currentUser, null, 2));
-            }}
-          >
-            <Text>
-              {!currentUser
-                ? "Not signed in."
-                : !currentUser.displayName
-                ? "No user name."
-                : currentUser.displayName}
-              {currentUser
-                ? " Signed in with " + currentUser.providerData[0]?.providerId
-                : null}
-            </Text>
-          </TouchableOpacity>
-          {Platform.OS === "ios" && (
-            <AppleAuthentication.AppleAuthenticationButton
-              buttonType={
-                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-              }
-              buttonStyle={
-                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-              }
-              cornerRadius={5}
-              style={{ width: 200, height: 44 }}
-              onPress={() => {
-                signInWithAppleAsync();
-              }}
-            />
-          )}
-          {FacebookSignInBtn()}
-          {GoogleSignInBtn()}
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>User Account</Text>
+          </View>
+          {!currentUser && <SigninBtns />}
+          {currentUser && <SignOutBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
@@ -163,6 +217,8 @@ function AccountScreen() {
                   mainDataToString(mainData)
                 );
               },
+              textBelow: "upload",
+              disabled: !currentUser,
             },
             {
               iconName: "cloud-download",
@@ -170,6 +226,8 @@ function AccountScreen() {
                 const result = await cloudDbFunctions.download(currentUser.uid);
                 stringToSetMainData(result.val());
               },
+              textBelow: "download",
+              disabled: !currentUser,
             },
           ]}
         />

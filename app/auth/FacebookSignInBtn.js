@@ -1,4 +1,4 @@
-import { Button, Platform } from "react-native";
+import { Button, TouchableOpacity, Text, Platform } from "react-native";
 import { ResponseType } from "expo-auth-session";
 import * as ExpoAuthSessionFacebook from "expo-auth-session/providers/facebook";
 import * as React from "react";
@@ -7,11 +7,22 @@ import firebase from "firebase";
 import * as ExpoFacebook from "expo-facebook";
 
 import { FACEBOOK_APP_ID } from "@env";
+import AuthButton from "./AuthButton";
 
 const isNative = Constants.appOwnership !== "expo" && Platform.OS !== "web";
 const isAndroid = Platform.OS === "android";
 
-function byExpoAuthSession() {
+const buttonReturn = (onPress, centerContainerSize) => (
+  <AuthButton
+    centerContainerSize={centerContainerSize}
+    color="#4267b2"
+    btnText="Log in With Facebook"
+    onPress={onPress}
+    iconName="facebook"
+  />
+);
+
+function byExpoAuthSession(centerContainerSize) {
   const [
     request,
     response,
@@ -49,18 +60,10 @@ function byExpoAuthSession() {
     }
   }, [response]);
 
-  return (
-    <Button
-      disabled={!request}
-      title="AuthSessionFbLogin"
-      onPress={() => {
-        promptAsync();
-      }}
-    />
-  );
+  return buttonReturn(() => promptAsync(), centerContainerSize);
 }
 
-function byExpoFacebook() {
+function byExpoFacebook(centerContainerSize) {
   async function signInAsync(params) {
     try {
       await ExpoFacebook.initializeAsync({
@@ -97,14 +100,7 @@ function byExpoFacebook() {
     }
   }
 
-  return (
-    <Button
-      title="ExpoFbLogin"
-      onPress={() => {
-        signInAsync();
-      }}
-    />
-  );
+  return buttonReturn(() => signInAsync(), centerContainerSize);
 }
 
 const FacebookSignInBtn =

@@ -9,8 +9,9 @@ import {
   EXPO_CLIENT_ID,
   WEB_CLIENT_ID,
 } from "@env";
+import AuthButton from "./AuthButton";
 
-function byExpoAuthSession() {
+function byExpoAuthSession(centerContainerSize) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     androidClientId: ANDROID_STANDALONE_APP_CLIENT_ID,
     expoClientId: EXPO_CLIENT_ID,
@@ -44,9 +45,11 @@ function byExpoAuthSession() {
   }, [response]);
 
   return (
-    <Button
-      disabled={!request}
-      title="AuthSessionGoogleLogin"
+    <AuthButton
+      btnText="Sign in with Google"
+      color="#df4a32"
+      centerContainerSize={centerContainerSize}
+      iconName="google"
       onPress={() => {
         promptAsync();
       }}

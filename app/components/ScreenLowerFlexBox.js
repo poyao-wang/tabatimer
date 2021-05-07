@@ -17,6 +17,8 @@ function ScreenLowerFlexBox({ windowDimentions, icons }) {
           iconName={icon.iconName}
           size={centerContainerSize * 0.13}
           onPress={icon.onPress}
+          textBelow={icon.textBelow}
+          disabled={icon.disabled}
         />
       </View>
     );
