@@ -60,7 +60,8 @@ const uiTextDefaultData = {
       title: "User Account",
       subtitle: {
         noUser: "Sign in for upload / download settings",
-        withUserBeforeProvidor: " Signed in with ",
+        withUserNameNotAvailable: "You",
+        withUserBeforeProvidor: " signed in with ",
         withUserAfterProvidor: "",
       },
       signOutBtnText: "Sign out",
@@ -151,6 +152,7 @@ const uiTextDefaultData = {
       title: "アカウント",
       subtitle: {
         noUser: `設定をアップロード/ダウンロードするため、\nサインインしてください`,
+        withUserNameNotAvailable: "あなた",
         withUserBeforeProvidor: " は ",
         withUserAfterProvidor: " でログインした",
       },
@@ -241,6 +243,7 @@ const uiTextDefaultData = {
       title: "使用者帳號",
       subtitle: {
         noUser: "請登錄帳號以 上傳 / 下載 使用者設定",
+        withUserNameNotAvailable: "你",
         withUserBeforeProvidor: " 以 ",
         withUserAfterProvidor: " 帳號登入",
       },

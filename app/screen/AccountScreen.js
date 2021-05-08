@@ -104,7 +104,7 @@ function AccountScreen() {
         {!currentUser
           ? translationText.subtitle.noUser
           : !currentUser.displayName
-          ? ""
+          ? translationText.subtitle.withUserNameNotAvailable
           : currentUser.displayName}
         {currentUser
           ? translationText.subtitle.withUserBeforeProvidor +
