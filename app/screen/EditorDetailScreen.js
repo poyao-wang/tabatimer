@@ -23,6 +23,7 @@ function EditorDetailScreen({ route, navigation }) {
 
   const finalValue = { minutes: 0, seconds: 0, numbers: 0 };
 
+  const itemKey = route.params.itemKey;
   const item = route.params.item;
   const title = route.params.title;
   const subtitle = route.params.subtitle;
@@ -136,7 +137,8 @@ function EditorDetailScreen({ route, navigation }) {
                   mainData
                 );
                 mainData.workoutSetup.updated = true;
-                if (item.title == "Workouts") {
+                console.log(title);
+                if (itemKey == "workouts") {
                   mainData.workoutSetup.flatListArray = timeDataSetupFunctions.makeFlatListArray(
                     mainData,
                     item.value

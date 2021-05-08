@@ -101,76 +101,63 @@ function EditorScreen({ navigation }) {
   };
 
   const renderItem = useCallback(
-    (item, title, subtitle) => (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("EditorDetailScreen", { item, title, subtitle });
-        }}
-        style={styles.itemContainer}
-      >
-        <View style={styles.titlesContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
-        <View style={styles.valueTextContainer}>
-          <Text style={styles.valueText}>
-            {item.type == "number" && item.value}
-            {!(item.type == "number") &&
-              timeDataSetupFunctions.totalSecToMinAndSec(item.value)
-                .displayText}
-          </Text>
-        </View>
-        <Animatable.View
-          animation={blink}
-          duration={300}
-          iterationDelay={2000}
-          iterationCount="infinite"
-          style={styles.iconContainer}
+    (itemKey) => {
+      const item = screenData[itemKey];
+      const title = uiText.editorScreen[itemKey].title;
+      const subtitle = uiText.editorScreen[itemKey].subtitle;
+
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("EditorDetailScreen", {
+              itemKey,
+              item,
+              title,
+              subtitle,
+            });
+          }}
+          style={styles.itemContainer}
         >
-          <CustomIcons
-            iconName={"chevron-double-right"}
-            disabled={true}
-            size={ITEM_HEIGHT * 0.45}
-          />
-        </Animatable.View>
-      </TouchableOpacity>
-    ),
+          <View style={styles.titlesContainer}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+          </View>
+          <View style={styles.valueTextContainer}>
+            <Text style={styles.valueText}>
+              {item.type == "number" && item.value}
+              {!(item.type == "number") &&
+                timeDataSetupFunctions.totalSecToMinAndSec(item.value)
+                  .displayText}
+            </Text>
+          </View>
+          <Animatable.View
+            animation={blink}
+            duration={300}
+            iterationDelay={2000}
+            iterationCount="infinite"
+            style={styles.iconContainer}
+          >
+            <CustomIcons
+              iconName={"chevron-double-right"}
+              disabled={true}
+              size={ITEM_HEIGHT * 0.45}
+            />
+          </Animatable.View>
+        </TouchableOpacity>
+      );
+    },
     [screenData]
   );
 
   return (
     <>
       <View style={styles.container}>
-        {renderItem(
-          screenData["prepareTime"],
-          uiText.editorScreen["prepareTime"].title,
-          uiText.editorScreen["prepareTime"].subtitle
-        )}
-        {renderItem(
-          screenData["workoutTime"],
-          uiText.editorScreen["workoutTime"].title,
-          uiText.editorScreen["workoutTime"].subtitle
-        )}
-        {renderItem(
-          screenData["restTime"],
-          uiText.editorScreen["restTime"].title,
-          uiText.editorScreen["restTime"].subtitle
-        )}
-        {renderItem(
-          screenData["restTimeSets"],
-          uiText.editorScreen["restTimeSets"].title,
-          uiText.editorScreen["restTimeSets"].subtitle
-        )}
-        {renderItem(
-          screenData["sets"],
-          uiText.editorScreen["sets"].title,
-          uiText.editorScreen["sets"].subtitle
-        )}
-        {renderItem(
-          screenData["workouts"],
-          uiText.editorScreen["workouts"].title,
-          uiText.editorScreen["workouts"].subtitle
-        )}
+        {renderItem("prepareTime")}
+        {renderItem("workoutTime")}
+        {renderItem("restTime")}
+        {renderItem("restTimeSets")}
+        {renderItem("sets")}
+        {renderItem("workouts")}
       </View>
       <View
         style={{
