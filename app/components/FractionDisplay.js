@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
+import { View, StyleSheet, TextInput, Text, Platform } from "react-native";
 import colors from "../config/colors";
 
 const BORDER_WIDTH = 0;
@@ -28,7 +28,8 @@ function FractionDisplay({
         defaultValue={defaultValue.toString()}
         editable={false}
         style={{
-          fontSize: itemSize * 0.4,
+          fontSize:
+            Platform.OS === "android" ? itemSize * 0.33 : itemSize * 0.4,
           textAlign: "center",
           color: colors.dark,
         }}
