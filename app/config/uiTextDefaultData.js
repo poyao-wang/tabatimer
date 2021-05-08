@@ -150,7 +150,7 @@ const uiTextDefaultData = {
     accountScreen: {
       title: "アカウント",
       subtitle: {
-        noUser: `サインインして、設定を アップロード / ダウンロード`,
+        noUser: `設定をアップロード/ダウンロードするため、\nサインインしてください`,
         withUserBeforeProvidor: " は ",
         withUserAfterProvidor: " でログインした",
       },

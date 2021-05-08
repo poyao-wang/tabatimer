@@ -117,9 +117,6 @@ function AccountScreen() {
   const SigninBtns = () => {
     return (
       <View style={styles.btnsContainer}>
-        <View style={styles.subtitleContainer}>
-          <SubTitle />
-        </View>
         {Platform.OS === "ios" && (
           <AppleSignInBtn centerContainerSize={centerContainerSize} />
         )}
@@ -132,9 +129,6 @@ function AccountScreen() {
   const SignOutBtns = () => {
     return (
       <View style={styles.btnsContainer}>
-        <View style={styles.subtitleContainer}>
-          <SubTitle />
-        </View>
         <AuthButton
           centerContainerSize={centerContainerSize}
           btnText={translationText.signOutBtnText}
@@ -163,10 +157,11 @@ function AccountScreen() {
       borderWidth: BORDER_WIDTH,
     },
     btnsContainer: {
-      justifyContent: "center",
+      justifyContent: "flex-start",
       alignItems: "center",
       borderWidth: BORDER_WIDTH,
-      height: centerContainerSize * 0.63,
+      paddingTop: centerContainerSize * 0.035,
+      height: centerContainerSize * 0.6,
       width: centerContainerSize * 0.8,
     },
     titleContainer: {
@@ -184,10 +179,8 @@ function AccountScreen() {
     subtitleContainer: {
       justifyContent: "center",
       alignItems: "center",
-      width: centerContainerSize * 0.8,
-      height: isAndroid
-        ? centerContainerSize * 0.2
-        : centerContainerSize * 0.13,
+      width: centerContainerSize * 0.9,
+      height: centerContainerSize * 0.13,
       borderWidth: BORDER_WIDTH,
     },
     subtitle: {
@@ -195,7 +188,7 @@ function AccountScreen() {
       fontSize: isAndroid
         ? centerContainerSize * 0.035
         : centerContainerSize * 0.04,
-      marginTop: centerContainerSize * 0.02,
+      lineHeight: centerContainerSize * 0.06,
     },
   });
 
@@ -214,6 +207,9 @@ function AccountScreen() {
         >
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{translationText.title}</Text>
+          </View>
+          <View style={styles.subtitleContainer}>
+            <SubTitle />
           </View>
           {loading && <LoadingView />}
           {!currentUser && !loading && <SigninBtns />}
