@@ -17,6 +17,7 @@ import CustomIcons from "../components/CustomIcons";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
+import Loader from "../components/Loader";
 
 const BORDER_WIDTH = 0;
 
@@ -31,6 +32,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
   const { width, height, centerContainerSize } = windowDimentions;
 
   const [imageUri, setImageUri] = useState();
+  const [loading, setLoading] = useState(false);
 
   const itemSize = Math.round(width > height ? height * 0.1 : width * 0.1);
   const selectorSize = itemSize * 5;
@@ -94,6 +96,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
 
   const selectImage = async () => {
     try {
+      setLoading(true);
       const result = await ImagePicker.launchImageLibraryAsync();
       if (!result.cancelled) {
         const resizedPhoto = await ImageManipulator.manipulateAsync(
@@ -108,7 +111,9 @@ function WorkoutListDetailScreen({ route, navigation }) {
         setMainData(mainData);
         useCache.store(mainData);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       Alert.alert(error.message);
     }
   };
@@ -181,7 +186,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
               />
             </TouchableOpacity>
           )}
-          {!imageUri && (
+          {!imageUri && !loading && (
             <CustomIcons
               iconName={"plus"}
               onPress={selectImage}
@@ -189,6 +194,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
               color={colors.medium}
             />
           )}
+          {loading && <Loader />}
         </View>
         <View
           style={{
