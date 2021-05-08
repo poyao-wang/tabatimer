@@ -1,6 +1,7 @@
-import { Animated, StyleSheet, Text, View } from "react-native";
+import { Alert, Animated, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import React, { useEffect, useRef } from "react";
+import Constants from "expo-constants";
 
 import AppIconSvg from "../components/AppIconSvg";
 import colors from "../config/colors";
@@ -183,6 +184,12 @@ function WelcomeScreen({ navigation, language, onSetLanguage }) {
               iconName="play-circle"
               onPress={() => {
                 navigation.navigate("AppNavigator");
+              }}
+              onLongPress={() => {
+                const ver = Constants.manifest.version;
+                const { deviceName } = Constants;
+                console.log(ver);
+                Alert.alert("App Info", "v" + ver + `\n` + deviceName);
               }}
               size={ITEM_SIZE * 0.45}
             />

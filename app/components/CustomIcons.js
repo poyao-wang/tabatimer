@@ -8,6 +8,7 @@ function CustomIcons({
   color = colors.dark,
   size = 60,
   style,
+  onLongPress,
   onPress,
   onPressIn,
   disabled = false,
@@ -27,6 +28,7 @@ function CustomIcons({
       disabled={disabled}
       onPress={onPress}
       onPressIn={onPressIn}
+      onLongPress={onLongPress}
       style={[styles.container, style]}
     >
       <MaterialCommunityIcons name={iconName} size={size} color={color} />
