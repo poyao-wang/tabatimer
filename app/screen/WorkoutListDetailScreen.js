@@ -38,43 +38,52 @@ function WorkoutListDetailScreen({ route, navigation }) {
   const item = route.params;
 
   const requestPermission = async () => {
-    const photosPermissionsStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
+    try {
+      const photosPermissionsStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
 
-    if (!photosPermissionsStatus.granted) {
-      if (photosPermissionsStatus.canAskAgain) {
-        Alert.alert(
-          uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
-          uiText.workoutListDetailScreen.alertPhotosPermissionMsg,
-          [
-            {
-              text: uiText.workoutListDetailScreen.alertPhotosPermissionCancel,
-              onPress: () => navigation.navigate("WorkoutListScreen"),
-            },
-            {
-              text: uiText.workoutListDetailScreen.alertPhotosPermissionOk,
-              onPress: async () => {
-                const {
-                  granted,
-                } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (!granted) {
-                  navigation.navigate("WorkoutListScreen");
-                }
+      if (!photosPermissionsStatus.granted) {
+        if (photosPermissionsStatus.canAskAgain) {
+          Alert.alert(
+            uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
+            uiText.workoutListDetailScreen.alertPhotosPermissionMsg,
+            [
+              {
+                text:
+                  uiText.workoutListDetailScreen.alertPhotosPermissionCancel,
+                onPress: () => navigation.navigate("WorkoutListScreen"),
               },
-            },
-          ],
-          { cancelable: false }
-        );
-      } else {
-        navigation.navigate("WorkoutListScreen");
-        Alert.alert(
-          uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
-          Platform.OS === "android"
-            ? uiText.workoutListDetailScreen.alertPhotosPermissionMsgAndroid
-            : uiText.workoutListDetailScreen.alertPhotosPermissionMsgIos,
-          [{ text: uiText.workoutListDetailScreen.alertPhotosPermissionOk }],
-          { cancelable: false }
-        );
+              {
+                text: uiText.workoutListDetailScreen.alertPhotosPermissionOk,
+                onPress: async () => {
+                  try {
+                    const {
+                      granted,
+                    } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                    if (!granted) {
+                      navigation.navigate("WorkoutListScreen");
+                    }
+                  } catch (error) {
+                    Alert.alert(error.message);
+                  }
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+        } else {
+          navigation.navigate("WorkoutListScreen");
+          Alert.alert(
+            uiText.workoutListDetailScreen.alertPhotosPermissionTitle,
+            Platform.OS === "android"
+              ? uiText.workoutListDetailScreen.alertPhotosPermissionMsgAndroid
+              : uiText.workoutListDetailScreen.alertPhotosPermissionMsgIos,
+            [{ text: uiText.workoutListDetailScreen.alertPhotosPermissionOk }],
+            { cancelable: false }
+          );
+        }
       }
+    } catch (error) {
+      Alert.alert(error.message);
     }
   };
 
@@ -100,7 +109,7 @@ function WorkoutListDetailScreen({ route, navigation }) {
         useCache.store(mainData);
       }
     } catch (error) {
-      console.log("Error reading an image", error);
+      Alert.alert(error.message);
     }
   };
 

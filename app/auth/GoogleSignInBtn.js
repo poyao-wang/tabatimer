@@ -11,6 +11,7 @@ import {
 } from "@env";
 import AuthButton from "./AuthButton";
 import { useAuth } from "./AuthContext";
+import { Alert } from "react-native";
 
 const deviceLanguage = Localization.locale.split("-")[0];
 const btnText =
@@ -31,22 +32,28 @@ function byExpoAuthSession(centerContainerSize) {
   const { setLoading } = useAuth();
 
   const firebaseSignIn = async (response) => {
-    if (response?.type === "success") {
-      setLoading(true);
+    try {
+      if (response?.type === "success") {
+        setLoading(true);
 
-      const { id_token } = response.params;
+        const { id_token } = response.params;
 
-      const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
-      const userFromFirebase = await firebase
-        .auth()
-        .signInWithCredential(credential);
+        const credential = firebase.auth.GoogleAuthProvider.credential(
+          id_token
+        );
+        const userFromFirebase = await firebase
+          .auth()
+          .signInWithCredential(credential);
 
-      await firebase
-        .database()
-        .ref("/users/" + userFromFirebase.user.uid)
-        .update({
-          additionalUserInfo: userFromFirebase.additionalUserInfo,
-        });
+        await firebase
+          .database()
+          .ref("/users/" + userFromFirebase.user.uid)
+          .update({
+            additionalUserInfo: userFromFirebase.additionalUserInfo,
+          });
+      }
+    } catch (error) {
+      Alert.alert(error.message);
     }
   };
 

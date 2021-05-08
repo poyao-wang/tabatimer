@@ -69,61 +69,77 @@ export default function TimerScreen() {
   const [finishedSound, setFinishedSound] = useState();
 
   async function loadSound() {
-    const { sound: tickSound } = await Audio.Sound.createAsync(
-      require("../assets/tick.mp3")
-    );
-    setTickSound(tickSound);
-    const { sound: countDownSound } = await Audio.Sound.createAsync(
-      require("../assets/count-down.mp3")
-    );
-    setCountDownSound(countDownSound);
-    const { sound: workOutStartSound } = await Audio.Sound.createAsync(
-      require("../assets/workout-start.mp3")
-    );
-    setWorkOutStartSound(workOutStartSound);
-    const { sound: restSound } = await Audio.Sound.createAsync(
-      require("../assets/rest-bell.mp3")
-    );
-    setRestSound(restSound);
-    const { sound: finishedSound } = await Audio.Sound.createAsync(
-      require("../assets/finished.mp3")
-    );
-    setFinishedSound(finishedSound);
+    try {
+      const { sound: tickSound } = await Audio.Sound.createAsync(
+        require("../assets/tick.mp3")
+      );
+      setTickSound(tickSound);
+      const { sound: countDownSound } = await Audio.Sound.createAsync(
+        require("../assets/count-down.mp3")
+      );
+      setCountDownSound(countDownSound);
+      const { sound: workOutStartSound } = await Audio.Sound.createAsync(
+        require("../assets/workout-start.mp3")
+      );
+      setWorkOutStartSound(workOutStartSound);
+      const { sound: restSound } = await Audio.Sound.createAsync(
+        require("../assets/rest-bell.mp3")
+      );
+      setRestSound(restSound);
+      const { sound: finishedSound } = await Audio.Sound.createAsync(
+        require("../assets/finished.mp3")
+      );
+      setFinishedSound(finishedSound);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   }
 
   async function unloadSound() {
-    if (tickSound) tickSound.unloadAsync();
-    if (countDownSound) countDownSound.unloadAsync();
-    if (workOutStartSound) workOutStartSound.unloadAsync();
-    if (restSound) restSound.unloadAsync();
-    if (finishedSound) finishedSound.unloadAsync();
+    try {
+      if (tickSound) tickSound.unloadAsync();
+      if (countDownSound) countDownSound.unloadAsync();
+      if (workOutStartSound) workOutStartSound.unloadAsync();
+      if (restSound) restSound.unloadAsync();
+      if (finishedSound) finishedSound.unloadAsync();
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   }
 
   async function playTickingSound(type) {
-    if (!useTimerSetupState.timerSetup.settings.playSound) return;
-    const sound =
-      type == "tick"
-        ? tickSound
-        : type == "countDown"
-        ? countDownSound
-        : undefined;
-    if (sound) await sound.replayAsync();
+    try {
+      if (!useTimerSetupState.timerSetup.settings.playSound) return;
+      const sound =
+        type == "tick"
+          ? tickSound
+          : type == "countDown"
+          ? countDownSound
+          : undefined;
+      if (sound) await sound.replayAsync();
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   }
 
   async function playSound(type) {
-    if (!useTimerSetupState.timerSetup.settings.playSound) return;
-    const sound =
-      type == "workOutStart"
-        ? workOutStartSound
-        : type == "countDown"
-        ? countDownSound
-        : type == "rest"
-        ? restSound
-        : type == "finished"
-        ? finishedSound
-        : undefined;
+    try {
+      if (!useTimerSetupState.timerSetup.settings.playSound) return;
+      const sound =
+        type == "workOutStart"
+          ? workOutStartSound
+          : type == "countDown"
+          ? countDownSound
+          : type == "rest"
+          ? restSound
+          : type == "finished"
+          ? finishedSound
+          : undefined;
 
-    if (sound) await sound.replayAsync();
+      if (sound) await sound.replayAsync();
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   }
 
   React.useEffect(() => {

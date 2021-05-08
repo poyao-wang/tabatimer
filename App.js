@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, TouchableOpacity, Animated, Dimensions } from "react-native";
+import {
+  Alert,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -43,16 +49,20 @@ export default function App() {
   const deviceLanguage = lanCodeTransfer(Localization.locale.split("-")[0]);
 
   const readFromCache = async () => {
-    const result = await useCache.get();
-    if (result) {
-      if (!result.settings.language) {
-        result.settings.language = deviceLanguage;
-        useCache.store(result);
+    try {
+      const result = await useCache.get();
+      if (result) {
+        if (!result.settings.language) {
+          result.settings.language = deviceLanguage;
+          useCache.store(result);
+        }
+        setTimerSetup(result);
+        setLanguage(result.settings.language);
+      } else {
+        setLanguage(deviceLanguage);
       }
-      setTimerSetup(result);
-      setLanguage(result.settings.language);
-    } else {
-      setLanguage(deviceLanguage);
+    } catch (error) {
+      Alert.alert(error.message);
     }
   };
 

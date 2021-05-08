@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const cacheKeyName = "mainData";
 
@@ -6,7 +7,7 @@ const store = async (object) => {
   try {
     await AsyncStorage.setItem(cacheKeyName, JSON.stringify(object));
   } catch (error) {
-    console.log(error);
+    Alert.alert(error.message);
   }
 };
 
@@ -17,7 +18,7 @@ const get = async () => {
 
     return object;
   } catch (error) {
-    console.log(error);
+    Alert.alert(error.message);
   }
 };
 

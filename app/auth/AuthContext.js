@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(false);
 
-  const logout = async () => {
+  const logout = () => {
     return firebase.auth().signOut();
   };
 
