@@ -1,3 +1,6 @@
+import Constants from "expo-constants";
+const currentAppVer = Constants.manifest.version;
+
 const timerSetupDefaultData = {
   workoutSetup: {
     updated: false,
@@ -360,40 +363,28 @@ const timerSetupDefaultData = {
       },
     ],
   },
-  settings: { playSound: true, language: "en" },
+  settings: { playSound: true, language: "en", appVer: currentAppVer },
   prepareTime: {
-    title: "Preparation Time",
-    subtitle: "Preparation before Start",
     type: "time",
     value: 15,
   },
   workoutTime: {
-    title: "Workout Time",
-    subtitle: "Duration for  Workout",
     type: "time",
     value: 30,
   },
   restTime: {
-    title: "Rest Time",
-    subtitle: "Rest between Workouts",
     type: "time",
     value: 10,
   },
   restTimeSets: {
-    title: "Rest Time - Sets",
-    subtitle: "Rest between Sets",
     type: "time",
     value: 30,
   },
   sets: {
-    title: "Sets",
-    subtitle: "Set Amount",
     type: "number",
     value: 3,
   },
   workouts: {
-    title: "Workouts",
-    subtitle: "Workouts per Set",
     type: "number",
     value: 6,
   },

@@ -10,6 +10,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Localization from "expo-localization";
+import Constants from "expo-constants";
+import semver from "semver";
 
 import timerSetupDefaultData from "./app/config/timerSetupDefaultData";
 
@@ -23,6 +25,7 @@ import * as firebase from "firebase";
 import { firebaseConfig } from "./config";
 import { MainContext } from "./app/config/MainContext";
 import { AuthProvider } from "./app/auth/AuthContext";
+import timeDataSetupFunctions from "./app/config/timeDataSetupFunctions";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -31,6 +34,7 @@ if (!firebase.apps.length) {
 }
 
 const Stack = createStackNavigator();
+const currentAppVer = Constants.manifest.version;
 
 export default function App() {
   const [tabBarShow, setTabBarShow] = useState(true);
@@ -52,12 +56,50 @@ export default function App() {
     try {
       const result = await useCache.get();
       if (result) {
-        if (!result.settings.language) {
-          result.settings.language = deviceLanguage;
-          useCache.store(result);
+        const ifcacheAppVerValid = semver.valid(result.settings?.appVer);
+        const cacheAppVer = ifcacheAppVerValid
+          ? result.settings?.appVer
+          : "0.0.0";
+        const currGtCache = semver.gt(currentAppVer, cacheAppVer);
+        // console.log("current:", "v" + currentAppVer);
+        // console.log("cache:", "v" + cacheAppVer);
+        // console.log("current > cache:", currGtCache);
+
+        const cacheLan = result.settings?.language;
+        const lanToSet =
+          cacheLan === "cht"
+            ? "zh_Hant_TW"
+            : cacheLan === "jpn"
+            ? "ja"
+            : cacheLan === "eng"
+            ? "en"
+            : cacheLan
+            ? cacheLan
+            : deviceLanguage;
+
+        // console.log("cacheLan", cacheLan);
+        // console.log("lanToSet", lanToSet);
+
+        if (currGtCache) {
+          timerSetup.prepareTime.value = result.prepareTime.value;
+          timerSetup.restTime.value = result.restTime.value;
+          timerSetup.restTimeSets.value = result.restTimeSets.value;
+          timerSetup.sets.value = result.sets.value;
+          timerSetup.workouts.value = result.workouts.value;
+          timerSetup.workoutTime.value = result.workoutTime.value;
+          timerSetup.workoutSetup.flatListArray =
+            result.workoutSetup.flatListArray;
+          timerSetup.workoutSetup.workoutArray = timeDataSetupFunctions.makeWorkoutsArray(
+            result
+          );
+          timerSetup.settings.language = lanToSet;
+
+          useCache.store(timerSetup);
+          setTimerSetup(timerSetup);
+        } else {
+          setTimerSetup(result);
         }
-        setTimerSetup(result);
-        setLanguage(result.settings.language);
+        setLanguage(lanToSet);
       } else {
         setLanguage(deviceLanguage);
       }
