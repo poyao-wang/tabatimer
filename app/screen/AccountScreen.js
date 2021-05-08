@@ -19,6 +19,7 @@ import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
 import useCache from "../utility/cache";
 import useWindowDimentions from "../hook/useWindowDimentions";
 import AppleSignInBtn from "../auth/AppleSignInBtn";
+import Loader from "../components/Loader";
 
 const BORDER_WIDTH = 0;
 const isAndroid = Platform.OS === "android";
@@ -143,8 +144,8 @@ function AccountScreen() {
 
   const LoadingView = () => {
     return (
-      <View style={styles.btnsContainer}>
-        <ActivityIndicator size="large" />
+      <View style={[styles.btnsContainer]}>
+        <Loader size={centerContainerSize * 0.5} />
       </View>
     );
   };
