@@ -190,6 +190,7 @@ function WorkoutListScreen({ navigation }) {
             mainData.workoutSetup.updated = true;
             setMainData(mainData);
             setData(data);
+            useCache.store(mainData);
           }}
           ItemSeparatorComponent={() => (
             <View
