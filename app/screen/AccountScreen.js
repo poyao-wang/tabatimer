@@ -6,7 +6,8 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useContext } from "react";
+import * as ExpoFacebook from "expo-facebook";
+import React, { useContext, useEffect, useState } from "react";
 
 import { MainContext } from "../config/MainContext";
 import { useAuth } from "../auth/AuthContext";
@@ -25,6 +26,8 @@ const BORDER_WIDTH = 0;
 const isAndroid = Platform.OS === "android";
 
 function AccountScreen() {
+  const [trackingAuthorized, setTrackingAuthorized] = useState(false);
+
   const { width, height, centerContainerSize } = useWindowDimentions();
 
   const containerHeight = centerContainerSize * 0.9;
@@ -38,6 +41,19 @@ function AccountScreen() {
   const { currentUser, logout, loading, setLoading } = useAuth();
 
   const translationText = uiText.accountScreen;
+
+  const checkPermission = async () => {
+    try {
+      const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+      setTrackingAuthorized(trackingPermissionsStatus.granted);
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
 
   const mainDataToString = (mainData) => {
     if (mainData) {
@@ -111,7 +127,47 @@ function AccountScreen() {
             providerText() +
             translationText.subtitle.withUserAfterProvidor
           : null}
+        {trackingAuthorized
+          ? ""
+          : translationText.subtitle.noTrackingPermission}
       </Text>
+    );
+  };
+
+  const PermissionBtns = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <AuthButton
+          centerContainerSize={centerContainerSize}
+          btnText={translationText.trackingPermission.btnText}
+          iconName="hand-okay"
+          onPress={async () => {
+            try {
+              const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+              if (trackingPermissionsStatus?.canAskAgain) {
+                const {
+                  granted,
+                } = await ExpoFacebook.requestPermissionsAsync();
+                setTrackingAuthorized(granted);
+              } else {
+                Alert.alert(
+                  translationText.trackingPermission.alertMainTitle,
+                  translationText.trackingPermission.alertMainMsg,
+                  [
+                    {
+                      text:
+                        translationText.trackingPermission.alertMainOkBtnText,
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+            } catch (error) {
+              Alert.alert("Error", error.message);
+            }
+          }}
+        />
+      </View>
     );
   };
 
@@ -213,8 +269,9 @@ function AccountScreen() {
             <SubTitle />
           </View>
           {loading && <LoadingView />}
-          {!currentUser && !loading && <SigninBtns />}
-          {currentUser && !loading && <SignOutBtns />}
+          {!loading && !trackingAuthorized && <PermissionBtns />}
+          {!loading && trackingAuthorized && !currentUser && <SigninBtns />}
+          {!loading && trackingAuthorized && currentUser && <SignOutBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
