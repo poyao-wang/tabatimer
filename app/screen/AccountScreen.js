@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { MainContext } from "../config/MainContext";
 import { useAuth } from "../auth/AuthContext";
@@ -27,6 +27,8 @@ const isAndroid = Platform.OS === "android";
 function AccountScreen() {
   const { width, height, centerContainerSize } = useWindowDimentions();
 
+  const [preSignInPressed, setPreSignInPressed] = useState(false);
+
   const containerHeight = centerContainerSize * 0.9;
   const containerWidth = centerContainerSize * 0.9;
 
@@ -38,6 +40,10 @@ function AccountScreen() {
   const { currentUser, logout, loading, setLoading } = useAuth();
 
   const translationText = uiText.accountScreen;
+
+  useEffect(() => {
+    if (currentUser) setPreSignInPressed(true);
+  }, []);
 
   const mainDataToString = (mainData) => {
     if (mainData) {
@@ -142,6 +148,31 @@ function AccountScreen() {
     );
   };
 
+  const PreSignInBtn = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <AuthButton
+          centerContainerSize={centerContainerSize}
+          btnText="Sign in"
+          iconName="login"
+          onPress={() => {
+            setPreSignInPressed(true);
+            Alert.alert(
+              "Data Usage",
+              "TabaTimer uses your name, email and account id to create your personal account in our database.\nThe data you provide is only used for authentication.",
+              [
+                {
+                  text: "OK",
+                },
+              ],
+              { cancelable: false }
+            );
+          }}
+        />
+      </View>
+    );
+  };
+
   const LoadingView = () => {
     return (
       <View style={[styles.btnsContainer]}>
@@ -213,8 +244,9 @@ function AccountScreen() {
             <SubTitle />
           </View>
           {loading && <LoadingView />}
-          {!currentUser && !loading && <SigninBtns />}
-          {currentUser && !loading && <SignOutBtns />}
+          {!loading && !preSignInPressed && <PreSignInBtn />}
+          {!loading && preSignInPressed && !currentUser && <SigninBtns />}
+          {!loading && preSignInPressed && currentUser && <SignOutBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
