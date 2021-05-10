@@ -65,6 +65,13 @@ const uiTextDefaultData = {
         withUserAfterProvidor: "",
       },
       signOutBtnText: "Sign out",
+      preSignInBtn: {
+        btnText: "Sign In",
+        alertMainTitle: "Data Usage",
+        alertMainMsg:
+          "TabaTimer uses your name, email and account id to create your personal account in our database.\nThe data you provide is only used for authentication.",
+        alertMainOkBtnText: "Ok",
+      },
       uploadBtn: {
         alertMainTitle: "Upload Settings",
         alertMainMsg:
@@ -157,6 +164,13 @@ const uiTextDefaultData = {
         withUserAfterProvidor: " でログインした",
       },
       signOutBtnText: "ログアウト",
+      preSignInBtn: {
+        btnText: "サインイン",
+        alertMainTitle: "データの使用",
+        alertMainMsg:
+          "TabaTimerは、ユーザーの名前、メールアドレス、アカウントIDを使用して、データベースに個人アカウントを作成します。\nユーザーが提供するデータは、認証にのみ使用されます。",
+        alertMainOkBtnText: "はい",
+      },
       uploadBtn: {
         alertMainTitle: "設定アップロード",
         alertMainMsg:
@@ -248,6 +262,13 @@ const uiTextDefaultData = {
         withUserAfterProvidor: " 帳號登入",
       },
       signOutBtnText: "登　出",
+      preSignInBtn: {
+        btnText: "登　入",
+        alertMainTitle: "數據使用",
+        alertMainMsg:
+          "TabaTimer使用您的姓名，電子郵件和帳號ID在我們的資料庫中創建您的個人帳號。\n您提供的數據僅用於身份驗證。",
+        alertMainOkBtnText: "好",
+      },
       uploadBtn: {
         alertMainTitle: "上傳使用者設定",
         alertMainMsg: "這將覆寫您帳戶上儲存的設定。確定繼續嗎？",

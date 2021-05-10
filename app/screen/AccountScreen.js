@@ -151,16 +151,16 @@ function AccountScreen() {
       <View style={styles.btnsContainer}>
         <AuthButton
           centerContainerSize={centerContainerSize}
-          btnText="Sign in"
+          btnText={translationText.preSignInBtn.btnText}
           iconName="login"
           onPress={() => {
             setPreSignInPressed(true);
             Alert.alert(
-              "Data Usage",
-              "TabaTimer uses your name, email and account id to create your personal account in our database.\nThe data you provide is only used for authentication.",
+              translationText.preSignInBtn.alertMainTitle,
+              translationText.preSignInBtn.alertMainMsg,
               [
                 {
-                  text: "OK",
+                  text: translationText.preSignInBtn.alertMainOkBtnText,
                 },
               ],
               { cancelable: false }
