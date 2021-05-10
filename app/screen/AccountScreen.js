@@ -12,7 +12,6 @@ import { MainContext } from "../config/MainContext";
 import { useAuth } from "../auth/AuthContext";
 import AuthButton from "../auth/AuthButton";
 import cloudDbFunctions from "../auth/cloudDbFunctions";
-import FacebookSignInBtn from "../auth/FacebookSignInBtn";
 import GoogleSignInBtn from "../auth/GoogleSignInBtn";
 import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
@@ -127,7 +126,6 @@ function AccountScreen() {
         {Platform.OS === "ios" && (
           <AppleSignInBtn centerContainerSize={centerContainerSize} />
         )}
-        {FacebookSignInBtn(centerContainerSize)}
         {GoogleSignInBtn(centerContainerSize)}
       </View>
     );
