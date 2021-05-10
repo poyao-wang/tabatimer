@@ -288,7 +288,7 @@ function AccountScreen() {
                 );
               },
               textBelow: translationText.uploadBtn.textBelow,
-              disabled: !currentUser || loading,
+              disabled: !currentUser || loading || !preSignInPressed,
             },
             {
               iconName: "cloud-download",
@@ -334,7 +334,7 @@ function AccountScreen() {
                 );
               },
               textBelow: translationText.downloadBtn.textBelow,
-              disabled: !currentUser || loading,
+              disabled: !currentUser || loading || !preSignInPressed,
             },
           ]}
         />
