@@ -60,16 +60,9 @@ const uiTextDefaultData = {
       title: "User Account",
       subtitle: {
         noUser: "Sign in for upload / download settings",
-        noTrackingPermission: "\nPlease allow tracking for sign in.",
         withUserNameNotAvailable: "You",
         withUserBeforeProvidor: " signed in with ",
         withUserAfterProvidor: "",
-      },
-      trackingPermission: {
-        btnText: "Allow Tracking",
-        alertMainTitle: "Allow Tracking",
-        alertMainMsg: `TabaTimer uses your name, email and your accounts id to create your personal account in our database.\nTo allow tracking, go to "Settings" → "TabaTimer", and turn on "Allow Tracking".`,
-        alertMainOkBtnText: "Ok",
       },
       signOutBtnText: "Sign out",
       uploadBtn: {
@@ -158,17 +151,10 @@ const uiTextDefaultData = {
     accountScreen: {
       title: "アカウント",
       subtitle: {
-        noUser: `設定を同期するため、サインインしてください`,
-        noTrackingPermission: "\nサインインするため、トラッキングの許可を",
+        noUser: `設定をアップロード/ダウンロードするため、\nサインインしてください`,
         withUserNameNotAvailable: "あなた",
         withUserBeforeProvidor: " は ",
         withUserAfterProvidor: " でログインした",
-      },
-      trackingPermission: {
-        btnText: "トラッキングを許可",
-        alertMainTitle: "トラッキングの許可",
-        alertMainMsg: `TabaTimerは、使用者の名前、メールアドレスとアカウントIDを使用して、データベースに使用者のアカウントを作成します。\nトラッキングを許可するには、デバイス上の"設定" → "TabaTimer"で,"トラッキングを許可"をオンにしてください。`,
-        alertMainOkBtnText: "はい",
       },
       signOutBtnText: "ログアウト",
       uploadBtn: {
@@ -257,18 +243,10 @@ const uiTextDefaultData = {
       title: "使用者帳號",
       subtitle: {
         noUser: "請登錄帳號以 上傳 / 下載 使用者設定",
-        noTrackingPermission: "\n請允許追蹤以登入帳號",
         withUserNameNotAvailable: "你",
         withUserBeforeProvidor: " 以 ",
         withUserAfterProvidor: " 帳號登入",
       },
-      trackingPermission: {
-        btnText: "允許追蹤",
-        alertMainTitle: "允許追蹤",
-        alertMainMsg: `TabaTimer使用您的姓名、電子郵件和帳戶ID在我們的數據庫中創建您的帳號。\n請至裝置上的"設定" → "TabaTimer"，並打開"允許追蹤".`,
-        alertMainOkBtnText: "好",
-      },
-      trackingPermissionBtnText: "登入 / 建立 帳號",
       signOutBtnText: "登　出",
       uploadBtn: {
         alertMainTitle: "上傳使用者設定",
