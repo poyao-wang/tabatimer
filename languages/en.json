@@ -1,5 +1,6 @@
 {
   "NSPhotoLibraryUsageDescription": "TabaTimer uses photos you provid for custom workout images. In order to use custom images for workouts, please allow TabaTimer to access Photos on your device.",
   "NSPhotoLibraryAddUsageDescription": "TabaTimer uses photos you provid for custom workout images. In order to use custom images for workouts, please allow TabaTimer to access Photos on your device.",
-  "NSCameraUsageDescription": "TabaTimer uses photos you provid for custom workout images. In order to use custom images for workouts, please allow TabaTimer to access Camera / Photos on your device."
+  "NSCameraUsageDescription": "TabaTimer uses photos you provid for custom workout images. In order to use custom images for workouts, please allow TabaTimer to access Camera / Photos on your device.",
+  "NSUserTrackingUsageDescription": "TabaTimer uses your name, email and your accounts id(if you choose to login by Apple/Facebook/Google) to create your account in our database. For uploading/downloading your timer settings, please allow tracking for TabaTimer to access these information."
 }

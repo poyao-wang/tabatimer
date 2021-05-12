@@ -6,12 +6,14 @@ import {
   Text,
   View,
 } from "react-native";
+import * as ExpoFacebook from "expo-facebook";
 import React, { useContext, useEffect, useState } from "react";
 
 import { MainContext } from "../config/MainContext";
 import { useAuth } from "../auth/AuthContext";
 import AuthButton from "../auth/AuthButton";
 import cloudDbFunctions from "../auth/cloudDbFunctions";
+import FacebookSignInBtn from "../auth/FacebookSignInBtn";
 import GoogleSignInBtn from "../auth/GoogleSignInBtn";
 import ScreenLowerFlexBox from "../components/ScreenLowerFlexBox";
 import timeDataSetupFunctions from "../config/timeDataSetupFunctions";
@@ -24,9 +26,9 @@ const BORDER_WIDTH = 0;
 const isAndroid = Platform.OS === "android";
 
 function AccountScreen() {
-  const { width, height, centerContainerSize } = useWindowDimentions();
+  const [trackingAuthorized, setTrackingAuthorized] = useState(false);
 
-  const [preSignInPressed, setPreSignInPressed] = useState(false);
+  const { width, height, centerContainerSize } = useWindowDimentions();
 
   const containerHeight = centerContainerSize * 0.9;
   const containerWidth = centerContainerSize * 0.9;
@@ -40,8 +42,17 @@ function AccountScreen() {
 
   const translationText = uiText.accountScreen;
 
+  const checkPermission = async () => {
+    try {
+      const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+      setTrackingAuthorized(trackingPermissionsStatus.granted);
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
   useEffect(() => {
-    if (currentUser) setPreSignInPressed(true);
+    checkPermission();
   }, []);
 
   const mainDataToString = (mainData) => {
@@ -116,7 +127,47 @@ function AccountScreen() {
             providerText() +
             translationText.subtitle.withUserAfterProvidor
           : null}
+        {trackingAuthorized
+          ? ""
+          : translationText.subtitle.noTrackingPermission}
       </Text>
+    );
+  };
+
+  const PermissionBtns = () => {
+    return (
+      <View style={styles.btnsContainer}>
+        <AuthButton
+          centerContainerSize={centerContainerSize}
+          btnText={translationText.trackingPermission.btnText}
+          iconName="hand-okay"
+          onPress={async () => {
+            try {
+              const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+              if (trackingPermissionsStatus?.canAskAgain) {
+                const {
+                  granted,
+                } = await ExpoFacebook.requestPermissionsAsync();
+                setTrackingAuthorized(granted);
+              } else {
+                Alert.alert(
+                  translationText.trackingPermission.alertMainTitle,
+                  translationText.trackingPermission.alertMainMsg,
+                  [
+                    {
+                      text:
+                        translationText.trackingPermission.alertMainOkBtnText,
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+            } catch (error) {
+              Alert.alert("Error", error.message);
+            }
+          }}
+        />
+      </View>
     );
   };
 
@@ -126,6 +177,7 @@ function AccountScreen() {
         {Platform.OS === "ios" && (
           <AppleSignInBtn centerContainerSize={centerContainerSize} />
         )}
+        {FacebookSignInBtn(centerContainerSize)}
         {GoogleSignInBtn(centerContainerSize)}
       </View>
     );
@@ -140,31 +192,6 @@ function AccountScreen() {
           iconName="logout"
           onPress={() => {
             logout();
-          }}
-        />
-      </View>
-    );
-  };
-
-  const PreSignInBtn = () => {
-    return (
-      <View style={styles.btnsContainer}>
-        <AuthButton
-          centerContainerSize={centerContainerSize}
-          btnText={translationText.preSignInBtn.btnText}
-          iconName="login"
-          onPress={() => {
-            setPreSignInPressed(true);
-            Alert.alert(
-              translationText.preSignInBtn.alertMainTitle,
-              translationText.preSignInBtn.alertMainMsg,
-              [
-                {
-                  text: translationText.preSignInBtn.alertMainOkBtnText,
-                },
-              ],
-              { cancelable: false }
-            );
           }}
         />
       </View>
@@ -242,9 +269,9 @@ function AccountScreen() {
             <SubTitle />
           </View>
           {loading && <LoadingView />}
-          {!loading && !preSignInPressed && <PreSignInBtn />}
-          {!loading && preSignInPressed && !currentUser && <SigninBtns />}
-          {!loading && preSignInPressed && currentUser && <SignOutBtns />}
+          {!loading && !trackingAuthorized && <PermissionBtns />}
+          {!loading && trackingAuthorized && !currentUser && <SigninBtns />}
+          {!loading && trackingAuthorized && currentUser && <SignOutBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
@@ -288,7 +315,7 @@ function AccountScreen() {
                 );
               },
               textBelow: translationText.uploadBtn.textBelow,
-              disabled: !currentUser || loading || !preSignInPressed,
+              disabled: !currentUser || loading,
             },
             {
               iconName: "cloud-download",
@@ -334,7 +361,7 @@ function AccountScreen() {
                 );
               },
               textBelow: translationText.downloadBtn.textBelow,
-              disabled: !currentUser || loading || !preSignInPressed,
+              disabled: !currentUser || loading,
             },
           ]}
         />
