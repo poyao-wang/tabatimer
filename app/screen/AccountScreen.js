@@ -44,7 +44,8 @@ function AccountScreen() {
 
   const checkPermission = async () => {
     try {
-      const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+      const trackingPermissionsStatus =
+        await ExpoFacebook.getPermissionsAsync();
       setTrackingAuthorized(trackingPermissionsStatus.granted);
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -100,9 +101,8 @@ function AccountScreen() {
     mainData.workoutSetup.flatListArray = workoutList;
 
     mainData.workoutSetup.updated = true;
-    mainData.workoutSetup.workoutArray = timeDataSetupFunctions.makeWorkoutsArray(
-      mainData
-    );
+    mainData.workoutSetup.workoutArray =
+      timeDataSetupFunctions.makeWorkoutsArray(mainData);
     setMainData(mainData);
     useCache.store(mainData);
   };
@@ -127,9 +127,6 @@ function AccountScreen() {
             providerText() +
             translationText.subtitle.withUserAfterProvidor
           : null}
-        {trackingAuthorized
-          ? ""
-          : translationText.subtitle.noTrackingPermission}
       </Text>
     );
   };
@@ -140,14 +137,14 @@ function AccountScreen() {
         <AuthButton
           centerContainerSize={centerContainerSize}
           btnText={translationText.trackingPermission.btnText}
-          iconName="hand-okay"
+          iconName="login"
           onPress={async () => {
             try {
-              const trackingPermissionsStatus = await ExpoFacebook.getPermissionsAsync();
+              const trackingPermissionsStatus =
+                await ExpoFacebook.getPermissionsAsync();
               if (trackingPermissionsStatus?.canAskAgain) {
-                const {
-                  granted,
-                } = await ExpoFacebook.requestPermissionsAsync();
+                const { granted } =
+                  await ExpoFacebook.requestPermissionsAsync();
                 setTrackingAuthorized(granted);
               } else {
                 Alert.alert(
@@ -155,8 +152,8 @@ function AccountScreen() {
                   translationText.trackingPermission.alertMainMsg,
                   [
                     {
-                      text:
-                        translationText.trackingPermission.alertMainOkBtnText,
+                      text: translationText.trackingPermission
+                        .alertMainOkBtnText,
                     },
                   ],
                   { cancelable: false }
@@ -167,6 +164,11 @@ function AccountScreen() {
             }
           }}
         />
+        <View style={styles.trackingTextContainer}>
+          <Text style={styles.trackingText}>
+            {translationText.trackingPermission.dataUsageExplainText}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -246,6 +248,13 @@ function AccountScreen() {
         ? centerContainerSize * 0.035
         : centerContainerSize * 0.04,
       lineHeight: centerContainerSize * 0.06,
+    },
+    trackingTextContainer: {
+      width: centerContainerSize * 0.7,
+    },
+    trackingText: {
+      fontSize: centerContainerSize * 0.03,
+      textAlign: "justify",
     },
   });
 
