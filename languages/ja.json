@@ -2,5 +2,5 @@
   "NSPhotoLibraryUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
   "NSPhotoLibraryAddUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上の写真へのアクセスを許可してください。",
   "NSCameraUsageDescription": "TabaTimerは、使用者が提供した写真でトレーニングの動作表示をします。トレーニングにカスタムな写真を使用するため、TabaTimerにデバイス上のカメラと写真へのアクセスを許可してください。",
-  "NSUserTrackingUsageDescription": "TabaTimerは、使用者の名前、メールアドレス、アカウントID（Apple/Facebook/Googleでログインした場合）を使用して、データベースに使用者のアカウントを作成します。タイマー設定をアップロード/ダウンロードするため、TabaTimerにトラッキングを許可してください。"
+  "NSUserTrackingUsageDescription": "TabaTimerは、使用者の名前、メールアドレスとアカウントIDを使用して、データベースに使用者のアカウントを作成します。データは認証にのみ使用されます。"
 }
