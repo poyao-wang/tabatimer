@@ -143,22 +143,23 @@ function AccountScreen() {
               const trackingPermissionsStatus =
                 await ExpoFacebook.getPermissionsAsync();
               if (trackingPermissionsStatus?.canAskAgain) {
-                const { granted } =
-                  await ExpoFacebook.requestPermissionsAsync();
-                setTrackingAuthorized(granted);
-              } else {
-                Alert.alert(
-                  translationText.trackingPermission.alertMainTitle,
-                  translationText.trackingPermission.alertMainMsg,
-                  [
-                    {
-                      text: translationText.trackingPermission
-                        .alertMainOkBtnText,
-                    },
-                  ],
-                  { cancelable: false }
-                );
+                await ExpoFacebook.requestPermissionsAsync();
               }
+              setTrackingAuthorized(true);
+              //   const { granted } =
+              // } else {
+              //   Alert.alert(
+              //     translationText.trackingPermission.alertMainTitle,
+              //     translationText.trackingPermission.alertMainMsg,
+              //     [
+              //       {
+              //         text: translationText.trackingPermission
+              //           .alertMainOkBtnText,
+              //       },
+              //     ],
+              //     { cancelable: false }
+              //   );
+              // }
             } catch (error) {
               Alert.alert("Error", error.message);
             }
