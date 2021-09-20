@@ -261,9 +261,9 @@ const AccountScreen: React.FC = () => {
             <SubTitle />
           </View>
           {loading && <LoadingView />}
-          {!loading && !trackingAuthorized && <PermissionBtns />}
-          {!loading && trackingAuthorized && !currentUser && <SigninBtns />}
-          {!loading && trackingAuthorized && currentUser && <SignOutBtns />}
+          {!loading && currentUser && <SignOutBtns />}
+          {!loading && !currentUser && !trackingAuthorized && <PermissionBtns />}
+          {!loading && !currentUser && trackingAuthorized && <SigninBtns />}
         </View>
         <ScreenLowerFlexBox
           windowDimentions={{ width, height, centerContainerSize }}
