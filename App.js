@@ -21,11 +21,30 @@ import useCache from "./app/utility/cache";
 import uiTextDefaultData from "./app/config/uiTextDefaultData";
 import { navigationRef } from "./app/navigation/rootNavigation";
 
+import {
+  API_KEY,
+  APP_ID,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  MESSAGE_SENDER_ID,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+} from "@env";
 import * as firebase from "firebase";
-import { firebaseConfig } from "./config";
+// import { firebaseConfig } from "./config";
 import { MainContext } from "./app/config/MainContext";
 import { AuthProvider } from "./app/auth/AuthContext";
 import timeDataSetupFunctions from "./app/config/timeDataSetupFunctions";
+
+const firebaseConfig = {
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: DATABASE_URL,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGE_SENDER_ID,
+  appId: APP_ID,
+};
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -89,9 +108,8 @@ export default function App() {
           timerSetup.workoutTime.value = result.workoutTime.value;
           timerSetup.workoutSetup.flatListArray =
             result.workoutSetup.flatListArray;
-          timerSetup.workoutSetup.workoutArray = timeDataSetupFunctions.makeWorkoutsArray(
-            result
-          );
+          timerSetup.workoutSetup.workoutArray =
+            timeDataSetupFunctions.makeWorkoutsArray(result);
           timerSetup.settings.language = lanToSet;
 
           useCache.store(timerSetup);

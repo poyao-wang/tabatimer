@@ -14,6 +14,11 @@ import { useAuth } from "./AuthContext";
 const isNative = Constants.appOwnership !== "expo" && Platform.OS !== "web";
 const isAndroid = Platform.OS === "android";
 
+const expoAuthSessionUseAuthRequestConfig = {
+  responseType: ResponseType.Token,
+  expoClientId: FACEBOOK_APP_ID,
+};
+
 const deviceLanguage = Localization.locale.split("-")[0];
 const btnText =
   deviceLanguage === "ja"
@@ -33,14 +38,8 @@ const buttonReturn = (onPress, centerContainerSize) => (
 );
 
 function byExpoAuthSession(centerContainerSize) {
-  const [
-    request,
-    response,
-    promptAsync,
-  ] = ExpoAuthSessionFacebook.useAuthRequest({
-    responseType: ResponseType.Token,
-    clientId: FACEBOOK_APP_ID,
-  });
+  const [request, response, promptAsync] =
+    ExpoAuthSessionFacebook.useAuthRequest(expoAuthSessionUseAuthRequestConfig);
 
   const { setLoading } = useAuth();
 

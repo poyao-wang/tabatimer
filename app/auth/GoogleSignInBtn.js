@@ -21,13 +21,17 @@ const btnText =
     ? "使用Google登入"
     : "Sign in with Google";
 
+const googleAuthRequestConfig = {
+  androidClientId: ANDROID_STANDALONE_APP_CLIENT_ID,
+  expoClientId: EXPO_CLIENT_ID,
+  iosClientId: IOS_STANDALONE_APP_CLIENT_ID,
+  webClientId: WEB_CLIENT_ID,
+};
+
 function byExpoAuthSession(centerContainerSize) {
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    androidClientId: ANDROID_STANDALONE_APP_CLIENT_ID,
-    expoClientId: EXPO_CLIENT_ID,
-    iosClientId: IOS_STANDALONE_APP_CLIENT_ID,
-    webClientId: WEB_CLIENT_ID,
-  });
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+    googleAuthRequestConfig
+  );
 
   const { setLoading } = useAuth();
 
