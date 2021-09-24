@@ -1,4 +1,6 @@
 import {
+  AppState,
+  AppStateStatus,
   Alert,
   Animated,
   Easing,
@@ -49,6 +51,10 @@ const TimerScreen: React.FC = () => {
   const windowDimentions = useWindowDimentions();
   const { width, height } = windowDimentions;
 
+  const appState = useRef(AppState.currentState);
+
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
   const [timeData, setTimeData] = useState(
     useTimerSetupState.timerSetup.workoutSetup.workoutArray
   );
@@ -66,6 +72,14 @@ const TimerScreen: React.FC = () => {
   const [workOutStartSound, setWorkOutStartSound] = useState<Audio.Sound>();
   const [restSound, setRestSound] = useState<Audio.Sound>();
   const [finishedSound, setFinishedSound] = useState<Audio.Sound>();
+
+  const handleAppStateChange: (nextAppState: AppStateStatus) => void = (
+    nextAppState
+  ) => {
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+    // console.log("AppState", appState.current);
+  };
 
   async function loadSound() {
     try {
@@ -117,7 +131,8 @@ const TimerScreen: React.FC = () => {
           : undefined;
       if (sound) await sound.replayAsync();
     } catch (error) {
-      Alert.alert(error.message);
+      // Alert.alert(error.message);
+      console.log(error.message);
     }
   }
 
@@ -137,14 +152,10 @@ const TimerScreen: React.FC = () => {
 
       if (sound) await sound.replayAsync();
     } catch (error) {
-      Alert.alert(error.message);
+      // Alert.alert(error.message);
+      console.log(error.message);
     }
   }
-
-  React.useEffect(() => {
-    loadSound();
-    return () => unloadSound();
-  }, []);
 
   const CENTER_CONTAINER_SIZE = windowDimentions.centerContainerSize;
   const ITEM_SIZE = Math.round(CENTER_CONTAINER_SIZE * 0.4);
@@ -426,6 +437,19 @@ const TimerScreen: React.FC = () => {
   );
 
   useEffect(() => {
+    loadSound();
+    return () => unloadSound();
+  }, []);
+
+  useEffect(() => {
+    AppState.addEventListener("change", handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener("change", handleAppStateChange);
+    };
+  }, []);
+
+  useEffect(() => {
     sectionTypeTextOpacity.setValue(0);
     Animated.timing(sectionTypeTextOpacity, {
       toValue: 0,
@@ -433,6 +457,16 @@ const TimerScreen: React.FC = () => {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  useEffect(() => {
+    if (screenFocused && appStateVisible !== "active") {
+      setTimerOn(false);
+      setTimeout(() => {
+        navBarAndBottomViewAnime(false);
+        navBarAndBottomViewAnime(true);
+      }, 500);
+    }
+  }, [screenFocused, appStateVisible]);
 
   useEffect(() => {
     if (screenFocused) {
