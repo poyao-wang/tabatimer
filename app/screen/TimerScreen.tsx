@@ -69,11 +69,6 @@ const TimerScreen: React.FC = () => {
 
   async function loadSound() {
     try {
-      await Audio.setAudioModeAsync({
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
-      });
-
       const { sound: tickSound } = await Audio.Sound.createAsync(
         require("../assets/tick.mp3")
       );
