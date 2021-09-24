@@ -162,7 +162,6 @@ const AccountScreen: React.FC = () => {
         {Platform.OS === "ios" && (
           <AppleSignInBtn centerContainerSize={centerContainerSize} />
         )}
-        {FacebookSignInBtn(centerContainerSize)}
         {GoogleSignInBtn(centerContainerSize)}
       </View>
     );
@@ -262,7 +261,9 @@ const AccountScreen: React.FC = () => {
           </View>
           {loading && <LoadingView />}
           {!loading && currentUser && <SignOutBtns />}
-          {!loading && !currentUser && !trackingAuthorized && <PermissionBtns />}
+          {!loading && !currentUser && !trackingAuthorized && (
+            <PermissionBtns />
+          )}
           {!loading && !currentUser && trackingAuthorized && <SigninBtns />}
         </View>
         <ScreenLowerFlexBox
