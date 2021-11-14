@@ -11,6 +11,8 @@ This is an Tabata timer with simple, clean and beautiful UI. Customize your own 
 [![app-store-link](https://github.com/poyao-wang/my-profile-data/raw/master/profile/TabaTimer/app-store-link-btn.png)](https://apps.apple.com/app/tabatimer-workout/id1559502460)
 [![play-store-link](https://github.com/poyao-wang/my-profile-data/raw/master/profile/TabaTimer/play-store-link-btn.png)](https://play.google.com/store/apps/details?id=com.poyaowang.tabatimer)
 
+Or visit [taba-timer.web.app](https://taba-timer.web.app) for the web app version.
+
 ![alt text](https://raw.githubusercontent.com/poyao-wang/my-profile-data/master/profile/TabaTimer/iPhone8-1.png)
 ![alt text](https://raw.githubusercontent.com/poyao-wang/my-profile-data/master/profile/TabaTimer/iPhone8-2.png)
 ![alt text](https://raw.githubusercontent.com/poyao-wang/my-profile-data/master/profile/TabaTimer/iPhone8-3.png)
